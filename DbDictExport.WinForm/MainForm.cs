@@ -9,6 +9,7 @@ using DbDictExport.WinForm.Service;
 using Aspose.Cells;
 
 
+
 namespace DbDictExport.WinForm
 {
     public partial class MainForm : Form
@@ -107,15 +108,16 @@ namespace DbDictExport.WinForm
             TreeNode currentNode = this.tvDatabase.SelectedNode;
             if (tripItem.Text == "Export data dictionary document to Excel")
             {
+                Workbook workbook;
                 try
                 {
                     LoadingFormService.CreateForm();
                     LoadingFormService.SetFormCaption("Exporting...");
 
                     List<DbTable> tableList = DataAccess.GetDbTableList(this.connBuilder, currentNode.Text);
-                    Workbook workbook = GenerateWorkbook(tableList);
+                    workbook = GenerateWorkbook(tableList);
 
-                    LoadingFormService.CloseFrom();
+                    //LoadingFormService.CloseFrom();
 
                     SaveFileDialog dia = new SaveFileDialog();
                     dia.Filter = "Excel files(*.xlsx)|*.xlsx|Excel files(*.xls)|*.xls;";
@@ -129,11 +131,16 @@ namespace DbDictExport.WinForm
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                finally
+                {
+                    LoadingFormService.CloseFrom();
+                }
             }
             else if (tripItem.Text == "Refresh")
             {
                 LoadTableTreeNode(currentNode);
             }
+
 
         }
 
@@ -213,6 +220,8 @@ namespace DbDictExport.WinForm
 
         private Workbook GenerateWorkbook(List<DbTable> tableList)
         {
+            #region
+
             Workbook workbook = new Workbook();
             Worksheet indexSheet = workbook.Worksheets[0];      //default "Sheet1"\
             if (tableList.Count > 0)
@@ -226,10 +235,12 @@ namespace DbDictExport.WinForm
                     string sheetName = tableList[k].Name.Length <= 31 ? tableList[k].Name : tableList[k].Name.Substring(0, 25) + "..." + k;
                     Worksheet sheet = workbook.Worksheets.Add(sheetName);
                     sheet.IsGridlinesVisible = false;
-                    sheet.Cells.StandardHeight = 17;
+                    sheet.Cells.StandardHeight = 20;
 
                     int hi = indexSheet.Hyperlinks.Add(k, 0, 1, 1, String.Format("'{0}'!A1", sheetName));
                     indexSheet.Hyperlinks[hi].TextToDisplay = tableList[k].Name;
+                    indexSheet.Cells.StandardHeight = 20;
+                    indexSheet.IsGridlinesVisible = false;
 
                     #region cell styles
                     Style titleStyle = workbook.Styles[workbook.Styles.Add()];
@@ -321,41 +332,11 @@ namespace DbDictExport.WinForm
                                 cell.SetStyle(style);
                             }
                         }
-
-                        #region
-                        /*
-                    foreach (var col in new int[] { 0, 3, 4, 6, 7, 8 })
-                    {
-                        Cell cell = sheet.Cells[rowNo, col];
-                        cell.SetStyle(valueCenterStyle);
-                        if (rowNo % 2 == 1)
-                        {
-                            Style style = cell.GetStyle();
-                            style.ForegroundColor = Color.AliceBlue;
-                            style.Pattern = BackgroundType.Solid;
-                            cell.SetStyle(style);
-                        }
-                    }
-                    foreach (var col in new int[] { 1, 2, 5, 9 })
-                    {
-                        Cell cell = sheet.Cells[rowNo, col];
-                        cell.SetStyle(valueLeftStyle);
-                        if (rowNo % 2 == 1)
-                        {
-                            Style style = cell.GetStyle();
-                            style.ForegroundColor = Color.AliceBlue;
-                            style.Pattern = BackgroundType.Solid;
-                            cell.SetStyle(style);
-                        }
-                    }
-                    */
-                        #endregion
+                  
                     }
                     #endregion
 
                     #region adjust column width
-                    //sheet.AutoFitColumns();
-                    // sheet.AutoFitRows();
                     sheet.Cells.SetColumnWidth(0, 6);      //#
                     sheet.Cells.SetColumnWidth(1, 30);     //field
                     sheet.Cells.SetColumnWidth(2, 20);     //desccription
@@ -367,12 +348,150 @@ namespace DbDictExport.WinForm
                     sheet.Cells.SetColumnWidth(8, 18);         //default value
                     sheet.Cells.SetColumnWidth(9, 30);          //comments
                     #endregion
+
                 }
             }
 
             return workbook;
-        }
 
+            #endregion
+
+            #region
+            /*
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            if (tableList !=null && tableList.Count > 0)
+            {
+                HSSFSheet indexSheet = (workbook.CreateSheet(tableList[0].Catalog + "_IndexSheet")) as HSSFSheet;
+                for (int k = 0; k < tableList.Count; k++)
+                {
+                    //create a work sheet
+                    //the max length of sheetname can't be larger than 31
+                    string sheetName = tableList[k].Name.Length <= 31 ? tableList[k].Name : tableList[k].Name.Substring(0, 25) + "..." + k;
+                    HSSFSheet sheet = (workbook.CreateSheet(sheetName)) as HSSFSheet;
+                    sheet.DisplayGridlines = false;
+                    sheet.DefaultRowHeightInPoints = 17;
+
+                    //add links to indexSheet for every table sheet
+                    ICell linkCell = indexSheet.CreateRow(0).CreateCell(0);
+                    HSSFHyperlink link = new HSSFHyperlink(HyperlinkType.Document);
+                    link.Address = String.Format("'{0}'!A1", sheetName);
+                    link.Label = tableList[k].Name;
+                    linkCell.SetCellValue(tableList[k].Name);
+                    linkCell.Hyperlink = link;
+
+                    #region cell styles
+                    HSSFCellStyle titleStyle = (HSSFCellStyle)workbook.CreateCellStyle();
+                    HSSFFont titleFont = (HSSFFont)workbook.CreateFont();
+                    titleFont.FontName = "Microsoft YaHei";
+                    titleFont.FontHeightInPoints = 20;
+                    titleStyle.SetFont(titleFont);
+                    titleStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                    titleStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    HSSFCellStyle subtitleStyle = (HSSFCellStyle)workbook.CreateCellStyle();
+                    HSSFFont subtitleFont = (HSSFFont)workbook.CreateFont();
+                    subtitleFont.FontName = "Microsoft YaHei";
+                    subtitleFont.FontHeightInPoints = 20;
+                    //subtitleFont.Color = new HSSFPalette(new NPOI.HSSF.Record.PaletteRecord()).AddColor((byte)0,(byte)175,(byte)219).GetIndex() ;
+                    subtitleFont.Color = HSSFColor.SkyBlue.Index;
+                    subtitleStyle.SetFont(titleFont);
+                    subtitleStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                    subtitleStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    HSSFCellStyle tableHeadStyle = (HSSFCellStyle)workbook.CreateCellStyle();
+                    HSSFFont tableHeadFont = (HSSFFont)workbook.CreateFont();
+                    tableHeadFont.FontName = "Microsoft YaHei";
+                    tableHeadFont.FontHeightInPoints = 12;
+                    tableHeadFont.Boldweight = 700;
+                    tableHeadFont.Color = HSSFColor.White.Index;
+                    tableHeadStyle.SetFont(titleFont);
+                    tableHeadStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                    tableHeadStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    HSSFCellStyle valueStyle = (HSSFCellStyle)workbook.CreateCellStyle();
+                    HSSFFont valueFont = (HSSFFont)workbook.CreateFont();
+                    valueFont.FontName = "Microsoft YaHei";
+                    valueFont.FontHeightInPoints = 11;
+                    valueStyle.SetFont(titleFont);
+                    valueStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;
+                    valueStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    #endregion
+
+                    #region fill data in cells
+                    //title--tablename
+                    ICell titleCell = sheet.CreateRow(k).CreateCell(0);
+                    titleCell.SetCellValue(tableList[k].Name);
+                    titleCell.CellStyle = subtitleStyle;
+
+                    //fields title at row 2
+                    IRow headRow = sheet.CreateRow(1);
+                    headRow.CreateCell(0).SetCellValue("#");
+                    headRow.CreateCell(1).SetCellValue("Field");
+                    headRow.CreateCell(2).SetCellValue("Description");
+                    headRow.CreateCell(3).SetCellValue("Identity");
+                    headRow.CreateCell(4).SetCellValue("PK");
+                    headRow.CreateCell(5).SetCellValue("Type");
+                    headRow.CreateCell(6).SetCellValue("Length");
+                    headRow.CreateCell(7).SetCellValue("Nullable");
+                    headRow.CreateCell(8).SetCellValue("DefaultValue");
+                    headRow.CreateCell(9).SetCellValue("Comment");
+                    for (int i = 0; i < 10; i++)
+                    {
+                        HSSFCell cell = (HSSFCell)sheet.GetRow(1).GetCell(i);
+                        cell.CellStyle = tableHeadStyle;
+                    }
+                    //fields from row 3
+                    foreach (DbColumn column in tableList[k].ColumnList)
+                    {
+                        int rowNo = column.Order + 1;
+                        IRow valueRow = sheet.CreateRow(rowNo);
+                        valueRow.CreateCell(0).SetCellValue(column.Order);
+                        valueRow.CreateCell(1).SetCellValue(column.Name);
+                        valueRow.CreateCell(2).SetCellValue(column.Description);
+                        valueRow.CreateCell(3).SetCellValue(column.IsIdentity ? "√" : "");
+                        valueRow.CreateCell(4).SetCellValue(column.PrimaryKey ? "√" : "");
+                        valueRow.CreateCell(5).SetCellValue(column.DbType);
+                        valueRow.CreateCell(6).SetCellValue(column.Length.ToString());
+                        valueRow.CreateCell(7).SetCellValue(column.IsNullable ? "√" : "");
+                        valueRow.CreateCell(8).SetCellValue(column.DefaultValue);
+                        valueRow.CreateCell(9).SetCellValue("");
+                        for (int i = 0; i < 10; i++)
+                        {
+                            ICell valueCell = sheet.GetRow(rowNo).GetCell(i);
+                            valueCell.CellStyle = valueStyle;
+                            if (rowNo % 2 == 1)
+                            {
+                                HSSFCellStyle style = (HSSFCellStyle)valueCell.CellStyle;
+                                style.FillForegroundColor = HSSFColor.PaleBlue.Index;
+                                style.FillPattern = FillPattern.SolidForeground;
+                                valueCell.CellStyle = style;
+                            }
+                        }
+                    }
+                    #endregion
+
+                    #region adjust column width
+
+                    sheet.SetColumnWidth(0, 6*256);         //#
+                    sheet.SetColumnWidth(1, 30*256);        //Field
+                    sheet.SetColumnWidth(2, 20*256);        //Description
+                    sheet.SetColumnWidth(3, 10*256);        //Identity
+                    sheet.SetColumnWidth(4, 6*256);         //PK
+                    sheet.SetColumnWidth(5, 17*256);         //Type   
+                    sheet.SetColumnWidth(6, 13*256);        //Length
+                    sheet.SetColumnWidth(7, 10*256);        //Nullable
+                    sheet.SetColumnWidth(8, 18*256);        //Default value
+                    sheet.SetColumnWidth(9, 30*256);        //Comments
+
+                    #endregion
+                }
+            }
+            return workbook;
+             * */
+#endregion
+
+        }
     }
 
 }
