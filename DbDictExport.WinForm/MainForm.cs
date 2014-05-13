@@ -48,11 +48,11 @@ namespace DbDictExport.WinForm
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             this.Load += MainForm_Load;
             this.tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
-            this.tvDatabase.NodeMouseClick += tvDatabase_NodeMouseClick;
+            //this.tvDatabase.NodeMouseClick += tvDatabase_NodeMouseClick;
             this.tvDatabase.MouseDown += tvDatabase_MouseDown;
             foreach (ToolStripItem item in this.cmsDatabase.Items)
             {
-                item.Click += new EventHandler(cmsDatabaseItem_Click);
+                item.Click += cmsDatabaseItem_Click;
             }
         }
 
@@ -81,11 +81,22 @@ namespace DbDictExport.WinForm
                     this.tvDatabase.SelectedNode = currentNode;
                 }
             }
-        }
-
-        void tvDatabase_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-
+            else if (e.Button == MouseButtons.Left)
+            {
+                Point clickPoint = new Point(e.X, e.Y);
+                TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
+                if (currrentNode != null)
+                {
+                    if (currrentNode.Name.StartsWith(tableTreeNodeNamePrefix))
+                    {
+                        DbTable table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, currrentNode.Text);
+                        if (table != null)
+                        {
+                            this.dgvTable.DataSource = table.ColumnList;
+                        }
+                    }
+                }
+            }
         }
 
         void tvDatabase_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -108,14 +119,13 @@ namespace DbDictExport.WinForm
             TreeNode currentNode = this.tvDatabase.SelectedNode;
             if (tripItem.Text == "Export data dictionary document to Excel")
             {
-                Workbook workbook;
                 try
                 {
                     LoadingFormService.CreateForm();
                     LoadingFormService.SetFormCaption("Exporting...");
 
                     List<DbTable> tableList = DataAccess.GetDbTableList(this.connBuilder, currentNode.Text);
-                    workbook = GenerateWorkbook(tableList);
+                    Workbook workbook = GenerateWorkbook(tableList);
 
                     //LoadingFormService.CloseFrom();
 
@@ -332,7 +342,7 @@ namespace DbDictExport.WinForm
                                 cell.SetStyle(style);
                             }
                         }
-                  
+
                     }
                     #endregion
 
@@ -489,7 +499,7 @@ namespace DbDictExport.WinForm
             }
             return workbook;
              * */
-#endregion
+            #endregion
 
         }
     }
