@@ -93,6 +93,8 @@ namespace DbDictExport.WinForm
                         if (table != null)
                         {
                             this.dgvTable.DataSource = table.ColumnList;
+                            dgvTable.Columns["DbTable"].Visible = false;
+                            dgvTable.Columns["Order"].Visible = false;
                         }
                     }
                 }

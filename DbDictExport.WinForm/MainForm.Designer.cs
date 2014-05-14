@@ -91,7 +91,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(903, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1281, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -114,26 +114,29 @@
             this.groupBox2.Controls.Add(this.dgvTable);
             this.groupBox2.Location = new System.Drawing.Point(347, 31);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(544, 608);
+            this.groupBox2.Size = new System.Drawing.Size(922, 608);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "TableView";
             // 
             // dgvTable
             // 
+            this.dgvTable.AllowUserToDeleteRows = false;
+            this.dgvTable.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvTable.Location = new System.Drawing.Point(3, 23);
             this.dgvTable.Name = "dgvTable";
+            this.dgvTable.ReadOnly = true;
             this.dgvTable.RowTemplate.Height = 27;
-            this.dgvTable.Size = new System.Drawing.Size(538, 582);
+            this.dgvTable.Size = new System.Drawing.Size(916, 582);
             this.dgvTable.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(903, 651);
+            this.ClientSize = new System.Drawing.Size(1281, 651);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
