@@ -8,49 +8,29 @@ namespace DbDictExport.WinForm.Model
     /// <summary>
     /// Class for a database table of sql server
     /// </summary>
-    public class DbTable
+    public sealed class DbTable
     {
-        private string catalog;
-        private string schema;
-        private string name;
-        private string type;
         private List<DbColumn> columnList;
 
         /// <summary>
         /// Catalog of table
         /// </summary>
-        public string Catalog
-        {
-            get { return catalog; }
-            set { catalog = value; }
-        }
-        
+        public string Catalog { get; set; }
+
         /// <summary>
         /// Schema of table
         /// </summary>
-        public string Schema
-        {
-            get { return schema; }
-            set { schema = value; }
-        }
+        public string Schema { get; set; }
 
         /// <summary>
         /// Name of table
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// table type of table
         /// </summary>
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
+        public string Type { get; set; }
 
         /// <summary>
         /// columns of table

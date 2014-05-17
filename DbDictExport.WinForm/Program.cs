@@ -16,14 +16,6 @@ namespace DbDictExport.WinForm
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-            //LoginForm loginForm = new LoginForm();
-            //loginForm.ShowDialog();
-            //if (loginForm.ShowDialog() == DialogResult.OK)
-            //{
-            //    loginForm.Close();
-
-            //}
-
         }
     }
 }
