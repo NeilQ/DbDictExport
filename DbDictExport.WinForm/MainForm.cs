@@ -33,46 +33,25 @@ namespace DbDictExport.WinForm
 
         public MainForm()
         {
-            MainForm_Init();
-        }
-
-        public MainForm(SqlConnectionStringBuilder connBuilder)
-        {
-            this.ConnBuilder = connBuilder;
-            MainForm_Init();
-        }
-
-        public void MainForm_Init()
-        {
             InitializeComponent();
-            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            this.Load += MainForm_Load;
             this.tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
-            //this.tvDatabase.NodeMouseClick += tvDatabase_NodeMouseClick;
             this.tvDatabase.MouseDown += tvDatabase_MouseDown;
             foreach (ToolStripItem item in this.cmsDatabase.Items)
             {
                 item.Click += cmsDatabaseItem_Click;
             }
-        }
-
-        void MainForm_Load(object sender, EventArgs e)
-        {
-            if (this.ConnBuilder != null)
-            {
-                LoadDatabaseTreeNode();
-            }
-
-        }
+            LoadLoginForm();
+        }    
 
         #region database TreeView's events
         void tvDatabase_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+
+            if (e.Button == MouseButtons.Right)     // Right click.
             {
                 Point clickPoint = new Point(e.X, e.Y);
                 TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
-                if (currentNode != null) //check if you right click a tree node
+                if (currentNode != null)
                 {
                     if (currentNode.Name.StartsWith(databaseTreeNodeNamePrefix))
                     {
@@ -81,7 +60,7 @@ namespace DbDictExport.WinForm
                     this.tvDatabase.SelectedNode = currentNode;
                 }
             }
-            else if (e.Button == MouseButtons.Left)
+            else if (e.Button == MouseButtons.Left)     // Left click.
             {
                 Point clickPoint = new Point(e.X, e.Y);
                 TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
@@ -107,7 +86,7 @@ namespace DbDictExport.WinForm
             {
                 if (e.Node.Nodes.Count == 1 && String.IsNullOrEmpty(e.Node.Nodes[0].Text))
                 {
-                    //if has the empty node
+                    // If has the empty node
                     TreeNode rootNode = e.Node;
                     LoadTableTreeNode(rootNode);
                 }
@@ -159,13 +138,7 @@ namespace DbDictExport.WinForm
         #region MenuItems click events
         private void newConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoginForm login = new LoginForm();
-            if (login.ShowDialog() == DialogResult.OK)
-            {
-                this.connBuilder = login.ConnBuilder;
-                login.Close();
-                LoadDatabaseTreeNode();
-            }
+            LoadLoginForm();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -230,6 +203,17 @@ namespace DbDictExport.WinForm
         }
         #endregion
 
+        private void LoadLoginForm()
+        {
+            LoginForm login = new LoginForm();
+            if (login.ShowDialog() == DialogResult.OK)
+            {
+                this.connBuilder = login.ConnBuilder;
+                login.Close();
+                LoadDatabaseTreeNode();
+            }
+        }
+
         private Workbook GenerateWorkbook(List<DbTable> tableList)
         {
             #region
@@ -242,8 +226,8 @@ namespace DbDictExport.WinForm
 
                 for (int k = 0; k < tableList.Count; k++)
                 {
-                    //create a work sheet
-                    //the max length of worksheet's name can't be larger than 31
+                    // Create a work sheet
+                    // The max length of worksheet's name can't be larger than 31
                     string sheetName = tableList[k].Name.Length <= 31 ? tableList[k].Name : tableList[k].Name.Substring(0, 25) + "..." + k;
                     Worksheet sheet = workbook.Worksheets.Add(sheetName);
                     sheet.IsGridlinesVisible = false;
@@ -292,18 +276,12 @@ namespace DbDictExport.WinForm
                     #endregion
 
                     #region fill data in cells
-                    //Table title at row 1
-                    //sheet.Cells.Merge(0, 0, 1, 2);
-                    //sheet.Cells.Merge(0, 2, 1, 8);
-                    //sheet.Cells[0, 0].PutValue("TableName");
+                    // Table title at row 1
                     sheet.Cells[0, 0].PutValue(tableList[k].Name);
                     sheet.Cells[0, 0].SetStyle(subtitleStyle);
-                    //sheet.Cells[0, 0].SetStyle(titleStyle);
                     sheet.Cells.SetRowHeight(0, 30);
-                    //sheet.Cells[1, 0].PutValue(table.Name);
-                    //sheet.Cells[0, 2].SetStyle(subtitleStyle);
 
-                    //fields title at row 2
+                    // Fields title at row 2
                     sheet.Cells[1, 0].PutValue("#");
                     sheet.Cells[1, 1].PutValue("Field");
                     sheet.Cells[1, 2].PutValue("Description");
@@ -318,7 +296,7 @@ namespace DbDictExport.WinForm
                     {
                         sheet.Cells[1, i].SetStyle(tableHeadStyle);
                     }
-                    //fields from row 3
+                    // Fields from row 3
                     foreach (DbColumn column in tableList[k].ColumnList)
                     {
                         int rowNo = column.Order + 1;
@@ -344,7 +322,6 @@ namespace DbDictExport.WinForm
                                 cell.SetStyle(style);
                             }
                         }
-
                     }
                     #endregion
 
@@ -353,12 +330,12 @@ namespace DbDictExport.WinForm
                     sheet.Cells.SetColumnWidth(1, 30);     //field
                     sheet.Cells.SetColumnWidth(2, 20);     //desccription
                     sheet.Cells.SetColumnWidth(3, 10);     //identity
-                    sheet.Cells.SetColumnWidth(4, 6);     //PK
+                    sheet.Cells.SetColumnWidth(4, 6);      //PK
                     sheet.Cells.SetColumnWidth(5, 17);     //Type
                     sheet.Cells.SetColumnWidth(6, 13);     //Length
-                    sheet.Cells.SetColumnWidth(7, 10);      //Nullable
-                    sheet.Cells.SetColumnWidth(8, 18);         //default value
-                    sheet.Cells.SetColumnWidth(9, 30);          //comments
+                    sheet.Cells.SetColumnWidth(7, 10);     //Nullable
+                    sheet.Cells.SetColumnWidth(8, 18);     //default value
+                    sheet.Cells.SetColumnWidth(9, 30);     //comments
                     #endregion
 
                 }

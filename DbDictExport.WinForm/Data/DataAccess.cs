@@ -8,7 +8,7 @@ using DbDictExport.WinForm.Model;
 
 namespace DbDictExport.WinForm.Data
 {
-    public class DataAccess
+    public sealed class DataAccess
     {
         /// <summary>
         /// get a list of database name
@@ -18,13 +18,10 @@ namespace DbDictExport.WinForm.Data
         public static List<string> GetDbNameList(SqlConnectionStringBuilder connBuilder)
         {
             List<string> list = new List<string>();
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
-                foreach (DataRow row in conn.GetSchema(SqlClientMetaDataCollectionNames.Databases).Rows)
-                {
-                    list.Add(row[0].ToString());
-                }
+                list.AddRange(from DataRow row in conn.GetSchema(SqlClientMetaDataCollectionNames.Databases).Rows select row[0].ToString());
                 conn.Close();
             }
             return list;
@@ -64,8 +61,8 @@ namespace DbDictExport.WinForm.Data
         public static List<DbTable> GetDbTableList(SqlConnectionStringBuilder connBuilder, string dbName)
         {
             connBuilder.InitialCatalog = dbName;
-            List<DbTable> list = new List<DbTable>();
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            var list = new List<DbTable>();
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
                 string sql = "SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE'";
@@ -115,8 +112,8 @@ namespace DbDictExport.WinForm.Data
 
         public static List<DbColumn> GetDbColumnList(SqlConnectionStringBuilder connBuilder, DbTable table)
         {
-            List<DbColumn> list = new List<DbColumn>();
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            var list = new List<DbColumn>();
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
                 string sql = @"SELECT  
@@ -153,7 +150,7 @@ namespace DbDictExport.WinForm.Data
 
                 while (dr.Read())
                 {
-                    DbColumn column = new DbColumn()
+                    var column = new DbColumn
                     {
                         DbTable = table,
                         DbType = dr["Type"].ToString(),
@@ -176,8 +173,8 @@ namespace DbDictExport.WinForm.Data
 
         public static List<DbColumn> GetDbColumnList(SqlConnectionStringBuilder connBuilder, string tableName)
         {
-            List<DbColumn> list = new List<DbColumn>();
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            var list = new List<DbColumn>();
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
                 string sql = @"SELECT  
@@ -214,9 +211,8 @@ namespace DbDictExport.WinForm.Data
 
                 while (dr.Read())
                 {
-                    DbColumn column = new DbColumn()
+                    var column = new DbColumn
                     {
-                        //DbTable = table,
                         DbType = dr["Type"].ToString(),
                         Name = dr["Name"].ToString(),
                         Order = Int32.Parse(dr["ColumnOrder"].ToString()),

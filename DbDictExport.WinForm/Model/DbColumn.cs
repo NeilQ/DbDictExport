@@ -5,7 +5,7 @@ namespace DbDictExport.WinForm.Model
     /// <summary>
     /// Class for table column of sql server database
     /// </summary>
-    public class DbColumn
+    public sealed class DbColumn
     {
         private DbTable dbTable;
 

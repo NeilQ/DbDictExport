@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -14,84 +11,84 @@ namespace DbDictExport.WinForm.Service
         private delegate void CloseLoadingForm();
         private static readonly Object syncLock = new object();
 
-        private static LoadingFormService _instance = null;
+        private static LoadingFormService _instance;
         public static LoadingFormService Instance
         {
             get {
-                if (LoadingFormService._instance == null)
+                if (_instance == null)
                 {
                     lock (syncLock)
                     {
-                        if (LoadingFormService._instance == null)
+                        if (_instance == null)
                         {
-                            LoadingFormService._instance = new LoadingFormService();
+                            _instance = new LoadingFormService();
                         }
                     }
                 }
-                return LoadingFormService._instance;
+                return _instance;
             }
         }
 
         public static void CreateForm()
         {
-            LoadingFormService.Instance.Create();
+            Instance.Create();
         }
 
         public static void CloseFrom()
         {
-            LoadingFormService.Instance.Close();
+            Instance.Close();
         }
 
         public static void SetFormCaption(string text)
         {
-            LoadingFormService.Instance.SetCaption(text);
+            Instance.SetCaption(text);
         }
 
         public void Create()
         {
             Close();
             frm = new LoadingForm();
-            loadingThread = new Thread(new ThreadStart(delegate() { Application.Run(frm); }));
+            loadingThread = new Thread(s => Application.Run(frm));
             loadingThread.Start();
         }
 
         private void Dispose()
         {
-            if (frm != null && frm.InvokeRequired)
+            if (frm != null)
             {
-                CloseLoadingForm closeFrm = new CloseLoadingForm(Dispose);
+                if (frm.InvokeRequired)
+                {
+                    CloseLoadingForm closeFrm = Dispose;
+                }
+                else
+                {
+                    frm.Dispose();
+                }
             }
-            else
-            {
-                frm.Dispose();
-            }
+            
         }
 
         public void Close()
         {
-            if (loadingThread != null)
+            if (loadingThread == null) return;
+            try
             {
-                try
-                {
-                    Dispose();
-                    loadingThread.Abort();
-                    loadingThread.Join();
-                    loadingThread.DisableComObjectEagerCleanup();
-                }
-                catch { }
+                Dispose();
+                loadingThread.Abort();
+                loadingThread.Join();
+                loadingThread.DisableComObjectEagerCleanup();
             }
+            catch { }
         }
 
         public void SetCaption(string text)
         {
-            if (frm != null)
+            if (frm == null) return;
+            try
             {
-                try
-                {
-                    frm.SetText(text);
-                }
-                catch { }
+                frm.SetText(text);
             }
+            catch { }
         }
     }
 }
