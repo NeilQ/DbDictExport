@@ -20,7 +20,7 @@ namespace DbDictExport.Dal
         /// <returns>The list of database name.</returns>
         public static List<string> GetDbNameList(SqlConnectionStringBuilder connBuilder)
         {
-            if(connBuilder == null)
+            if (connBuilder == null)
             {
                 throw new Exception("The connBuilder cannot be null.");
             }
@@ -184,7 +184,7 @@ namespace DbDictExport.Dal
             }
             if (table == null)
             {
-                throw new Exception("The table cannot be null");
+                throw new Exception("The table cannot be null.");
             }
             else
             {
@@ -264,7 +264,7 @@ namespace DbDictExport.Dal
             {
                 throw new Exception("The connBuilder cannont be null");
             }
-            if(String.IsNullOrEmpty(tableName))
+            if (String.IsNullOrEmpty(tableName))
             {
                 throw new Exception("The tableName cannot be null");
             }
@@ -324,6 +324,51 @@ namespace DbDictExport.Dal
                 conn.Close();
             }
             return list;
+        }
+
+        /// <summary>
+        /// Gets a dataTable of the top 500 columns.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="table">The specified dbTable.</param>
+        /// <returns>A DataTable object of the top 500 column of the specified data table.</returns>
+        public static DataTable GetResultSetByDbTable(SqlConnectionStringBuilder connBuilder, DbTable table)
+        {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannont be null.");
+            }
+            if (table == null)
+            {
+                throw new Exception("The table cannot be null or empty.");
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(table.Catalog))
+                {
+                    throw new Exception("The table.Catalog cannot be null or empty.");
+                }
+                if (String.IsNullOrEmpty(table.Name))
+                {
+                    throw new Exception("The table.Name cannot be null or empty.");
+                }
+            }
+
+            connBuilder.InitialCatalog = table.Catalog;
+            var dtResult = new DataTable();
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand
+                {
+                    CommandText = "SELECT TOP 500 * FROM " + table.Name,
+                    Connection = conn
+                };
+                SqlDataAdapter adp = new SqlDataAdapter(cmd);
+                adp.Fill(dtResult);
+                conn.Close();
+            }
+            return dtResult;
         }
 
     }

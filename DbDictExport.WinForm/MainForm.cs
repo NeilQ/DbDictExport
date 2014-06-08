@@ -34,6 +34,7 @@ namespace DbDictExport.WinForm
         public MainForm()
         {
             InitializeComponent();
+            this.dgvResultSet.DataError += dgvResultSet_DataError;
             this.tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
             this.tvDatabase.MouseDown += tvDatabase_MouseDown;
             foreach (ToolStripItem item in this.cmsDatabase.Items)
@@ -42,6 +43,17 @@ namespace DbDictExport.WinForm
             }
             LoadLoginForm();
             this.tvDatabase.ImageList = this.imgListCommon;
+        }
+
+ 
+
+        void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            if (!dgvResultSet.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.Equals(DBNull.Value))
+            {
+                e.ThrowException = false;
+            }
+        
         }
 
         #region database TreeView's events
@@ -76,6 +88,8 @@ namespace DbDictExport.WinForm
                             this.dgvTable.DataSource = table.ColumnList;
                             dgvTable.Columns["DbTable"].Visible = false;
                             dgvTable.Columns["Order"].Visible = false;
+
+                            this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
                         }
                     }
                 }

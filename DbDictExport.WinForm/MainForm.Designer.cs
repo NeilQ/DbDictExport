@@ -41,11 +41,15 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dgvTable = new System.Windows.Forms.DataGridView();
             this.imgListCommon = new System.Windows.Forms.ImageList(this.components);
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.dgvResultSet = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResultSet)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -53,16 +57,17 @@
             this.groupBox1.Controls.Add(this.tvDatabase);
             this.groupBox1.Location = new System.Drawing.Point(12, 31);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(329, 608);
+            this.groupBox1.Size = new System.Drawing.Size(329, 784);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DataBase";
             // 
             // tvDatabase
             // 
-            this.tvDatabase.Location = new System.Drawing.Point(6, 26);
+            this.tvDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvDatabase.Location = new System.Drawing.Point(3, 23);
             this.tvDatabase.Name = "tvDatabase";
-            this.tvDatabase.Size = new System.Drawing.Size(317, 576);
+            this.tvDatabase.Size = new System.Drawing.Size(323, 758);
             this.tvDatabase.TabIndex = 0;
             // 
             // cmsDatabase
@@ -92,7 +97,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1281, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1316, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -115,13 +120,14 @@
             this.groupBox2.Controls.Add(this.dgvTable);
             this.groupBox2.Location = new System.Drawing.Point(347, 31);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(922, 608);
+            this.groupBox2.Size = new System.Drawing.Size(969, 441);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "TableView";
+            this.groupBox2.Text = "Design";
             // 
             // dgvTable
             // 
+            this.dgvTable.AllowUserToAddRows = false;
             this.dgvTable.AllowUserToDeleteRows = false;
             this.dgvTable.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -130,7 +136,7 @@
             this.dgvTable.Name = "dgvTable";
             this.dgvTable.ReadOnly = true;
             this.dgvTable.RowTemplate.Height = 27;
-            this.dgvTable.Size = new System.Drawing.Size(916, 582);
+            this.dgvTable.Size = new System.Drawing.Size(963, 415);
             this.dgvTable.TabIndex = 0;
             // 
             // imgListCommon
@@ -141,12 +147,37 @@
             this.imgListCommon.Images.SetKeyName(1, "database_tree.ico");
             this.imgListCommon.Images.SetKeyName(2, "datatable_tree.ico");
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.dgvResultSet);
+            this.groupBox3.Location = new System.Drawing.Point(347, 475);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(966, 337);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Result Set";
+            // 
+            // dgvResultSet
+            // 
+            this.dgvResultSet.AllowUserToAddRows = false;
+            this.dgvResultSet.AllowUserToDeleteRows = false;
+            this.dgvResultSet.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvResultSet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvResultSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvResultSet.Location = new System.Drawing.Point(3, 23);
+            this.dgvResultSet.Name = "dgvResultSet";
+            this.dgvResultSet.ReadOnly = true;
+            this.dgvResultSet.RowTemplate.Height = 27;
+            this.dgvResultSet.Size = new System.Drawing.Size(960, 311);
+            this.dgvResultSet.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1281, 651);
+            this.ClientSize = new System.Drawing.Size(1316, 821);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
@@ -163,6 +194,8 @@
             this.menuStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResultSet)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,5 +214,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dgvTable;
         private System.Windows.Forms.ImageList imgListCommon;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.DataGridView dgvResultSet;
     }
 }
