@@ -40,6 +40,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dgvTable = new System.Windows.Forms.DataGridView();
+            this.imgListCommon = new System.Windows.Forms.ImageList(this.components);
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -132,6 +133,14 @@
             this.dgvTable.Size = new System.Drawing.Size(916, 582);
             this.dgvTable.TabIndex = 0;
             // 
+            // imgListCommon
+            // 
+            this.imgListCommon.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListCommon.ImageStream")));
+            this.imgListCommon.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgListCommon.Images.SetKeyName(0, "databases_tree_root.ico");
+            this.imgListCommon.Images.SetKeyName(1, "database_tree.ico");
+            this.imgListCommon.Images.SetKeyName(2, "datatable_tree.ico");
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -141,7 +150,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -171,5 +180,6 @@
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dgvTable;
+        private System.Windows.Forms.ImageList imgListCommon;
     }
 }

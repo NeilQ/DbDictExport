@@ -4,19 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
-using DbDictExport.WinForm.Model;
+using DbDictExport.Model;
 
-namespace DbDictExport.WinForm.Data
+namespace DbDictExport.Dal
 {
+    /// <summary>
+    /// DataAccess class for get the database data.
+    /// </summary>
     public sealed class DataAccess
     {
         /// <summary>
-        /// get a list of database name
+        /// Gets a list of database name.
         /// </summary>
-        /// <param name="connBuilder"></param>
-        /// <returns></returns>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <returns>The list of database name.</returns>
         public static List<string> GetDbNameList(SqlConnectionStringBuilder connBuilder)
         {
+            if(connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannot be null.");
+            }
             List<string> list = new List<string>();
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
@@ -27,16 +34,35 @@ namespace DbDictExport.WinForm.Data
             return list;
         }
 
+        /// <summary>
+        /// Gets a dbTable.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="dbName">The specified database name.</param>
+        /// <param name="tableName">The specified datatable name.`</param>
+        /// <returns></returns>
         public static DbTable GetTableByName(SqlConnectionStringBuilder connBuilder, string dbName, string tableName)
         {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannot be null.");
+            }
+            if (String.IsNullOrEmpty(dbName))
+            {
+                throw new Exception("The dbName cannot be null or empty.");
+            }
+            if (String.IsNullOrEmpty(tableName))
+            {
+                throw new Exception("The tableName cannot be null.");
+            }
             connBuilder.InitialCatalog = dbName;
-            DbTable table =null ;
+            DbTable table = null;
             using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
                 string sql = "SELECT TOP 1 * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE' AND TABLE_NAME=@TableName";
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add(new SqlParameter("TableName",tableName));
+                cmd.Parameters.Add(new SqlParameter("TableName", tableName));
                 SqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
@@ -58,8 +84,22 @@ namespace DbDictExport.WinForm.Data
             return table;
         }
 
-        public static List<DbTable> GetDbTableList(SqlConnectionStringBuilder connBuilder, string dbName)
+        /// <summary>
+        /// Gets a list of dbTable.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="dbName">The specified datatable name.</param>
+        /// <returns>A list of dbTable, with columns.</returns>
+        public static List<DbTable> GetDbTableListWithColumns(SqlConnectionStringBuilder connBuilder, string dbName)
         {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannot be null.");
+            }
+            if (String.IsNullOrEmpty(dbName))
+            {
+                throw new Exception("The dbName cannot be null or empry.");
+            }
             connBuilder.InitialCatalog = dbName;
             var list = new List<DbTable>();
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
@@ -89,10 +129,24 @@ namespace DbDictExport.WinForm.Data
             return list.OrderBy(s => s.Name).ToList();
         }
 
-        public static List<string> GetDbTableNameList(SqlConnectionStringBuilder connBuilder, string dbName)
+        /// <summary>
+        /// Gets a list of datatable name.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="dbName">The specified database name.</param>
+        /// <returns>The list of datatable name.</returns>
+        public static List<DbTable> GetDbTableNameListWithoutColumns(SqlConnectionStringBuilder connBuilder, string dbName)
         {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannot be null.");
+            }
+            if (String.IsNullOrEmpty(dbName))
+            {
+                throw new Exception("The dbName cannot be null or empty.");
+            }
             connBuilder.InitialCatalog = dbName;
-            List<string> list = new List<string>();
+            var list = new List<DbTable>();
             using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
@@ -102,16 +156,43 @@ namespace DbDictExport.WinForm.Data
 
                 while (dr.Read())
                 {
-                    list.Add(dr["TABLE_NAME"].ToString());
+                    DbTable table = new DbTable()
+                    {
+                        Catalog = dr["TABLE_CATALOG"].ToString(),
+                        Schema = dr["TABLE_SCHEMA"].ToString(),
+                        Name = dr["TABLE_NAME"].ToString(),
+                        Type = dr["TABLE_TYPE"].ToString()
+                    };
+                    list.Add(table);
                 }
                 conn.Close();
-                list.Sort();
             }
-            return list;
+            return list.OrderBy(s => s.Name).ToList();
         }
 
+        /// <summary>
+        /// Gets a list of DbColumn.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="table">The specified dbTable. <c>table.Name cannot be empty.</c></param>
+        /// <returns></returns>
         public static List<DbColumn> GetDbColumnList(SqlConnectionStringBuilder connBuilder, DbTable table)
         {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannot be null.");
+            }
+            if (table == null)
+            {
+                throw new Exception("The table cannot be null");
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(table.Name))
+                {
+                    throw new Exception("The table.Name cannot be null or empty.");
+                }
+            }
             var list = new List<DbColumn>();
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
@@ -171,8 +252,22 @@ namespace DbDictExport.WinForm.Data
             return list;
         }
 
+        /// <summary>
+        /// Gets a list of dbColumn.
+        /// </summary>
+        /// <param name="connBuilder">The specified SqlConnectionStringBuilder.</param>
+        /// <param name="tableName">The specified data table name.</param>
+        /// <returns>The list of dbColumn.</returns>
         public static List<DbColumn> GetDbColumnList(SqlConnectionStringBuilder connBuilder, string tableName)
         {
+            if (connBuilder == null)
+            {
+                throw new Exception("The connBuilder cannont be null");
+            }
+            if(String.IsNullOrEmpty(tableName))
+            {
+                throw new Exception("The tableName cannot be null");
+            }
             var list = new List<DbColumn>();
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {

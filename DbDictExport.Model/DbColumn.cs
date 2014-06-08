@@ -1,6 +1,6 @@
 ﻿
 
-namespace DbDictExport.WinForm.Model
+namespace DbDictExport.Model
 {
     /// <summary>
     /// DbColumn Class for data table's column. 

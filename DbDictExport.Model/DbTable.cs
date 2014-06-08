@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DbDictExport.WinForm.Model
+namespace DbDictExport.Model
 {
     /// <summary>
     /// DbTable Class for a database table. 
