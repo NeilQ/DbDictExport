@@ -161,11 +161,14 @@ namespace DbDictExport.WinForm
             LoadLoginForm();
         }
 
+        /*
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var abox = new AboutBox();
             abox.ShowDialog();
         }
+         * */
+         
         #endregion
 
         #region Load TreeView nodes
