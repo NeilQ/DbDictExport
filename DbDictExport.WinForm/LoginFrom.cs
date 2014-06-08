@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
+
 namespace DbDictExport.WinForm
 {
     public partial class LoginForm : Form

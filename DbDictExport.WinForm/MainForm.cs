@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using DbDictExport.WinForm.Data;
-using DbDictExport.WinForm.Model;
+using DbDictExport.Dal;
+using DbDictExport.Model;
 using DbDictExport.WinForm.Service;
 using Aspose.Cells;
 
@@ -21,8 +21,8 @@ namespace DbDictExport.WinForm
          * the table tree node's Name arrtibute start with string "tb_"
          * the column tree node's Name arrtibute start with string "col_"
          * */
-        private string databaseTreeNodeNamePrefix = "db_";
-        private string tableTreeNodeNamePrefix = "tb_";
+        private const string DatabaseTreeNodeNamePrefix = "db_";
+        private const string TableTreeNodeNamePrefix = "tb_";
         //private string columnTreeNodeNamePrefix = "col_";
         public SqlConnectionStringBuilder ConnBuilder
         {
@@ -34,6 +34,7 @@ namespace DbDictExport.WinForm
         public MainForm()
         {
             InitializeComponent();
+            this.dgvResultSet.DataError += dgvResultSet_DataError;
             this.tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
             this.tvDatabase.MouseDown += tvDatabase_MouseDown;
             foreach (ToolStripItem item in this.cmsDatabase.Items)
@@ -41,7 +42,19 @@ namespace DbDictExport.WinForm
                 item.Click += cmsDatabaseItem_Click;
             }
             LoadLoginForm();
-        }    
+            this.tvDatabase.ImageList = this.imgListCommon;
+        }
+
+ 
+
+        void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            if (!dgvResultSet.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.Equals(DBNull.Value))
+            {
+                e.ThrowException = false;
+            }
+        
+        }
 
         #region database TreeView's events
         void tvDatabase_MouseDown(object sender, MouseEventArgs e)
@@ -53,7 +66,7 @@ namespace DbDictExport.WinForm
                 TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
                 if (currentNode != null)
                 {
-                    if (currentNode.Name.StartsWith(databaseTreeNodeNamePrefix))
+                    if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
                     {
                         currentNode.ContextMenuStrip = this.cmsDatabase;
                     }
@@ -66,14 +79,17 @@ namespace DbDictExport.WinForm
                 TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
                 if (currrentNode != null)
                 {
-                    if (currrentNode.Name.StartsWith(tableTreeNodeNamePrefix))
+                    if (currrentNode.Name.StartsWith(TableTreeNodeNamePrefix))
                     {
-                        DbTable table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, currrentNode.Text);
+                        var table = currrentNode.Tag as DbTable;
+                        table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, table.Name);
                         if (table != null)
                         {
                             this.dgvTable.DataSource = table.ColumnList;
                             dgvTable.Columns["DbTable"].Visible = false;
                             dgvTable.Columns["Order"].Visible = false;
+
+                            this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
                         }
                     }
                 }
@@ -82,7 +98,7 @@ namespace DbDictExport.WinForm
 
         void tvDatabase_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.Name.StartsWith(this.databaseTreeNodeNamePrefix))
+            if (e.Node.Name.StartsWith(DatabaseTreeNodeNamePrefix))
             {
                 if (e.Node.Nodes.Count == 1 && String.IsNullOrEmpty(e.Node.Nodes[0].Text))
                 {
@@ -93,6 +109,8 @@ namespace DbDictExport.WinForm
             }
         }
         #endregion
+
+        #region ContextMenuStrip click event
 
         private void cmsDatabaseItem_Click(object sender, EventArgs e)
         {
@@ -105,7 +123,7 @@ namespace DbDictExport.WinForm
                     LoadingFormService.CreateForm();
                     LoadingFormService.SetFormCaption("Exporting...");
 
-                    List<DbTable> tableList = DataAccess.GetDbTableList(this.connBuilder, currentNode.Text);
+                    List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(this.connBuilder, currentNode.Text);
                     Workbook workbook = GenerateWorkbook(tableList);
 
                     //LoadingFormService.CloseFrom();
@@ -135,6 +153,8 @@ namespace DbDictExport.WinForm
 
         }
 
+        #endregion
+
         #region MenuItems click events
         private void newConnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -143,7 +163,7 @@ namespace DbDictExport.WinForm
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutBox abox = new AboutBox();
+            var abox = new AboutBox();
             abox.ShowDialog();
         }
         #endregion
@@ -156,15 +176,17 @@ namespace DbDictExport.WinForm
             //clear the empty node
             this.tvDatabase.Cursor = Cursors.AppStarting;
             rootNode.Nodes.Clear();
-            List<string> tableNameList = DataAccess.GetDbTableNameList(connBuilder, rootNode.Text);
-            foreach (var name in tableNameList)
+            List<DbTable> tableList = DataAccess.GetDbTableNameListWithoutColumns(connBuilder, rootNode.Text);
+            foreach (var table in tableList)
             {
                 TreeNode tableNode = new TreeNode()
                 {
-                    Name = tableTreeNodeNamePrefix + name,
-                    Text = name,
-                    ToolTipText = name,
-                    //Tag = table
+                    Name = TableTreeNodeNamePrefix + table.Name,
+                    Text = table.Schema + "." + table.Name,
+                    ToolTipText = table.Schema + "." + table.Name,
+                    Tag = table,
+                    ImageIndex = 2,
+                    SelectedImageIndex = 2
                 };
                 rootNode.Nodes.Add(tableNode);
             }
@@ -175,17 +197,22 @@ namespace DbDictExport.WinForm
         private void LoadDatabaseTreeNode()
         {
             this.tvDatabase.Nodes.Clear();
-            TreeNode rootNode = new TreeNode();
-            rootNode.Text = this.connBuilder.DataSource + string.Format("({0})", this.connBuilder.UserID);
-            this.tvDatabase.Nodes.Add(rootNode);
-
+            var rootNode = new TreeNode
+            {
+                Text = this.connBuilder.DataSource + string.Format("({0})", this.connBuilder.UserID),
+                ImageIndex = 0,
+                SelectedImageIndex = 0
+            };
+            this.tvDatabase.Nodes.Add(rootNode);    
             foreach (string dbName in DataAccess.GetDbNameList(this.ConnBuilder))
             {
-                TreeNode databaseNode = new TreeNode()
+                var databaseNode = new TreeNode()
                 {
                     Text = dbName,
                     ToolTipText = dbName,
-                    Name = this.databaseTreeNodeNamePrefix + dbName,
+                    Name = DatabaseTreeNodeNamePrefix + dbName,
+                    ImageIndex = 1,
+                    SelectedImageIndex = 1 
                 };
 
                 /*
@@ -195,7 +222,7 @@ namespace DbDictExport.WinForm
                  * It will be clear when the specific database node be expended,
                  * and load  real child nodes.
                  * */
-                TreeNode emptyNode = new TreeNode();
+                var emptyNode = new TreeNode();
                 databaseNode.Nodes.Add(emptyNode);
                 rootNode.Nodes.Add(databaseNode);
                 //Maybe: give a img to every root node
@@ -205,7 +232,7 @@ namespace DbDictExport.WinForm
 
         private void LoadLoginForm()
         {
-            LoginForm login = new LoginForm();
+            var login = new LoginForm();
             if (login.ShowDialog() == DialogResult.OK)
             {
                 this.connBuilder = login.ConnBuilder;

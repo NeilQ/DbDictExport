@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace DbDictExport.WinForm.Model
+namespace DbDictExport.Model
 {
     /// <summary>
-    /// Class for a database table of sql server
+    /// DbTable Class for a database table. 
     /// </summary>
     public sealed class DbTable
     {
         private List<DbColumn> columnList;
 
         /// <summary>
-        /// Catalog of table
+        /// Gets or sets the catalog of data table.
         /// </summary>
         public string Catalog { get; set; }
 
         /// <summary>
-        /// Schema of table
+        /// Gets or sets the schema of data table.
         /// </summary>
         public string Schema { get; set; }
 
         /// <summary>
-        /// Name of table
+        /// Gets or sets the name of data table.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// table type of table
+        /// Gets or sets the table type of data table.
         /// </summary>
         public string Type { get; set; }
 
         /// <summary>
-        /// columns of table
+        /// Gets or sets the columns list of table.
         /// </summary>
         public List<DbColumn> ColumnList
         {
