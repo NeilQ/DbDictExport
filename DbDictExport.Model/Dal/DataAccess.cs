@@ -57,18 +57,18 @@ namespace DbDictExport.Dal
             }
             connBuilder.InitialCatalog = dbName;
             DbTable table = null;
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
-                string sql = "SELECT TOP 1 * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE' AND TABLE_NAME=@TableName";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                const string sql = "SELECT TOP 1 * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE' AND TABLE_NAME=@TableName";
+                var cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.Add(new SqlParameter("TableName", tableName));
                 SqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
                     //table
-                    table = new DbTable()
+                    table = new DbTable
                     {
                         Catalog = dr["TABLE_CATALOG"].ToString(),
                         Schema = dr["TABLE_SCHEMA"].ToString(),
@@ -105,14 +105,14 @@ namespace DbDictExport.Dal
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
-                string sql = "SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE'";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                const string sql = "SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE' AND TABLE_NAME<>'sysdiagrams'";
+                var cmd = new SqlCommand(sql, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
                     //table
-                    DbTable table = new DbTable()
+                    var table = new DbTable
                     {
                         Catalog = dr["TABLE_CATALOG"].ToString(),
                         Schema = dr["TABLE_SCHEMA"].ToString(),
@@ -147,16 +147,16 @@ namespace DbDictExport.Dal
             }
             connBuilder.InitialCatalog = dbName;
             var list = new List<DbTable>();
-            using (SqlConnection conn = new SqlConnection(connBuilder.ConnectionString))
+            using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
-                string sql = "SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE'";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                const string sql = "SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE ='BASE TABLE' AND TABLE_NAME<>'sysdiagrams'";
+                var cmd = new SqlCommand(sql, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    DbTable table = new DbTable()
+                    var table = new DbTable
                     {
                         Catalog = dr["TABLE_CATALOG"].ToString(),
                         Schema = dr["TABLE_SCHEMA"].ToString(),
@@ -186,18 +186,15 @@ namespace DbDictExport.Dal
             {
                 throw new Exception("The table cannot be null.");
             }
-            else
+            if (String.IsNullOrEmpty(table.Name))
             {
-                if (String.IsNullOrEmpty(table.Name))
-                {
-                    throw new Exception("The table.Name cannot be null or empty.");
-                }
+                throw new Exception("The table.Name cannot be null or empty.");
             }
             var list = new List<DbColumn>();
             using (var conn = new SqlConnection(connBuilder.ConnectionString))
             {
                 conn.Open();
-                string sql = @"SELECT  
+                const string sql = @"SELECT  
                                             [TableName]=case when a.colorder=1 then d.name else '' end,  
                                             [TableDescription]=case when a.colorder=1 then isnull(f.value,'') else '' end,  
                                             [ColumnOrder]=a.colorder,  
@@ -225,7 +222,7 @@ namespace DbDictExport.Dal
                                         left join sys.extended_properties f on d.id=f.major_id and f.minor_id=0  
                                         where d.name=@TableName    
                                         order by a.id,a.colorder  ";
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                var cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.Add(new SqlParameter("TableName", table.Name));
                 SqlDataReader dr = cmd.ExecuteReader();
 
@@ -342,16 +339,13 @@ namespace DbDictExport.Dal
             {
                 throw new Exception("The table cannot be null or empty.");
             }
-            else
+            if (String.IsNullOrEmpty(table.Catalog))
             {
-                if (String.IsNullOrEmpty(table.Catalog))
-                {
-                    throw new Exception("The table.Catalog cannot be null or empty.");
-                }
-                if (String.IsNullOrEmpty(table.Name))
-                {
-                    throw new Exception("The table.Name cannot be null or empty.");
-                }
+                throw new Exception("The table.Catalog cannot be null or empty.");
+            }
+            if (String.IsNullOrEmpty(table.Name))
+            {
+                throw new Exception("The table.Name cannot be null or empty.");
             }
 
             connBuilder.InitialCatalog = table.Catalog;
@@ -364,7 +358,7 @@ namespace DbDictExport.Dal
                     CommandText = "SELECT TOP 500 * FROM " + table.Name,
                     Connection = conn
                 };
-                SqlDataAdapter adp = new SqlDataAdapter(cmd);
+                var adp = new SqlDataAdapter(cmd);
                 adp.Fill(dtResult);
                 conn.Close();
             }

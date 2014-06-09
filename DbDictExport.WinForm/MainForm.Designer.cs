@@ -176,9 +176,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DbView";
+            this.Text = "DbViewer";
             this.groupBox1.ResumeLayout(false);
             this.cmsDatabase.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
