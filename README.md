@@ -3,7 +3,7 @@ DbDictExport
 
 
 A small tool to view the data table's fields properties and export data dictionaries to a excel file from the Sql Server database. 
-Just test with Sql Server 2008 now.
+Available for Sql Server 2008\2012.
 
 It will help you to write document.
 
