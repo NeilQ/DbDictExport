@@ -6,7 +6,7 @@ using DbDictExport.Model;
 
 namespace DbDictExport.Common
 {
-    public static class ExcelHelper
+    public sealed class ExcelHelper
     {
         public static Workbook GenerateWorkbook(List<DbTable> tableList)
         {
