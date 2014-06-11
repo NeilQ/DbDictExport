@@ -11,7 +11,7 @@ Any advice or question please let me know.
 
 Mail: neil_chen_0918 'at' live.cn
 
-Sql Server数据字典导出工具。目前仅测试过sql server 2008。
+Sql Server数据表查看及字典导出工具。可用：sql server 2008\2012。
 
-方便查看数据表字段信息及导出文档。
+方便查看数据表信息及导出文档。
 
