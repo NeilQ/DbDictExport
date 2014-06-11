@@ -15,3 +15,4 @@ Sql Server数据表查看及字典导出工具。可用：sql server 2008\2012�
 
 方便查看数据表信息及导出文档。
 
+![image](https://raw.githubusercontent.com/NeilQ/DbDictExport/master/screenshot.jpg)
