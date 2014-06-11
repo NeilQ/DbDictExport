@@ -183,7 +183,7 @@ namespace DbDictExport.WinForm
             this.tvDatabase.Cursor = Cursors.AppStarting;
             rootNode.Nodes.Clear();
             List<DbTable> tableList = DataAccess.GetDbTableNameListWithoutColumns(connBuilder, rootNode.Text);
-            foreach (TreeNode tableNode in tableList.Select(table => new TreeNode()
+            foreach (var tableNode in tableList.Select(table => new TreeNode
             {
                 Name = TableTreeNodeNamePrefix + table.Name,
                 Text = table.Schema + "." + table.Name,
@@ -211,7 +211,7 @@ namespace DbDictExport.WinForm
             this.tvDatabase.Nodes.Add(rootNode);    
             foreach (string dbName in DataAccess.GetDbNameList(this.ConnBuilder))
             {
-                var databaseNode = new TreeNode()
+                var databaseNode = new TreeNode
                 {
                     Text = dbName,
                     ToolTipText = dbName,

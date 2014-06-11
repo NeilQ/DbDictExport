@@ -42,6 +42,8 @@
             this.imgListCommon = new System.Windows.Forms.ImageList(this.components);
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.dgvResultSet = new System.Windows.Forms.DataGridView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -49,14 +51,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResultSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.tvDatabase);
-            this.groupBox1.Location = new System.Drawing.Point(12, 31);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(329, 784);
+            this.groupBox1.Size = new System.Drawing.Size(341, 793);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DataBase";
@@ -66,7 +77,7 @@
             this.tvDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvDatabase.Location = new System.Drawing.Point(3, 23);
             this.tvDatabase.Name = "tvDatabase";
-            this.tvDatabase.Size = new System.Drawing.Size(323, 758);
+            this.tvDatabase.Size = new System.Drawing.Size(335, 767);
             this.tvDatabase.TabIndex = 0;
             // 
             // cmsDatabase
@@ -109,9 +120,10 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dgvTable);
-            this.groupBox2.Location = new System.Drawing.Point(347, 31);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(969, 441);
+            this.groupBox2.Size = new System.Drawing.Size(971, 399);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Design";
@@ -127,7 +139,7 @@
             this.dgvTable.Name = "dgvTable";
             this.dgvTable.ReadOnly = true;
             this.dgvTable.RowTemplate.Height = 27;
-            this.dgvTable.Size = new System.Drawing.Size(963, 415);
+            this.dgvTable.Size = new System.Drawing.Size(965, 373);
             this.dgvTable.TabIndex = 0;
             // 
             // imgListCommon
@@ -141,9 +153,10 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.dgvResultSet);
-            this.groupBox3.Location = new System.Drawing.Point(347, 475);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(966, 337);
+            this.groupBox3.Size = new System.Drawing.Size(971, 390);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Result Set";
@@ -159,8 +172,44 @@
             this.dgvResultSet.Name = "dgvResultSet";
             this.dgvResultSet.ReadOnly = true;
             this.dgvResultSet.RowTemplate.Height = 27;
-            this.dgvResultSet.Size = new System.Drawing.Size(960, 311);
+            this.dgvResultSet.Size = new System.Drawing.Size(965, 364);
             this.dgvResultSet.TabIndex = 0;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel1MinSize = 30;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Size = new System.Drawing.Size(1316, 793);
+            this.splitContainer1.SplitterDistance = 341;
+            this.splitContainer1.TabIndex = 4;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.groupBox2);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.groupBox3);
+            this.splitContainer2.Size = new System.Drawing.Size(971, 793);
+            this.splitContainer2.SplitterDistance = 399;
+            this.splitContainer2.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -168,15 +217,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1316, 821);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DbViewer";
@@ -188,6 +234,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).EndInit();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResultSet)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,5 +261,7 @@
         private System.Windows.Forms.ImageList imgListCommon;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.DataGridView dgvResultSet;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }
