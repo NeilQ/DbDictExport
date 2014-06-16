@@ -104,7 +104,6 @@ namespace DbDictExport.WinForm
                 using (SqlConnection sqlConn = new SqlConnection(this.ConnBuilder.ConnectionString))
                 {
                     sqlConn.Open();
-                    sqlConn.Close();
                     return true;
                 }
             }
