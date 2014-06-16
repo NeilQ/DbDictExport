@@ -29,7 +29,6 @@ namespace DbDictExport.Dal
             {
                 conn.Open();
                 list.AddRange(from DataRow row in conn.GetSchema(SqlClientMetaDataCollectionNames.Databases).Rows select row[0].ToString());
-                conn.Close();
             }
             return list;
         }
@@ -79,7 +78,6 @@ namespace DbDictExport.Dal
                     table.ColumnList = GetDbColumnList(connBuilder, table);
 
                 }
-                conn.Close();
             }
             return table;
         }
@@ -123,8 +121,6 @@ namespace DbDictExport.Dal
                     table.ColumnList = GetDbColumnList(connBuilder, table);
                     list.Add(table);
                 }
-                conn.Close();
-
             }
             return list.OrderBy(s => s.Name).ToList();
         }
@@ -165,7 +161,6 @@ namespace DbDictExport.Dal
                     };
                     list.Add(table);
                 }
-                conn.Close();
             }
             return list.OrderBy(s => s.Name).ToList();
         }
@@ -244,7 +239,6 @@ namespace DbDictExport.Dal
                     };
                     list.Add(column);
                 }
-                conn.Close();
             }
             return list;
         }
@@ -318,7 +312,6 @@ namespace DbDictExport.Dal
                     };
                     list.Add(column);
                 }
-                conn.Close();
             }
             return list;
         }
@@ -360,7 +353,6 @@ namespace DbDictExport.Dal
                 };
                 var adp = new SqlDataAdapter(cmd);
                 adp.Fill(dtResult);
-                conn.Close();
             }
             return dtResult;
         }
