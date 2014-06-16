@@ -25,6 +25,7 @@ namespace DbDictExport.WinForm
          * */
         private const string DatabaseTreeNodeNamePrefix = "db_";
         private const string TableTreeNodeNamePrefix = "tb_";
+        private const string DabaseTempDbName = "tempdb";
         //private string columnTreeNodeNamePrefix = "col_";
         public SqlConnectionStringBuilder ConnBuilder
         {
@@ -61,40 +62,63 @@ namespace DbDictExport.WinForm
         #region database TreeView's events
         void tvDatabase_MouseDown(object sender, MouseEventArgs e)
         {
-
-            if (e.Button == MouseButtons.Right)     // Right click.
+            switch (e.Button)
             {
-                Point clickPoint = new Point(e.X, e.Y);
-                TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
-                if (currentNode != null)
+                case MouseButtons.Right:
                 {
-                    if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
+                    var clickPoint = new Point(e.X, e.Y);
+                    TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
+                    if (currentNode != null)
                     {
-                        currentNode.ContextMenuStrip = this.cmsDatabase;
-                    }
-                    this.tvDatabase.SelectedNode = currentNode;
-                }
-            }
-            else if (e.Button == MouseButtons.Left)     // Left click.
-            {
-                Point clickPoint = new Point(e.X, e.Y);
-                TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
-                if (currrentNode != null)
-                {
-                    if (currrentNode.Name.StartsWith(TableTreeNodeNamePrefix))
-                    {
-                        var table = currrentNode.Tag as DbTable;
-                        table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, table.Name);
-                        if (table != null)
+                        if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
                         {
-                            this.dgvTable.DataSource = table.ColumnList;
-                            dgvTable.Columns["DbTable"].Visible = false;
-                            dgvTable.Columns["Order"].Visible = false;
+                            currentNode.ContextMenuStrip = this.cmsDatabase;
+                        }
+                        this.tvDatabase.SelectedNode = currentNode;
+                    }
+                }
+                    break;
+                case MouseButtons.Left:
+                {
+                    var clickPoint = new Point(e.X, e.Y);
+                    TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
+                    if (currrentNode != null)
+                    {
+                        if (currrentNode.Name.StartsWith(TableTreeNodeNamePrefix))
+                        {
+                            this.dgvResultSet.DataSource = null;
+                            this.dgvResultSet.Columns.Clear();
+                            this.dgvTable.DataSource = null;
+                            this.dgvTable.Columns.Clear();
 
-                            this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
+                            var table = currrentNode.Tag as DbTable;
+                            table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, table.Name);
+                            if (table != null)
+                            {
+                                this.dgvTable.DataSource = table.ColumnList;
+                                dgvTable.Columns["DbTable"].Visible = false;
+                                dgvTable.Columns["Order"].Visible = false;
+
+                                if (currrentNode.Parent.Text == DabaseTempDbName)
+                                {
+                                    var dgvr = new DataGridViewRow();
+                                    var cell = new DataGridViewTextBoxCell
+                                    {
+                                        Value = "The temp table do not support viewing records.",
+                                    };
+                                    dgvr.Cells.Add(cell);
+
+                                    this.dgvResultSet.Columns.Add("Message","Message");
+                                    this.dgvResultSet.Columns["Message"].Width = 600;
+                                    this.dgvResultSet.Rows.Add(dgvr);
+                                    return;
+                                }
+                                this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
+                            }
                         }
                     }
                 }
+                    break;
             }
         }
 
