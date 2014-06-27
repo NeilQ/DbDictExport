@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="DbDictExport.WPF.Pages.Home"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid Style="{StaticResource ContentRoot}">
+        <ScrollViewer>
+            <StackPanel MinWidth="200">
+                <TextBlock Text="TODO: add content" />
+                <mui:BBCodeBlock BBCode="[url=/Pages/Connect.xaml]Connect[/url]"/>
+                <Button Content="Connect" Click="Button_Click" ></Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
