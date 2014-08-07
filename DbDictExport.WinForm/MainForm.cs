@@ -114,6 +114,7 @@ namespace DbDictExport.WinForm
                                     return;
                                 }
                                 this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
+                                this.dgvResultSet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                             }
                         }
                     }
