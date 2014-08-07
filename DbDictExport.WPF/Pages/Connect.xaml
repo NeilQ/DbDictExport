@@ -4,22 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:ph ="clr-namespace:DbDictExport.WPF.Common"
              xmlns:pages="clr-namespace:DbDictExport.WPF.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400">
-        <ScrollViewer>
-            <StackPanel MinWidth="200">
+             d:DesignHeight="400" d:DesignWidth="400" HorizontalAlignment="Center">
+    <ScrollViewer>
+        <StackPanel MinWidth="200">
 
-                <TextBlock Text="Connect" Style="{StaticResource Heading2}" Margin="0,0,0,0"/>
+            <TextBlock Text="Connect" Style="{StaticResource Heading2}" Margin="0,0,0,0"/>
 
             <!-- Form starts here -->
             <StackPanel x:Name="Form" Orientation="Vertical">
-                
+
                 <!-- Create ViewModel-->
-                <StackPanel.DataContext>
-                    <pages:ConnectViewModel/>
-                </StackPanel.DataContext>
-                
+
                 <StackPanel.Resources>
                     <Style TargetType="StackPanel">
                         <Setter Property="Orientation" Value="Horizontal" />
@@ -35,16 +33,19 @@
                     <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
                         <Setter Property="Padding" Value="0,3" />
                     </Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="Width" Value="80"></Setter>
+                    </Style>
                 </StackPanel.Resources>
 
                 <StackPanel>
                     <Label Content="Engine" Target="{Binding ElementName=Engine}"></Label>
-                    <ComboBox x:Name="ComboEngine" ItemsSource="{Binding Engines}" SelectedItem="{Binding SelectedEngine, Mode=TwoWay}" Width="200">
-                    </ComboBox>
+                    <ComboBox x:Name="ComboEngine" ItemsSource="{Binding Engines}" SelectedItem="{Binding SelectedEngine, Mode=TwoWay}" Width="200"></ComboBox>
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Server" Target="{Binding ElementName=Server}"></Label>
-                    <TextBox x:Name="Server" Width="200" Text="{Binding Server, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                    <ComboBox x:Name="ComboServer" IsEditable="True" ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer,Mode=OneWay}" Width="200"></ComboBox>
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Authentication" Target="{Binding ElementName=Authentication}"></Label>
@@ -52,14 +53,18 @@
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Username" Target="{Binding ElementName=Username}"></Label>
-                    <TextBox x:Name="Username" IsEnabled="{Binding IsUsernameEnable, Mode=TwoWay}" Width="200" Text="{Binding Username, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                    <TextBox x:Name="Username" IsEnabled="{Binding IsUsernameEnabled, Mode=TwoWay}" Width="200" Text="{Binding Username, Mode=TwoWay}"/>
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Password" Target="{Binding ElementName=Password}"></Label>
-                    <TextBox x:Name="Password" Width="200" Text="{Binding Password, Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                    <PasswordBox x:Name="Password" IsEnabled="{Binding IsPasswordEnabled,Mode=TwoWay}" Width="200" ph:PasswordBoxHelper.Password="{Binding Password,Mode=TwoWay}"/>
                 </StackPanel>
+                <StackPanel >
+                    <Button x:Name="ButtonConnect" Content="Connect" Command="{Binding ConnectCommand}" Margin="100,0,0,0"></Button>
+                    <Button x:Name="ButtonCancle" Content="Cancle" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Home.xaml"  Margin="20,0,0,0"></Button>
                 </StackPanel>
             </StackPanel>
-        </ScrollViewer>
-        
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>
