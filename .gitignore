@@ -213,3 +213,10 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+packages/ModernUI.WPF.1.0.5/lib/net40/FirstFloor.ModernUI.dll
+packages/ModernUI.WPF.1.0.5/lib/net40/FirstFloor.ModernUI.XML
+packages/ModernUI.WPF.1.0.5/lib/net40/Microsoft.Windows.Shell.dll
+packages/ModernUI.WPF.1.0.5/lib/net45/FirstFloor.ModernUI.dll
+packages/ModernUI.WPF.1.0.5/ModernUI.WPF.1.0.5.nupkg
+packages/ModernUI.WPF.1.0.5/lib/net45/FirstFloor.ModernUI.XML
+packages/repositories.config
