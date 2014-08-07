@@ -28,9 +28,9 @@ namespace DbDictExport.WPF.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ModernWindow
+            var window = new ModernDialog
             {
-                Style = (Style)App.Current.Resources["EmptyWindow"],
+                //Style = (Style)Application.Current.Resources["EmptyWindow"],
                 Content = new Connect
                 {
                     Margin = new Thickness(32)

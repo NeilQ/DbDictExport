@@ -21,9 +21,12 @@ namespace DbDictExport.WPF
     /// </summary>
     public partial class MainWindow : ModernWindow
     {
+        public AppManagement Management { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            var Management = new AppManagement { AppMainWindow = this };
         }
     }
 }
