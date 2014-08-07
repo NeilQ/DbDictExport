@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbDictExport.WinForm", "DbD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbDictExport.Model", "DbDictExport.Model\DbDictExport.Model.csproj", "{CEE2E2C4-1F66-4D2D-86F3-66FE7BC50A96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbDictExport.WPF", "DbDictExport.WPF\DbDictExport.WPF.csproj", "{C20001DF-D7B1-47D9-8F54-22FC7068027B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CEE2E2C4-1F66-4D2D-86F3-66FE7BC50A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEE2E2C4-1F66-4D2D-86F3-66FE7BC50A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEE2E2C4-1F66-4D2D-86F3-66FE7BC50A96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C20001DF-D7B1-47D9-8F54-22FC7068027B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C20001DF-D7B1-47D9-8F54-22FC7068027B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C20001DF-D7B1-47D9-8F54-22FC7068027B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C20001DF-D7B1-47D9-8F54-22FC7068027B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
