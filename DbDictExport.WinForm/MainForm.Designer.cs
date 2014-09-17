@@ -178,6 +178,7 @@
             this.dgvResultSet.RowTemplate.Height = 27;
             this.dgvResultSet.Size = new System.Drawing.Size(965, 364);
             this.dgvResultSet.TabIndex = 0;
+            this.dgvResultSet.Font = new System.Drawing.Font("Microsoft Yahei", 8);
             // 
             // splitContainer1
             // 

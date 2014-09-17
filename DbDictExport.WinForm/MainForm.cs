@@ -81,25 +81,25 @@ namespace DbDictExport.WinForm
                 case MouseButtons.Left:
                 {
                     var clickPoint = new Point(e.X, e.Y);
-                    TreeNode currrentNode = tvDatabase.GetNodeAt(clickPoint);
-                    if (currrentNode != null)
+                    TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
+                    if (currentNode != null)
                     {
-                        if (currrentNode.Name.StartsWith(TableTreeNodeNamePrefix))
+                        if (currentNode.Name.StartsWith(TableTreeNodeNamePrefix))
                         {
                             this.dgvResultSet.DataSource = null;
                             this.dgvResultSet.Columns.Clear();
                             this.dgvTable.DataSource = null;
                             this.dgvTable.Columns.Clear();
 
-                            var table = currrentNode.Tag as DbTable;
-                            table = DataAccess.GetTableByName(this.connBuilder, currrentNode.Parent.Text, table.Name);
+                            var table = currentNode.Tag as DbTable;
+                            table = DataAccess.GetTableByName(this.connBuilder, currentNode.Parent.Text, table.Name);
                             if (table != null)
                             {
                                 this.dgvTable.DataSource = table.ColumnList;
                                 dgvTable.Columns["DbTable"].Visible = false;
                                 dgvTable.Columns["Order"].Visible = false;
 
-                                if (currrentNode.Parent.Text == DabaseTempDbName)
+                                if (currentNode.Parent.Text == DabaseTempDbName)
                                 {
                                     var dgvr = new DataGridViewRow();
                                     var cell = new DataGridViewTextBoxCell
