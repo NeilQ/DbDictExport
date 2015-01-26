@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.IO;
 using DbDictExport.Dal;
 using DbDictExport.Model;
 using DbDictExport.Common;
@@ -48,7 +49,7 @@ namespace DbDictExport.WinForm
             this.tvDatabase.ImageList = this.imgListCommon;
         }
 
- 
+
 
         void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -56,7 +57,7 @@ namespace DbDictExport.WinForm
             {
                 e.ThrowException = false;
             }
-        
+
         }
 
         #region database TreeView's events
@@ -65,60 +66,60 @@ namespace DbDictExport.WinForm
             switch (e.Button)
             {
                 case MouseButtons.Right:
-                {
-                    var clickPoint = new Point(e.X, e.Y);
-                    TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
-                    if (currentNode != null)
                     {
-                        if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
+                        var clickPoint = new Point(e.X, e.Y);
+                        TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
+                        if (currentNode != null)
                         {
-                            currentNode.ContextMenuStrip = this.cmsDatabase;
+                            if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
+                            {
+                                currentNode.ContextMenuStrip = this.cmsDatabase;
+                            }
+                            this.tvDatabase.SelectedNode = currentNode;
                         }
-                        this.tvDatabase.SelectedNode = currentNode;
                     }
-                }
                     break;
                 case MouseButtons.Left:
-                {
-                    var clickPoint = new Point(e.X, e.Y);
-                    TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
-                    if (currentNode != null)
                     {
-                        if (currentNode.Name.StartsWith(TableTreeNodeNamePrefix))
+                        var clickPoint = new Point(e.X, e.Y);
+                        TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
+                        if (currentNode != null)
                         {
-                            this.dgvResultSet.DataSource = null;
-                            this.dgvResultSet.Columns.Clear();
-                            this.dgvTable.DataSource = null;
-                            this.dgvTable.Columns.Clear();
-
-                            var table = currentNode.Tag as DbTable;
-                            table = DataAccess.GetTableByName(this.connBuilder, currentNode.Parent.Text, table.Name);
-                            if (table != null)
+                            if (currentNode.Name.StartsWith(TableTreeNodeNamePrefix))
                             {
-                                this.dgvTable.DataSource = table.ColumnList;
-                                dgvTable.Columns["DbTable"].Visible = false;
-                                dgvTable.Columns["Order"].Visible = false;
+                                this.dgvResultSet.DataSource = null;
+                                this.dgvResultSet.Columns.Clear();
+                                this.dgvTable.DataSource = null;
+                                this.dgvTable.Columns.Clear();
 
-                                if (currentNode.Parent.Text == DabaseTempDbName)
+                                var table = currentNode.Tag as DbTable;
+                                table = DataAccess.GetTableByName(this.connBuilder, currentNode.Parent.Text, table.Name);
+                                if (table != null)
                                 {
-                                    var dgvr = new DataGridViewRow();
-                                    var cell = new DataGridViewTextBoxCell
-                                    {
-                                        Value = "The temp table do not support viewing records.",
-                                    };
-                                    dgvr.Cells.Add(cell);
+                                    this.dgvTable.DataSource = table.ColumnList;
+                                    dgvTable.Columns["DbTable"].Visible = false;
+                                    dgvTable.Columns["Order"].Visible = false;
 
-                                    this.dgvResultSet.Columns.Add("Message","Message");
-                                    this.dgvResultSet.Columns["Message"].Width = 600;
-                                    this.dgvResultSet.Rows.Add(dgvr);
-                                    return;
+                                    if (currentNode.Parent.Text == DabaseTempDbName)
+                                    {
+                                        var dgvr = new DataGridViewRow();
+                                        var cell = new DataGridViewTextBoxCell
+                                        {
+                                            Value = "The temp table do not support viewing records.",
+                                        };
+                                        dgvr.Cells.Add(cell);
+
+                                        this.dgvResultSet.Columns.Add("Message", "Message");
+                                        this.dgvResultSet.Columns["Message"].Width = 600;
+                                        this.dgvResultSet.Rows.Add(dgvr);
+                                        return;
+                                    }
+                                    this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder, table);
+                                    this.dgvResultSet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                                 }
-                                this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder,table);
-                                this.dgvResultSet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                             }
                         }
                     }
-                }
                     break;
             }
         }
@@ -151,9 +152,9 @@ namespace DbDictExport.WinForm
                     {
                         LoadingFormService.CreateForm();
                         LoadingFormService.SetFormCaption("Exporting...");
-
                         List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(this.connBuilder, currentNode.Text);
-                        Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
+                        //Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
+                        IExcelHelper helper = new AsposeExcelHelper();
 
                         //LoadingFormService.CloseFrom();
 
@@ -164,7 +165,8 @@ namespace DbDictExport.WinForm
                         };
                         if (dia.ShowDialog() == DialogResult.OK)
                         {
-                            workbook.Save(dia.FileName);
+                            helper.GenerateWorkbook(tableList, dia.FileName);
+                            //workbook.Save(dia.FileName);
                         }
                     }
                     catch (Exception ex)
@@ -197,7 +199,7 @@ namespace DbDictExport.WinForm
             abox.ShowDialog();
         }
          * */
-         
+
         #endregion
 
         #region Load TreeView nodes
@@ -233,7 +235,7 @@ namespace DbDictExport.WinForm
                 ImageIndex = 0,
                 SelectedImageIndex = 0
             };
-            this.tvDatabase.Nodes.Add(rootNode);    
+            this.tvDatabase.Nodes.Add(rootNode);
             foreach (string dbName in DataAccess.GetDbNameList(this.ConnBuilder))
             {
                 var databaseNode = new TreeNode
@@ -242,7 +244,7 @@ namespace DbDictExport.WinForm
                     ToolTipText = dbName,
                     Name = DatabaseTreeNodeNamePrefix + dbName,
                     ImageIndex = 1,
-                    SelectedImageIndex = 1 
+                    SelectedImageIndex = 1
                 };
 
                 /*

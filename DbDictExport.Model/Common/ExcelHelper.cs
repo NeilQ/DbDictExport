@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Aspose.Cells;
+using System.IO;
 using System.Drawing;
 using DbDictExport.Model;
 
 namespace DbDictExport.Common
 {
-    public sealed class ExcelHelper
+    public sealed class AsposeExcelHelper : IExcelHelper
     {
-        public static Workbook GenerateWorkbook(List<DbTable> tableList)
+        public void GenerateWorkbook(List<DbTable> tableList, string fileName)
         {
             #region
 
@@ -135,7 +136,7 @@ namespace DbDictExport.Common
                 }
             }
 
-            return workbook;
+            workbook.Save(fileName);
 
             #endregion
 

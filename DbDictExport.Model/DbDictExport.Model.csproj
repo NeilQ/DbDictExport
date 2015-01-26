@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ExcelHelper.cs" />
+    <Compile Include="Common\IExcelHelper.cs" />
     <Compile Include="Dal\DataAccess.cs" />
     <Compile Include="DbColumn.cs" />
     <Compile Include="DbTable.cs" />
