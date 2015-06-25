@@ -34,6 +34,7 @@ namespace DbDictExport.WinForm
             set { this.connBuilder = value; }
         }
 
+        private static TreeNode SelectedTableNode { get; set; }
 
         public MainForm()
         {
@@ -91,6 +92,13 @@ namespace DbDictExport.WinForm
                                 this.dgvResultSet.Columns.Clear();
                                 this.dgvTable.DataSource = null;
                                 this.dgvTable.Columns.Clear();
+
+                                if (SelectedTableNode != null)
+                                {
+                                    SelectedTableNode.BackColor = Color.White;
+                                }
+                                SelectedTableNode = currentNode;
+                                SelectedTableNode.BackColor = SystemColors.Highlight;
 
                                 var table = currentNode.Tag as DbTable;
                                 table = DataAccess.GetTableByName(this.connBuilder, currentNode.Parent.Text, table.Name);
