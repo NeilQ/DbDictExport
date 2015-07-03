@@ -4,18 +4,17 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using System.IO;
 using DbDictExport.Dal;
 using DbDictExport.Model;
 using DbDictExport.Common;
 using DbDictExport.WinForm.Service;
-using Aspose.Cells;
+using MetroFramework.Forms;
 
 
 
 namespace DbDictExport.WinForm
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MetroForm
     {
 
         private SqlConnectionStringBuilder connBuilder;

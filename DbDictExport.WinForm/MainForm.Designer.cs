@@ -68,7 +68,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(341, 793);
+            this.groupBox1.Size = new System.Drawing.Size(330, 713);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DataBase";
@@ -78,44 +78,46 @@
             this.tvDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvDatabase.Location = new System.Drawing.Point(3, 23);
             this.tvDatabase.Name = "tvDatabase";
-            this.tvDatabase.Size = new System.Drawing.Size(335, 767);
+            this.tvDatabase.Size = new System.Drawing.Size(324, 687);
             this.tvDatabase.TabIndex = 0;
             // 
             // cmsDatabase
             // 
+            this.cmsDatabase.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsDatabase.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshToolStripMenuItem,
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem});
             this.cmsDatabase.Name = "cmsDatabase";
-            this.cmsDatabase.Size = new System.Drawing.Size(353, 52);
+            this.cmsDatabase.Size = new System.Drawing.Size(380, 52);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(352, 24);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(379, 24);
             this.refreshToolStripMenuItem.Text = "Refresh";
             // 
             // exportDataDictionaryDocumentToExcelToolStripMenuItem
             // 
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Name = "exportDataDictionaryDocumentToExcelToolStripMenuItem";
-            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(352, 24);
+            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(379, 24);
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Text = "Export data dictionary document to Excel";
             // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.Window;
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newConnectToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Location = new System.Drawing.Point(20, 60);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1316, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1276, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // newConnectToolStripMenuItem
             // 
             this.newConnectToolStripMenuItem.Name = "newConnectToolStripMenuItem";
-            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
+            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(119, 24);
             this.newConnectToolStripMenuItem.Text = "New Connect";
             this.newConnectToolStripMenuItem.Click += new System.EventHandler(this.newConnectToolStripMenuItem_Click);
             // 
@@ -126,7 +128,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(971, 399);
+            this.groupBox2.Size = new System.Drawing.Size(942, 358);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Design";
@@ -142,7 +144,7 @@
             this.dgvTable.Name = "dgvTable";
             this.dgvTable.ReadOnly = true;
             this.dgvTable.RowTemplate.Height = 27;
-            this.dgvTable.Size = new System.Drawing.Size(965, 373);
+            this.dgvTable.Size = new System.Drawing.Size(936, 332);
             this.dgvTable.TabIndex = 0;
             // 
             // imgListCommon
@@ -160,7 +162,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(971, 390);
+            this.groupBox3.Size = new System.Drawing.Size(942, 351);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Result Set";
@@ -172,19 +174,20 @@
             this.dgvResultSet.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvResultSet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvResultSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvResultSet.Font = new System.Drawing.Font("Microsoft YaHei", 8F);
             this.dgvResultSet.Location = new System.Drawing.Point(3, 23);
             this.dgvResultSet.Name = "dgvResultSet";
             this.dgvResultSet.ReadOnly = true;
             this.dgvResultSet.RowTemplate.Height = 27;
-            this.dgvResultSet.Size = new System.Drawing.Size(965, 364);
+            this.dgvResultSet.Size = new System.Drawing.Size(936, 325);
             this.dgvResultSet.TabIndex = 0;
-            this.dgvResultSet.Font = new System.Drawing.Font("Microsoft Yahei", 8);
             // 
             // splitContainer1
             // 
-            this.splitContainer1.BackColor = System.Drawing.SystemColors.Highlight;
+            this.splitContainer1.BackColor = System.Drawing.Color.LightGray;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer1.Location = new System.Drawing.Point(20, 88);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 30, 3, 3);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -195,8 +198,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1316, 793);
-            this.splitContainer1.SplitterDistance = 341;
+            this.splitContainer1.Size = new System.Drawing.Size(1276, 713);
+            this.splitContainer1.SplitterDistance = 330;
             this.splitContainer1.TabIndex = 4;
             // 
             // splitContainer2
@@ -213,8 +216,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainer2.Size = new System.Drawing.Size(971, 793);
-            this.splitContainer2.SplitterDistance = 399;
+            this.splitContainer2.Size = new System.Drawing.Size(942, 713);
+            this.splitContainer2.SplitterDistance = 358;
             this.splitContainer2.TabIndex = 0;
             // 
             // MainForm
@@ -229,7 +232,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DbViewer";
             this.groupBox1.ResumeLayout(false);
             this.cmsDatabase.ResumeLayout(false);

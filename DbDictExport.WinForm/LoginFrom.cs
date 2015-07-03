@@ -2,11 +2,12 @@
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using MetroFramework.Forms;
 
 
 namespace DbDictExport.WinForm
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : MetroForm
     {
 
         private bool isWindowsAuthentication;
