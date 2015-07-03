@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ExcelHelper.cs" />
+    <Compile Include="Common\AsposeExcelHelper.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\IExcelHelper.cs" />
     <Compile Include="Dal\DataAccess.cs" />
     <Compile Include="DbColumn.cs" />

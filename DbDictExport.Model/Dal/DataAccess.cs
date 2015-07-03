@@ -348,7 +348,7 @@ namespace DbDictExport.Dal
                 conn.Open();
                 var cmd = new SqlCommand
                 {
-                    CommandText = "SELECT TOP 500 * FROM " + String.Format("[{0}]", table.Name),
+                    CommandText = "SELECT TOP 200 * FROM " + String.Format("[{0}]", table.Name),
                     Connection = conn
                 };
                 var adp = new SqlDataAdapter(cmd);

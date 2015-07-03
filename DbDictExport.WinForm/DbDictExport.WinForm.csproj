@@ -171,9 +171,6 @@
     <None Include="img\database.ico" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DbDictExport.Model\DbDictExport.Model.csproj">
       <Project>{cee2e2c4-1f66-4d2d-86f3-66fe7bc50a96}</Project>
       <Name>DbDictExport.Model</Name>
