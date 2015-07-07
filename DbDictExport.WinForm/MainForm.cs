@@ -1,37 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-using System.IO;
+using DbDictExport.Common;
 using DbDictExport.Dal;
 using DbDictExport.Model;
-using DbDictExport.Common;
 using DbDictExport.WinForm.Service;
-using Aspose.Cells;
-
-
+using MetroFramework.Controls;
+using MetroFramework.Forms;
 
 namespace DbDictExport.WinForm
 {
-    public partial class MainForm : Form
+    public partial class MainForm : MetroForm
     {
 
-        private SqlConnectionStringBuilder connBuilder;
-        /*
-         * the database tree node's Name attribute start with string "db_"
-         * the table tree node's Name arrtibute start with string "tb_"
-         * the column tree node's Name arrtibute start with string "col_"
-         * */
-        private const string DatabaseTreeNodeNamePrefix = "db_";
-        private const string TableTreeNodeNamePrefix = "tb_";
-        private const string DabaseTempDbName = "tempdb";
+        private SqlConnectionStringBuilder _connBuilder;
+
+
         //private string columnTreeNodeNamePrefix = "col_";
         public SqlConnectionStringBuilder ConnBuilder
         {
-            get { return connBuilder; }
-            set { this.connBuilder = value; }
+            get { return _connBuilder; }
+            set { _connBuilder = value; }
         }
 
         private static TreeNode SelectedTableNode { get; set; }
@@ -39,22 +31,22 @@ namespace DbDictExport.WinForm
         public MainForm()
         {
             InitializeComponent();
-            this.dgvResultSet.DataError += dgvResultSet_DataError;
-            this.tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
-            this.tvDatabase.MouseDown += tvDatabase_MouseDown;
-            foreach (ToolStripItem item in this.cmsDatabase.Items)
+            MetroGridResultSet.DataError += dgvResultSet_DataError;
+            tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
+            tvDatabase.MouseDown += tvDatabase_MouseDown;
+            foreach (ToolStripItem item in cmsDatabase.Items)
             {
                 item.Click += cmsDatabaseItem_Click;
             }
             LoadLoginForm();
-            this.tvDatabase.ImageList = this.imgListCommon;
+            tvDatabase.ImageList = imgListCommon;
         }
 
 
 
         void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            if (!dgvResultSet.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.Equals(DBNull.Value))
+            if (!MetroGridResultSet.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.Equals(DBNull.Value))
             {
                 e.ThrowException = false;
             }
@@ -72,11 +64,11 @@ namespace DbDictExport.WinForm
                         TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
                         if (currentNode != null)
                         {
-                            if (currentNode.Name.StartsWith(DatabaseTreeNodeNamePrefix))
+                            if (currentNode.Name.StartsWith(Constants.DATABASE_TREE_NODE_NAME_PREFIX))
                             {
-                                currentNode.ContextMenuStrip = this.cmsDatabase;
+                                currentNode.ContextMenuStrip = cmsDatabase;
                             }
-                            this.tvDatabase.SelectedNode = currentNode;
+                            tvDatabase.SelectedNode = currentNode;
                         }
                     }
                     break;
@@ -86,12 +78,9 @@ namespace DbDictExport.WinForm
                         TreeNode currentNode = tvDatabase.GetNodeAt(clickPoint);
                         if (currentNode != null)
                         {
-                            if (currentNode.Name.StartsWith(TableTreeNodeNamePrefix))
+                            if (currentNode.Name.StartsWith(Constants.TABLE_TREE_NODE_NAME_PREFIX))
                             {
-                                this.dgvResultSet.DataSource = null;
-                                this.dgvResultSet.Columns.Clear();
-                                this.dgvTable.DataSource = null;
-                                this.dgvTable.Columns.Clear();
+                                ClearGridData();
 
                                 if (SelectedTableNode != null)
                                 {
@@ -101,40 +90,17 @@ namespace DbDictExport.WinForm
                                 SelectedTableNode.BackColor = SystemColors.Highlight;
 
                                 var table = currentNode.Tag as DbTable;
-                                table = DataAccess.GetTableByName(this.connBuilder, currentNode.Parent.Text, table.Name);
-                                if (table != null)
-                                {
-                                    this.dgvTable.DataSource = table.ColumnList;
-                                    dgvTable.Columns["DbTable"].Visible = false;
-                                    dgvTable.Columns["Order"].Visible = false;
-
-                                    if (currentNode.Parent.Text == DabaseTempDbName)
-                                    {
-                                        var dgvr = new DataGridViewRow();
-                                        var cell = new DataGridViewTextBoxCell
-                                        {
-                                            Value = "The temp table do not support viewing records.",
-                                        };
-                                        dgvr.Cells.Add(cell);
-
-                                        this.dgvResultSet.Columns.Add("Message", "Message");
-                                        this.dgvResultSet.Columns["Message"].Width = 600;
-                                        this.dgvResultSet.Rows.Add(dgvr);
-                                        return;
+                                SetGridData(currentNode.Parent.Text, table.Name);
                                     }
-                                    this.dgvResultSet.DataSource = DataAccess.GetResultSetByDbTable(this.connBuilder, table);
-                                    this.dgvResultSet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                                 }
                             }
-                        }
-                    }
                     break;
             }
         }
 
         void tvDatabase_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.Name.StartsWith(DatabaseTreeNodeNamePrefix))
+            if (e.Node.Name.StartsWith(Constants.DATABASE_TREE_NODE_NAME_PREFIX))
             {
                 if (e.Node.Nodes.Count == 1 && String.IsNullOrEmpty(e.Node.Nodes[0].Text))
                 {
@@ -151,7 +117,7 @@ namespace DbDictExport.WinForm
         private void cmsDatabaseItem_Click(object sender, EventArgs e)
         {
             var tripItem = sender as ToolStripItem;
-            var currentNode = this.tvDatabase.SelectedNode;
+            var currentNode = tvDatabase.SelectedNode;
             if (tripItem == null) return;
             switch (tripItem.Text)
             {
@@ -159,8 +125,8 @@ namespace DbDictExport.WinForm
                     try
                     {
                         LoadingFormService.CreateForm();
-                        LoadingFormService.SetFormCaption("Exporting...");
-                        List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(this.connBuilder, currentNode.Text);
+                        LoadingFormService.SetFormCaption(Constants.EXPORT_CAPTION);
+                        List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(_connBuilder, currentNode.Text);
                         //Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
                         IExcelHelper helper = new AsposeExcelHelper();
 
@@ -168,7 +134,7 @@ namespace DbDictExport.WinForm
 
                         var dia = new SaveFileDialog
                         {
-                            Filter = "Excel files(*.xlsx)|*.xlsx|Excel files(*.xls)|*.xls;",
+                            Filter = Constants.SAVE_FILE_DIALOG_FILTER,
                             FileName = currentNode.Text + " Data Dictionary"
                         };
                         if (dia.ShowDialog() == DialogResult.OK)
@@ -179,7 +145,7 @@ namespace DbDictExport.WinForm
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(ex.Message, Constants.ERROR_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     finally
                     {
@@ -200,14 +166,6 @@ namespace DbDictExport.WinForm
             LoadLoginForm();
         }
 
-        /*
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var abox = new AboutBox();
-            abox.ShowDialog();
-        }
-         * */
-
         #endregion
 
         #region Load TreeView nodes
@@ -215,44 +173,44 @@ namespace DbDictExport.WinForm
         {
             //if first expand the node
             //clear the empty node
-            this.tvDatabase.Cursor = Cursors.AppStarting;
+            tvDatabase.Cursor = Cursors.AppStarting;
             rootNode.Nodes.Clear();
-            List<DbTable> tableList = DataAccess.GetDbTableNameListWithoutColumns(connBuilder, rootNode.Text);
+            List<DbTable> tableList = DataAccess.GetDbTableNameListWithoutColumns(_connBuilder, rootNode.Text);
             foreach (var tableNode in tableList.Select(table => new TreeNode
             {
-                Name = TableTreeNodeNamePrefix + table.Name,
-                Text = table.Schema + "." + table.Name,
-                ToolTipText = table.Schema + "." + table.Name,
+                Name = Constants.TABLE_TREE_NODE_NAME_PREFIX + table.Name,
+                Text = String.Format("{0}.{1}", table.Schema, table.Name),
+                ToolTipText = String.Format("{0}.{1}", table.Schema, table.Name),
                 Tag = table,
-                ImageIndex = 2,
-                SelectedImageIndex = 2
+                ImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX,
+                SelectedImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX
             }))
             {
                 rootNode.Nodes.Add(tableNode);
             }
-            this.tvDatabase.Cursor = Cursors.Default;
+            tvDatabase.Cursor = Cursors.Default;
 
         }
 
         private void LoadDatabaseTreeNode()
         {
-            this.tvDatabase.Nodes.Clear();
+            tvDatabase.Nodes.Clear();
             var rootNode = new TreeNode
             {
-                Text = this.connBuilder.DataSource + string.Format("({0})", this.connBuilder.UserID),
-                ImageIndex = 0,
-                SelectedImageIndex = 0
+                Text = _connBuilder.DataSource + string.Format("({0})", _connBuilder.UserID),
+                ImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX,
+                SelectedImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX
             };
-            this.tvDatabase.Nodes.Add(rootNode);
-            foreach (string dbName in DataAccess.GetDbNameList(this.ConnBuilder))
+            tvDatabase.Nodes.Add(rootNode);
+            foreach (string dbName in DataAccess.GetDbNameList(ConnBuilder))
             {
                 var databaseNode = new TreeNode
                 {
                     Text = dbName,
                     ToolTipText = dbName,
-                    Name = DatabaseTreeNodeNamePrefix + dbName,
-                    ImageIndex = 1,
-                    SelectedImageIndex = 1
+                    Name = Constants.DATABASE_TREE_NODE_NAME_PREFIX + dbName,
+                    ImageIndex = Constants.TREENODE_DATABASE_IMAGE_INDEX,
+                    SelectedImageIndex = Constants.TREENODE_DATABASE_IMAGE_INDEX
                 };
 
                 /*
@@ -274,12 +232,53 @@ namespace DbDictExport.WinForm
             var login = new LoginForm();
             if (login.ShowDialog() == DialogResult.OK)
             {
-                this.connBuilder = login.ConnBuilder;
+                _connBuilder = login.ConnBuilder;
+                ClearGridData();
                 login.Close();
                 LoadDatabaseTreeNode();
             }
         }
 
+        private void SetGridData(string dbName, string tableName)
+        {
+            var table = DataAccess.GetTableByName(_connBuilder, dbName, tableName);
+            if (table == null) return;
+
+            MetroGridDesign.DataSource = table.ColumnList;
+
+            MetroGridDesign.Columns["DbTable"].Visible = false;
+            MetroGridDesign.Columns["Order"].Visible = false;
+
+
+            if (dbName == Constants.DATABASE_TEMP_DB_NAME)
+            {
+                var dgvr = new DataGridViewRow();
+                var cell = new DataGridViewTextBoxCell
+                {
+                    Value = "The temp table do not support viewing records."
+                };
+                dgvr.Cells.Add(cell);
+
+                MetroGridResultSet.Columns.Add("Message", "Message");
+                MetroGridResultSet.Columns["Message"].Width = 600;
+                MetroGridResultSet.Rows.Add(dgvr);
+                return;
+            }
+            MetroGridResultSet.DataSource = DataAccess.GetResultSetByDbTable(_connBuilder, table);
+
+            MetroGridDesign.ClearSelection();
+            MetroGridResultSet.ClearSelection();
+
+        }
+
+        private void ClearGridData()
+        {
+            MetroGridResultSet.DataSource = null;
+            MetroGridResultSet.Columns.Clear();
+
+            MetroGridDesign.DataSource = null;
+            MetroGridDesign.Columns.Clear();
+        }
     }
 
 }

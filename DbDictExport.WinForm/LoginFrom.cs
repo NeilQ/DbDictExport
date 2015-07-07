@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-
+using DbDictExport.Common;
+using MetroFramework.Forms;
 
 namespace DbDictExport.WinForm
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : MetroForm
     {
 
         private bool isWindowsAuthentication;
@@ -14,23 +15,23 @@ namespace DbDictExport.WinForm
         public SqlConnectionStringBuilder ConnBuilder
         {
             get { return connBuilder ?? (connBuilder = new SqlConnectionStringBuilder()); }
-            set { this.connBuilder = value; }
+            set { connBuilder = value; }
         }
 
         public LoginForm()
         {
             InitializeComponent();
-            this.cmbServerType.SelectedIndex = 0;
-            this.cmbServer.SelectedIndex = 0;
-            this.cmbAuthentication.SelectedIndex = 0;
-            this.cmbAuthentication.SelectedValueChanged += cmbAuthentication_SelectedValueChanged;
+            cmbServerType.SelectedIndex = 0;
+            cmbServer.SelectedIndex = 0;
+            cmbAuthentication.SelectedIndex = 0;
+            cmbAuthentication.SelectedValueChanged += cmbAuthentication_SelectedValueChanged;
         }
 
         void cmbAuthentication_SelectedValueChanged(object sender, EventArgs e)
         {
-            this.isWindowsAuthentication = cmbAuthentication.Text == "Windows Authentication";
-            this.txtUsername.Enabled = !this.isWindowsAuthentication;
-            this.txtPassword.Enabled = !this.isWindowsAuthentication;
+            isWindowsAuthentication = cmbAuthentication.Text == Constants.WINDOWS_AUTHENTICATION_TEXT;
+            txtUsername.Enabled = !isWindowsAuthentication;
+            txtPassword.Enabled = !isWindowsAuthentication;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -71,29 +72,29 @@ namespace DbDictExport.WinForm
             }
             if (!ok)
             {
-                MessageBox.Show(message.ToString(), "Validation failed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(message.ToString(), Constants.VALIDATE_FAIL_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ChangeConnectButtonStatus(true);
                 return;
             }
             #endregion
 
             // Builde connection string
-            this.ConnBuilder.DataSource = this.cmbServer.Text;
-            this.ConnBuilder.PersistSecurityInfo = true;
-            if (!this.isWindowsAuthentication)
+            ConnBuilder.DataSource = cmbServer.Text;
+            ConnBuilder.PersistSecurityInfo = true;
+            if (!isWindowsAuthentication)
             {
-                this.ConnBuilder.UserID = this.txtUsername.Text;
-                this.ConnBuilder.Password = this.txtPassword.Text;
+                ConnBuilder.UserID = txtUsername.Text;
+                ConnBuilder.Password = txtPassword.Text;
             }
             else
             {
-                this.ConnBuilder.IntegratedSecurity = true;
+                ConnBuilder.IntegratedSecurity = true;
             }
 
             // Access database
             if (Connect())
             {
-                this.DialogResult = DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
         }
 
@@ -101,7 +102,7 @@ namespace DbDictExport.WinForm
         {
             try
             {
-                using (SqlConnection sqlConn = new SqlConnection(this.ConnBuilder.ConnectionString))
+                using (SqlConnection sqlConn = new SqlConnection(ConnBuilder.ConnectionString))
                 {
                     sqlConn.Open();
                     return true;
@@ -109,14 +110,14 @@ namespace DbDictExport.WinForm
             }
             catch (Exception ex)
             {
-                this.ConnBuilder.Clear();
+                ConnBuilder.Clear();
                 ChangeConnectButtonStatus(true);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, Constants.ERROR_CAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        public void ChangeConnectButtonStatus(bool allowClick)
+        private void ChangeConnectButtonStatus(bool allowClick)
         {
             btnConnect.Text = allowClick ? "Connect" : "Connecting";
             btnConnect.Enabled = allowClick;
