@@ -117,7 +117,7 @@ namespace DbDictExport.WinForm
             }
         }
 
-        public void ChangeConnectButtonStatus(bool allowClick)
+        private void ChangeConnectButtonStatus(bool allowClick)
         {
             btnConnect.Text = allowClick ? "Connect" : "Connecting";
             btnConnect.Enabled = allowClick;

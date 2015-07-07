@@ -166,14 +166,6 @@ namespace DbDictExport.WinForm
             LoadLoginForm();
         }
 
-        /*
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var abox = new AboutBox();
-            abox.ShowDialog();
-        }
-         * */
-
         #endregion
 
         #region Load TreeView nodes
@@ -190,8 +182,8 @@ namespace DbDictExport.WinForm
                 Text = String.Format("{0}.{1}", table.Schema, table.Name),
                 ToolTipText = String.Format("{0}.{1}", table.Schema, table.Name),
                 Tag = table,
-                ImageIndex = 2,
-                SelectedImageIndex = 2
+                ImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX,
+                SelectedImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX
             }))
             {
                 rootNode.Nodes.Add(tableNode);
@@ -206,8 +198,8 @@ namespace DbDictExport.WinForm
             var rootNode = new TreeNode
             {
                 Text = _connBuilder.DataSource + string.Format("({0})", _connBuilder.UserID),
-                ImageIndex = 0,
-                SelectedImageIndex = 0
+                ImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX,
+                SelectedImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX
             };
             tvDatabase.Nodes.Add(rootNode);
             foreach (string dbName in DataAccess.GetDbNameList(ConnBuilder))
@@ -217,8 +209,8 @@ namespace DbDictExport.WinForm
                     Text = dbName,
                     ToolTipText = dbName,
                     Name = Constants.DATABASE_TREE_NODE_NAME_PREFIX + dbName,
-                    ImageIndex = 1,
-                    SelectedImageIndex = 1
+                    ImageIndex = Constants.TREENODE_DATABASE_IMAGE_INDEX,
+                    SelectedImageIndex = Constants.TREENODE_DATABASE_IMAGE_INDEX
                 };
 
                 /*

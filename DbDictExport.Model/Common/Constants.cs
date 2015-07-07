@@ -23,5 +23,9 @@ namespace DbDictExport.Common
         public const string EXPORT_CAPTION = "Exporting...";
         public const string VALIDATE_FAIL_CAPTION = "Validate failed";
 
+        public const int TREENODE_ROOT_IMAGE_INDEX = 0;
+        public const int TREENODE_DATABASE_IMAGE_INDEX = 1;
+        public const int TREENODE_DATATABLE_IMAGE_INDEX = 2;
+
     }
 }
