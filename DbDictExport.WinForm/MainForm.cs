@@ -8,6 +8,7 @@ using DbDictExport.Common;
 using DbDictExport.Dal;
 using DbDictExport.Model;
 using DbDictExport.WinForm.Service;
+using MetroFramework.Controls;
 using MetroFramework.Forms;
 
 namespace DbDictExport.WinForm
@@ -240,6 +241,7 @@ namespace DbDictExport.WinForm
             if (login.ShowDialog() == DialogResult.OK)
             {
                 _connBuilder = login.ConnBuilder;
+                ClearGridData();
                 login.Close();
                 LoadDatabaseTreeNode();
             }
