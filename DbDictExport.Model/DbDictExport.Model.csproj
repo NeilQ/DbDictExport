@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Common\AsposeExcelHelper.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\Extentions.cs" />
     <Compile Include="Common\IExcelHelper.cs" />
     <Compile Include="Dal\DataAccess.cs" />
     <Compile Include="DbColumn.cs" />

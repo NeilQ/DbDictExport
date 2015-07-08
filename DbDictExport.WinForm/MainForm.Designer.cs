@@ -50,6 +50,7 @@
             this.MetroGridResultSet = new MetroFramework.Controls.MetroGrid();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -74,7 +75,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(330, 713);
+            this.groupBox1.Size = new System.Drawing.Size(370, 747);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DataBase";
@@ -84,7 +85,7 @@
             this.tvDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvDatabase.Location = new System.Drawing.Point(3, 23);
             this.tvDatabase.Name = "tvDatabase";
-            this.tvDatabase.Size = new System.Drawing.Size(324, 687);
+            this.tvDatabase.Size = new System.Drawing.Size(364, 721);
             this.tvDatabase.TabIndex = 0;
             // 
             // cmsDatabase
@@ -116,7 +117,7 @@
             this.newConnectToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(20, 60);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1276, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1433, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -134,7 +135,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(942, 358);
+            this.groupBox2.Size = new System.Drawing.Size(1059, 375);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Design";
@@ -186,9 +187,8 @@
             this.MetroGridDesign.RowHeadersWidth = 20;
             this.MetroGridDesign.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.MetroGridDesign.RowTemplate.Height = 27;
-            this.MetroGridDesign.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.MetroGridDesign.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MetroGridDesign.Size = new System.Drawing.Size(936, 332);
+            this.MetroGridDesign.Size = new System.Drawing.Size(1053, 349);
             this.MetroGridDesign.Style = MetroFramework.MetroColorStyle.Teal;
             this.MetroGridDesign.TabIndex = 1;
             // 
@@ -207,7 +207,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(942, 351);
+            this.groupBox3.Size = new System.Drawing.Size(1059, 368);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Result Set";
@@ -260,7 +260,7 @@
             this.MetroGridResultSet.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.MetroGridResultSet.RowTemplate.Height = 27;
             this.MetroGridResultSet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MetroGridResultSet.Size = new System.Drawing.Size(936, 325);
+            this.MetroGridResultSet.Size = new System.Drawing.Size(1053, 342);
             this.MetroGridResultSet.Style = MetroFramework.MetroColorStyle.Teal;
             this.MetroGridResultSet.TabIndex = 0;
             // 
@@ -280,8 +280,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1276, 713);
-            this.splitContainer1.SplitterDistance = 330;
+            this.splitContainer1.Size = new System.Drawing.Size(1433, 747);
+            this.splitContainer1.SplitterDistance = 370;
             this.splitContainer1.TabIndex = 4;
             // 
             // splitContainer2
@@ -298,15 +298,29 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainer2.Size = new System.Drawing.Size(942, 713);
-            this.splitContainer2.SplitterDistance = 358;
+            this.splitContainer2.Size = new System.Drawing.Size(1059, 747);
+            this.splitContainer2.SplitterDistance = 375;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // metroScrollBar1
+            // 
+            this.metroScrollBar1.LargeChange = 10;
+            this.metroScrollBar1.Location = new System.Drawing.Point(0, 0);
+            this.metroScrollBar1.Maximum = 100;
+            this.metroScrollBar1.Minimum = 0;
+            this.metroScrollBar1.MouseWheelBarPartitions = 10;
+            this.metroScrollBar1.Name = "metroScrollBar1";
+            this.metroScrollBar1.Orientation = MetroFramework.Controls.MetroScrollOrientation.Horizontal;
+            this.metroScrollBar1.ScrollbarSize = 10;
+            this.metroScrollBar1.Size = new System.Drawing.Size(200, 10);
+            this.metroScrollBar1.TabIndex = 0;
+            this.metroScrollBar1.UseSelectable = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1316, 821);
+            this.ClientSize = new System.Drawing.Size(1473, 855);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -352,5 +366,6 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private MetroFramework.Controls.MetroGrid MetroGridDesign;
         private MetroFramework.Controls.MetroGrid MetroGridResultSet;
+        private MetroFramework.Controls.MetroScrollBar metroScrollBar1;
     }
 }

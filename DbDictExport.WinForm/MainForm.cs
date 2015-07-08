@@ -8,7 +8,6 @@ using DbDictExport.Common;
 using DbDictExport.Dal;
 using DbDictExport.Model;
 using DbDictExport.WinForm.Service;
-using MetroFramework.Controls;
 using MetroFramework.Forms;
 
 namespace DbDictExport.WinForm
@@ -244,11 +243,7 @@ namespace DbDictExport.WinForm
             var table = DataAccess.GetTableByName(_connBuilder, dbName, tableName);
             if (table == null) return;
 
-            MetroGridDesign.DataSource = table.ColumnList;
-
-            MetroGridDesign.Columns["DbTable"].Visible = false;
-            MetroGridDesign.Columns["Order"].Visible = false;
-
+            MetroGridDesign.DataSource = table.ColumnList.ToDataTable();
 
             if (dbName == Constants.DATABASE_TEMP_DB_NAME)
             {
@@ -268,7 +263,6 @@ namespace DbDictExport.WinForm
 
             MetroGridDesign.ClearSelection();
             MetroGridResultSet.ClearSelection();
-
         }
 
         private void ClearGridData()
