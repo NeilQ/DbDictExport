@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using DbDictExport.Common;
 using MetroFramework.Forms;
+using System.Configuration;
 
 namespace DbDictExport.WinForm
 {
@@ -21,9 +22,7 @@ namespace DbDictExport.WinForm
         public LoginForm()
         {
             InitializeComponent();
-            cmbServerType.SelectedIndex = 0;
-            cmbServer.SelectedIndex = 0;
-            cmbAuthentication.SelectedIndex = 0;
+            LoadConnectHistiry();
             cmbAuthentication.SelectedValueChanged += cmbAuthentication_SelectedValueChanged;
         }
 
@@ -94,6 +93,7 @@ namespace DbDictExport.WinForm
             // Access database
             if (Connect())
             {
+                RefreshConnectHistory();
                 DialogResult = DialogResult.OK;
             }
         }
@@ -123,7 +123,54 @@ namespace DbDictExport.WinForm
             btnConnect.Enabled = allowClick;
         }
 
+        private void LoadConnectHistiry()
+        {
+            var lastConnectServer = ConfigurationManager.AppSettings["lastConnectServer"];
+            var lastConnectUser = ConfigurationManager.AppSettings["lastConnectUser"];
+            var lastConnectPassword = ConfigurationManager.AppSettings["lastConnectPassword"];
+            var lastConnectAuth = ConfigurationManager.AppSettings["lastConnectAuthentication"];
 
+            if (!String.IsNullOrEmpty(lastConnectServer))
+            {
+                cmbServer.Text = lastConnectServer;
+                cmbServer.Items.Add(lastConnectServer);
+            }
+            else
+            {
+                cmbServer.SelectedIndex = 0;
+            }
+            if (!String.IsNullOrEmpty(lastConnectUser))
+            {
+                txtUsername.Text = lastConnectUser;
+            }
+            if (!String.IsNullOrEmpty(lastConnectPassword))
+            {
+                txtPassword.Text = lastConnectPassword;
+            }
+            if (!String.IsNullOrEmpty(lastConnectAuth))
+            {
+                cmbAuthentication.Text = lastConnectAuth;
+            }
+            else
+            {
+                cmbAuthentication.SelectedIndex = 0;
+            }
+
+
+            cmbServerType.SelectedIndex = 0;
+        }
+
+        private void RefreshConnectHistory()
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["lastConnectServer"].Value = cmbServer.Text;
+            config.AppSettings.Settings["lastConnectUser"].Value = txtUsername.Text;
+            config.AppSettings.Settings["lastConnectPassword"].Value = txtPassword.Text;
+            config.AppSettings.Settings["lastConnectAuthentication"].Value = cmbAuthentication.Text;
+            config.Save(ConfigurationSaveMode.Modified);
+
+            ConfigurationManager.RefreshSection("appSettings");
+        }
     }
 }
 
