@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using DbDictExport.Common;
-using DbDictExport.Dal;
-using DbDictExport.Model;
+using DbDictExport.Core;
+using DbDictExport.Core.Common;
+using DbDictExport.Core.Dal;
 using DbDictExport.WinForm.Service;
 using MetroFramework.Forms;
 

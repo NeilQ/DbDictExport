@@ -1,6 +1,6 @@
 ﻿
 
-namespace DbDictExport.Model
+namespace DbDictExport.Core
 {
     /// <summary>
     /// DbColumn Class for data table's column. 

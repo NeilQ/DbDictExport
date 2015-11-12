@@ -2,9 +2,9 @@
 using System.Data.SqlClient;
 using System.Text;
 using System.Windows.Forms;
-using DbDictExport.Common;
 using MetroFramework.Forms;
 using System.Configuration;
+using DbDictExport.Core.Common;
 
 namespace DbDictExport.WinForm
 {

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.Data.SqlClient;
-using DbDictExport.Model;
+using System.Linq;
 
-namespace DbDictExport.Dal
+namespace DbDictExport.Core.Dal
 {
     /// <summary>
     /// DataAccess class for get the database data.
@@ -207,9 +205,9 @@ namespace DbDictExport.Dal
                                             [IsNullable]=case when a.isnullable=1 then '1'else '0' end,  
                                             [DefaultValue]=isnull(e.text,''),  
                                             [Description]=isnull(g.[value],'')  ,
-	                                        [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu inner join information_schema.table_constraints tc ON (ccu.constraint_name = tc.constraint_name) 
-					                                          WHERE tc.Constraint_Type = 'FOREIGN KEY' and ccu.table_name = d.name and ccu.column_name = a.name )  
-					                                          FROM syscolumns a  
+                                            [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu inner join information_schema.table_constraints tc ON (ccu.constraint_name = tc.constraint_name) 
+                                                              WHERE tc.Constraint_Type = 'FOREIGN KEY' and ccu.table_name = d.name and ccu.column_name = a.name )  
+                                                              FROM syscolumns a  
                                         left join systypes b on a.xusertype=b.xusertype  
                                         inner join sysobjects d on a.id=d.id  and d.xtype='U' and  d.name<>'dtproperties'  
                                         left join syscomments e on a.cdefault=e.id  
@@ -281,9 +279,9 @@ namespace DbDictExport.Dal
                                             [IsNullable]=case when a.isnullable=1 then '1'else '0' end,  
                                             [DefaultValue]=isnull(e.text,''),  
                                             [Description]=isnull(g.[value],'')  ,
-	                                        [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu inner join information_schema.table_constraints tc ON (ccu.constraint_name = tc.constraint_name) 
-					                                          WHERE tc.Constraint_Type = 'FOREIGN KEY' and ccu.table_name = d.name and ccu.column_name = a.name )  
-					                                          FROM syscolumns a  
+                                            [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu inner join information_schema.table_constraints tc ON (ccu.constraint_name = tc.constraint_name) 
+                                                              WHERE tc.Constraint_Type = 'FOREIGN KEY' and ccu.table_name = d.name and ccu.column_name = a.name )  
+                                                              FROM syscolumns a  
                                         left join systypes b on a.xusertype=b.xusertype  
                                         inner join sysobjects d on a.id=d.id  and d.xtype='U' and  d.name<>'dtproperties'  
                                         left join syscomments e on a.cdefault=e.id  

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DbDictExport.Common
+﻿namespace DbDictExport.Core.Common
 {
     public static class Constants
     {

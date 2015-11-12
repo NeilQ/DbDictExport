@@ -7,8 +7,8 @@
     <ProjectGuid>{CEE2E2C4-1F66-4D2D-86F3-66FE7BC50A96}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DbDictExport.Model</RootNamespace>
-    <AssemblyName>DbDictExport.Model</AssemblyName>
+    <RootNamespace>DbDictExport.Core</RootNamespace>
+    <AssemblyName>DbDictExport.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

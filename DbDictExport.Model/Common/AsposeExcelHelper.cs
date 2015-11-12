@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aspose.Cells;
-using System.IO;
 using System.Drawing;
-using DbDictExport.Model;
+using Aspose.Cells;
 
-namespace DbDictExport.Common
+namespace DbDictExport.Core.Common
 {
     public sealed class AsposeExcelHelper : IExcelHelper
     {

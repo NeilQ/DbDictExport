@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using DbDictExport.Model;
 
-namespace DbDictExport.Common
+namespace DbDictExport.Core.Common
 {
     public static class Extentions
     {
