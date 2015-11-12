@@ -27,5 +27,7 @@ namespace DbDictExport.Common
         public const int TREENODE_DATABASE_IMAGE_INDEX = 1;
         public const int TREENODE_DATATABLE_IMAGE_INDEX = 2;
 
+        public const string CONTEXT_MENU_DATABASE_EXPORT_DICTIONARY = "Export data dictionary document to Excel";
+        public const string CONTEXT_MENU_DATABASE_REFRESH = "Refresh";
     }
 }

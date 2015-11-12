@@ -90,9 +90,9 @@ namespace DbDictExport.WinForm
 
                                 var table = currentNode.Tag as DbTable;
                                 SetGridData(currentNode.Parent.Text, table.Name);
-                                    }
-                                }
                             }
+                        }
+                    }
                     break;
             }
         }
@@ -120,7 +120,7 @@ namespace DbDictExport.WinForm
             if (tripItem == null) return;
             switch (tripItem.Text)
             {
-                case "Export data dictionary document to Excel":
+                case Constants.CONTEXT_MENU_DATABASE_EXPORT_DICTIONARY:
                     try
                     {
                         LoadingFormService.CreateForm();
@@ -151,7 +151,7 @@ namespace DbDictExport.WinForm
                         LoadingFormService.CloseFrom();
                     }
                     break;
-                case "Refresh":
+                case Constants.CONTEXT_MENU_DATABASE_REFRESH:
                     LoadTableTreeNode(currentNode);
                     break;
             }
