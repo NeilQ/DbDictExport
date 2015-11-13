@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Codes\AbstractKdCodeFactory.cs" />
+    <Compile Include="Codes\BllInterfaceKdCodeFactory.cs" />
+    <Compile Include="Codes\BllKdCodeFactory.cs" />
+    <Compile Include="Codes\DalInterfaceKdCodeFactory.cs" />
+    <Compile Include="Codes\DalKdCodeFactory.cs" />
+    <Compile Include="Codes\ModelKdCodeFactory.cs" />
     <Compile Include="Common\AsposeExcelHelper.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Extentions.cs" />
