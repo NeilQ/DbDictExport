@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using DbDictExport.Core;
+using DbDictExport.Core.Codes;
 using DbDictExport.Core.Common;
 using DbDictExport.Core.Dal;
 using DbDictExport.WinForm.Service;
@@ -174,7 +176,13 @@ namespace DbDictExport.WinForm
             switch (tripItem.Text)
             {
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES:
-
+                    var table = currentNode.Tag as DbTable;
+                    if (table == null) break;
+                    table.ColumnList = DataAccess.GetDbColumnList(ConnBuilder, table.Name);
+                    var idal = new DalInterfaceKdCodeFactory("Line", "Goods", table);
+                    var dal = new DalKdCodeFactory("Line", "Goods", table);
+                    File.WriteAllText("C:\\Users\\Neil\\Desktop\\idal.cs", idal.GenerateCodes().ToString());
+                    File.WriteAllText("C:\\Users\\Neil\\Desktop\\dal.cs", dal.GenerateCodes().ToString());
                     break;
 
             }

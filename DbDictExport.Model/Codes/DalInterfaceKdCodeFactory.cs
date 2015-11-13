@@ -24,6 +24,7 @@ namespace DbDictExport.Core.Codes
 
             var codes = new StringBuilder();
             var indent = 0;
+            // using
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
             codes.AppendLine(Environment.NewLine);
@@ -31,18 +32,20 @@ namespace DbDictExport.Core.Codes
             codes.AppendLine("{"); // namesapce
 
             indent++;
+            // class
             codes.AppendLine(string.Format("{1}public interface I{0}Manager : IBaseManager<{0}>", EntityName,
                 GetIndentStr(indent)));
             codes.AppendLine(GetIndentStr(indent) + "{"); //class
 
             indent++;
+            // methods
             // get by primary
             var pkColumns = Table.ColumnList.Where(t => t.PrimaryKey);
             if (pkColumns.Any())
             {
                 codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + string.Format("{0} Get{0}(", EntityName));
-                codes.Append("int ticketId, int costId");
+                //codes.Append("int ticketId, int costId");
                 var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
@@ -50,9 +53,13 @@ namespace DbDictExport.Core.Codes
             }
 
             // get by page
-            codes.AppendLine(
-                string.Format("List<{0}> Get{0}s(out long total, int page, int size, string sort, bool asc);",
+            if (pkColumns.Count() < 2)
+            {
+                codes.AppendLine(
+                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(out long total, int page, int size, string sort, bool asc);",
                     EntityName));
+            }
+
 
             indent--;
             codes.AppendLine(GetIndentStr(indent) + "}"); // class 
@@ -61,6 +68,6 @@ namespace DbDictExport.Core.Codes
             return codes;
         }
 
-       
+
     }
 }
