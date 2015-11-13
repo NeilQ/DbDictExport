@@ -29,8 +29,8 @@ namespace DbDictExport.Core.Codes
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Data.SqlClient;");
             codes.AppendLine("using System.Text;");
-            codes.AppendLine("using KD.Service.Procurement.IDAL;");
-            codes.AppendLine("using KD.Service.Procurement.Model;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
             // namespace
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.SQLServe");
@@ -49,7 +49,7 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Any())
             {
                 codes.Append(Environment.NewLine);
-                codes.Append(GetIndentStr(indent) + string.Format("{0} Get{0}(", EntityName));
+                codes.Append(GetIndentStr(indent) + string.Format("public {0} Get{0}(", EntityName));
                 var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")\r\n");
@@ -71,7 +71,7 @@ namespace DbDictExport.Core.Codes
                 codes.Append(string.Join(" AND ", whereStr));
                 codes.Append("\", TableName);\r\n");
 
-                var paramsList = pkColumns.Select(t => string.Format("new SqlParameter(\"{0}\", {0});", t.Name));
+                var paramsList = pkColumns.Select(t => string.Format("new SqlParameter(\"{0}\", {0})", t.Name));
                 codes.AppendLine(GetIndentStr(indent) + $"return GetEntity(sql, {string.Join(", ", paramsList)});");
 
                 indent--;
