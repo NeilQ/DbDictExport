@@ -24,5 +24,6 @@
 
         public const string CONTEXT_MENU_DATABASE_EXPORT_DICTIONARY = "Export data dictionary document to Excel";
         public const string CONTEXT_MENU_DATABASE_REFRESH = "Refresh";
+        public const string CONTEXT_MENU_TABLE_GENERATE_KD_CODES = "Generate kd Codes";
     }
 }

@@ -51,6 +51,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
+            this.cmsDbTable = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.generateKdCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -66,6 +68,7 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.cmsDbTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -95,18 +98,18 @@
             this.refreshToolStripMenuItem,
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem});
             this.cmsDatabase.Name = "cmsDatabase";
-            this.cmsDatabase.Size = new System.Drawing.Size(380, 52);
+            this.cmsDatabase.Size = new System.Drawing.Size(386, 56);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(379, 24);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(385, 26);
             this.refreshToolStripMenuItem.Text = "Refresh";
             // 
             // exportDataDictionaryDocumentToExcelToolStripMenuItem
             // 
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Name = "exportDataDictionaryDocumentToExcelToolStripMenuItem";
-            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(379, 24);
+            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(385, 26);
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Text = "Export data dictionary document to Excel";
             // 
             // menuStrip1
@@ -316,6 +319,20 @@
             this.metroScrollBar1.TabIndex = 0;
             this.metroScrollBar1.UseSelectable = true;
             // 
+            // cmsDbTable
+            // 
+            this.cmsDbTable.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsDbTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generateKdCodesToolStripMenuItem});
+            this.cmsDbTable.Name = "cmsDbTable";
+            this.cmsDbTable.Size = new System.Drawing.Size(224, 58);
+            // 
+            // generateKdCodesToolStripMenuItem
+            // 
+            this.generateKdCodesToolStripMenuItem.Name = "generateKdCodesToolStripMenuItem";
+            this.generateKdCodesToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
+            this.generateKdCodesToolStripMenuItem.Text = "Generate kd Codes";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -345,6 +362,7 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.cmsDbTable.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -367,5 +385,7 @@
         private MetroFramework.Controls.MetroGrid MetroGridDesign;
         private MetroFramework.Controls.MetroGrid MetroGridResultSet;
         private MetroFramework.Controls.MetroScrollBar metroScrollBar1;
+        private System.Windows.Forms.ContextMenuStrip cmsDbTable;
+        private System.Windows.Forms.ToolStripMenuItem generateKdCodesToolStripMenuItem;
     }
 }

@@ -37,9 +37,14 @@ namespace DbDictExport.WinForm
             {
                 item.Click += cmsDatabaseItem_Click;
             }
+            foreach (ToolStripItem item in cmsDbTable.Items)
+            {
+                item.Click += cmsDbTableItem_Click;
+            }
             LoadLoginForm();
             tvDatabase.ImageList = imgListCommon;
         }
+
 
 
 
@@ -66,6 +71,10 @@ namespace DbDictExport.WinForm
                             if (currentNode.Name.StartsWith(Constants.DATABASE_TREE_NODE_NAME_PREFIX))
                             {
                                 currentNode.ContextMenuStrip = cmsDatabase;
+                            }
+                            else if (currentNode.Name.StartsWith(Constants.TABLE_TREE_NODE_NAME_PREFIX))
+                            {
+                                currentNode.ContextMenuStrip = cmsDbTable;
                             }
                             tvDatabase.SelectedNode = currentNode;
                         }
@@ -157,6 +166,19 @@ namespace DbDictExport.WinForm
             }
         }
 
+        private void cmsDbTableItem_Click(object sender, EventArgs eventArgs)
+        {
+            var tripItem = sender as ToolStripItem;
+            var currentNode = tvDatabase.SelectedNode;
+            if (tripItem == null) return;
+            switch (tripItem.Text)
+            {
+                case Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES:
+
+                    break;
+
+            }
+        }
         #endregion
 
         #region MenuItems click events
