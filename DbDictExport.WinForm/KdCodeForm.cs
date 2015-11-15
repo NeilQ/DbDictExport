@@ -43,17 +43,20 @@ namespace DbDictExport.WinForm
                 txtModuleName.BackColor = Color.DarkSalmon;
                 return;
             }
-            var forderDialog = new FolderBrowserDialog();
-            if (forderDialog.ShowDialog() != DialogResult.OK) return;
+            var folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() != DialogResult.OK) return;
 
             var idal = new DalInterfaceKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
             var dal = new DalKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
+            var model = new ModelKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
 
-            var idalPath = forderDialog.SelectedPath + $"\\I{txtEntityName.Text}Manager.cs";
-            var dalPath = forderDialog.SelectedPath + $"\\{txtEntityName.Text}Manager.cs";
+            var idalPath = folderBrowserDialog.SelectedPath + $"\\I{txtEntityName.Text}Manager.cs";
+            var dalPath = folderBrowserDialog.SelectedPath + $"\\{txtEntityName.Text}Manager.cs";
+            var modelPath = folderBrowserDialog.SelectedPath + $"\\{txtEntityName.Text}.cs";
 
             File.WriteAllText(idalPath, idal.GenerateCodes().ToString());
             File.WriteAllText(dalPath, dal.GenerateCodes().ToString());
+            File.WriteAllText(modelPath, model.GenerateCodes().ToString());
 
             Close();
         }

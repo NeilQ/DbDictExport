@@ -179,10 +179,6 @@ namespace DbDictExport.WinForm
                     var table = currentNode.Tag as DbTable;
                     if (table == null) break;
                     table.ColumnList = DataAccess.GetDbColumnList(ConnBuilder, table.Name);
-                    //var idal = new DalInterfaceKdCodeFactory("Line", "Goods", table);
-                    //var dal = new DalKdCodeFactory("Line", "Goods", table);
-                    //File.WriteAllText("C:\\Users\\Neil\\Desktop\\idal.cs", idal.GenerateCodes().ToString());
-                    //File.WriteAllText("C:\\Users\\Neil\\Desktop\\dal.cs", dal.GenerateCodes().ToString());
                     var form = new KdCodeForm(table);
                     form.Show();
                     break;
