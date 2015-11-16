@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using DbDictExport.Core.Common;
 
@@ -67,6 +68,7 @@ namespace DbDictExport.Core.Codes
                 // field
                 codes.AppendLine(GetIndentStr(indent) +
                                  $"public {GetCSharpType(column.DbType)} {column.Name} {{ get; set; }}");
+                codes.Append(Environment.NewLine);
             }
 
             indent--;
