@@ -27,11 +27,12 @@ namespace DbDictExport.Core.Codes
 
             // using 
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
-            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IBLL");
-            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IBLL;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
 
             // namespace
+            codes.Append(Environment.NewLine);
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.BLL");
             codes.AppendLine("{"); // namespace
 
@@ -55,7 +56,7 @@ namespace DbDictExport.Core.Codes
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"List<{EntityName}> Get{EntityName}s(out long total, int page, int size, string sort, bool asc)");
+                                 $"public List<{EntityName}> Get{EntityName}s(out long total, int page, int size, string sort, bool asc)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(out total, page, size, sort, asc);");
@@ -84,7 +85,7 @@ namespace DbDictExport.Core.Codes
 
 
             // add
-            codes.AppendLine(GetIndentStr(indent) + $"int Add({EntityName} entity)");
+            codes.AppendLine(GetIndentStr(indent) + $"public int Add({EntityName} entity)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) +
                              $"return _unitOfWork.{EntityName}Manager.Insert(entity);");
@@ -92,7 +93,7 @@ namespace DbDictExport.Core.Codes
             codes.Append(Environment.NewLine);
 
             // update
-            codes.AppendLine(GetIndentStr(indent) + $"bool Update({EntityName} entity)");
+            codes.AppendLine(GetIndentStr(indent) + $"public bool Update({EntityName} entity)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) +
                              $"return _unitOfWork.{EntityName}Manager.Update(entity);");
@@ -102,13 +103,11 @@ namespace DbDictExport.Core.Codes
             // delete
             if (pkColumns.Any())
             {
-                codes.Append(Environment.NewLine);
-                codes.Append(GetIndentStr(indent) + "bool Delete(");
+                codes.Append(GetIndentStr(indent) + "public bool Delete(");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")");
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "{");
-                codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent + 1) +
                              $"return _unitOfWork.{EntityName}Manager.MarkDeletion(");
                 codes.Append(string.Join(", ", paramList));
@@ -122,10 +121,10 @@ namespace DbDictExport.Core.Codes
             // bulk delete
             if (pkColumns.Count == 1)
             {
-                codes.AppendLine(GetIndentStr(indent) + "bool Delete(IEnumerable<int> idList)");
+                codes.AppendLine(GetIndentStr(indent) + "public bool Delete(IEnumerable<int> idList)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                                 $"return _unitOfWork.{EntityName}Manager.MarkDeletions(idList);");
+                                 $"return _unitOfWork.{EntityName}Manager.MarkDeletions(idList.Select<int, object>(t => t));");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }
@@ -133,7 +132,7 @@ namespace DbDictExport.Core.Codes
             // exists
             if (pkColumns.Count == 1)
             {
-                codes.AppendLine(GetIndentStr(indent) + $"bool Exists({GetCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
+                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({GetCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Exists({pkColumns[0].Name});");

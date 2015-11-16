@@ -27,9 +27,10 @@ namespace DbDictExport.Core.Codes
 
             // using 
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
             // namespace
+            codes.Append(Environment.NewLine);
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IBLL");
             codes.AppendLine("{"); // namespace
 

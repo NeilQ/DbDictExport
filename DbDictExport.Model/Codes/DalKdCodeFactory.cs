@@ -33,7 +33,8 @@ namespace DbDictExport.Core.Codes
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
             // namespace
-            codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.SQLServe");
+            codes.Append(Environment.NewLine);
+            codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.SQLServer");
             codes.AppendLine("{");
 
             // class

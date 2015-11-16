@@ -26,7 +26,7 @@ namespace DbDictExport.Core.Codes
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
             codes.AppendLine(Environment.NewLine);
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL");
             codes.AppendLine("{"); // namesapce
@@ -49,6 +49,7 @@ namespace DbDictExport.Core.Codes
                 var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
+                codes.Append(Environment.NewLine);
                 codes.Append(Environment.NewLine);
             }
 
