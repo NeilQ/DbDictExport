@@ -33,7 +33,7 @@ namespace DbDictExport.Core.Codes
             indent++;
             var pkColumns = Table.ColumnList.Where(t => t.PrimaryKey).ToList();
             //attributes
-            codes.AppendLine(GetIndentStr(indent) + $"[TableName(\"{EntityName}\")]");
+            codes.AppendLine(GetIndentStr(indent) + $"[TableName(\"{Table.Name}\")]");
             if (pkColumns.Count == 1)
             {
                 codes.AppendLine(GetIndentStr(indent) + $"[PrimaryKey(\"{pkColumns[0].Name}\")]");
