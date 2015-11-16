@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DbDictExport.Core;
 using DbDictExport.Core.Codes;
@@ -49,14 +44,18 @@ namespace DbDictExport.WinForm
             var idal = new DalInterfaceKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
             var dal = new DalKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
             var model = new ModelKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
+            var ibll = new BllInterfaceKdCodeFactory(txtEntityName.Text, txtModuleName.Text, Table);
 
             var idalPath = folderBrowserDialog.SelectedPath + $"\\I{txtEntityName.Text}Manager.cs";
             var dalPath = folderBrowserDialog.SelectedPath + $"\\{txtEntityName.Text}Manager.cs";
             var modelPath = folderBrowserDialog.SelectedPath + $"\\{txtEntityName.Text}.cs";
+            var ibllPath = folderBrowserDialog.SelectedPath + $"\\I{txtEntityName.Text}Service.cs";
+
 
             File.WriteAllText(idalPath, idal.GenerateCodes().ToString());
             File.WriteAllText(dalPath, dal.GenerateCodes().ToString());
             File.WriteAllText(modelPath, model.GenerateCodes().ToString());
+            File.WriteAllText(ibllPath, ibll.GenerateCodes().ToString());
 
             Close();
         }
