@@ -61,6 +61,7 @@ namespace DbDictExport.Core.Codes
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(out total, page, size, sort, asc);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
+                codes.Append(Environment.NewLine);
             }
 
             var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}").ToList();
@@ -68,7 +69,7 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Any())
             {
                 // get by primary key
-                codes.Append(Environment.NewLine);
+
                 codes.Append(GetIndentStr(indent) + $"{EntityName} Get{EntityName}(");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")");
