@@ -70,7 +70,7 @@ namespace DbDictExport.Core.Codes
             {
                 // get by primary key
 
-                codes.Append(GetIndentStr(indent) + $"{EntityName} Get{EntityName}(");
+                codes.Append(GetIndentStr(indent) + $"public {EntityName} Get{EntityName}(");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")");
                 codes.Append(Environment.NewLine);

@@ -91,7 +91,7 @@ namespace DbDictExport.Core.Codes
             }
 
             // exists
-            if (pkColumns.Count == 0)
+            if (pkColumns.Count == 1)
             {
                 codes.AppendLine(GetIndentStr(indent) + "bool Exists(int id);");
             }
