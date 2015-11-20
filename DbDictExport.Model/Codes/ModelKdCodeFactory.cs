@@ -60,6 +60,15 @@ namespace DbDictExport.Core.Codes
             indent++;
             foreach (var column in Table.ColumnList)
             {
+                if (hasBaseFields &&
+                    (column.Name != "AddTime"
+                    || column.Name == "UpdateUser"
+                    || column.Name == "UpdateTime"
+                    || column.Name == "AddUser"
+                    || column.Name == "Marks"))
+                {
+                    continue;
+                }
                 // annatation
                 codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
                 codes.AppendLine(GetIndentStr(indent) + $"/// {column.Description}");
