@@ -61,7 +61,7 @@ namespace DbDictExport.Core.Codes
             foreach (var column in Table.ColumnList)
             {
                 if (hasBaseFields &&
-                    (column.Name != "AddTime"
+                    (column.Name == "AddTime"
                     || column.Name == "UpdateUser"
                     || column.Name == "UpdateTime"
                     || column.Name == "AddUser"
