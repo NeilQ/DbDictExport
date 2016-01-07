@@ -51,7 +51,7 @@ namespace DbDictExport.Core.Codes
             {
                 codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + string.Format("public {0} Get{0}(", EntityName));
-                var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}");
+                var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")\r\n");
                 codes.AppendLine(GetIndentStr(indent) + "{");
@@ -72,7 +72,7 @@ namespace DbDictExport.Core.Codes
                 codes.Append(string.Join(" AND ", whereStr));
                 codes.Append("\", TableName);\r\n");
 
-                var paramsList = pkColumns.Select(t => string.Format("new SqlParameter(\"{0}\", {0})", t.Name));
+                var paramsList = pkColumns.Select(t => string.Format("new SqlParameter(\"{0}\", {0})", ToCamelCase(t.Name)));
                 codes.AppendLine(GetIndentStr(indent) + $"return GetEntity(sql, {string.Join(", ", paramsList)});");
 
                 indent--;

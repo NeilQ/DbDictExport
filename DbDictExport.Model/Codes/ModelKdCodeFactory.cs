@@ -76,7 +76,7 @@ namespace DbDictExport.Core.Codes
 
                 // field
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public {GetCSharpType(column.DbType)} {column.Name} {{ get; set; }}");
+                                 $"public {MapCSharpType(column.DbType)} {column.Name} {{ get; set; }}");
                 codes.Append(Environment.NewLine);
             }
 

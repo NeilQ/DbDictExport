@@ -65,8 +65,8 @@ namespace DbDictExport.Core.Codes
                 codes.Append(Environment.NewLine);
             }
 
-            var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}").ToList();
-            var paramList = pkColumns.Select(pk => $"{pk.Name}").ToList();
+            var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
+            var paramList = pkColumns.Select(pk => $"{ToCamelCase(pk.Name)}").ToList();
             if (pkColumns.Any())
             {
                 // get by primary key
@@ -134,7 +134,7 @@ namespace DbDictExport.Core.Codes
             // exists
             if (pkColumns.Count == 1)
             {
-                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({GetCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
+                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Exists({pkColumns[0].Name});");

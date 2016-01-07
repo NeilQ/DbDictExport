@@ -49,7 +49,7 @@ namespace DbDictExport.Core.Codes
                                  $"List<{EntityName}> Get{EntityName}s(out long total, int page, int size, string sort, bool asc);");
             }
 
-            var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}").ToList();
+            var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
             if (pkColumns.Any())
             {
                 // get by primary key

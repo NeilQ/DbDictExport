@@ -46,7 +46,7 @@ namespace DbDictExport.Core.Codes
                 codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + string.Format("{0} Get{0}(", EntityName));
                 //codes.Append("int ticketId, int costId");
-                var tmpList = pkColumns.Select(pk => $"{GetCSharpType(pk.DbType)} {pk.Name}");
+                var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
                 codes.Append(Environment.NewLine);
