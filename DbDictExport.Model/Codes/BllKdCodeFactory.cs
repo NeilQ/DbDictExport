@@ -57,7 +57,7 @@ namespace DbDictExport.Core.Codes
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> Get{EntityName}s(out long total, int page, int size, string sort, bool asc)");
+                                 $"public List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(out total, page, size, sort, asc);");
@@ -137,7 +137,7 @@ namespace DbDictExport.Core.Codes
                 codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _unitOfWork.{EntityName}Manager.Exists({pkColumns[0].Name});");
+                    $"return _unitOfWork.{EntityName}Manager.Exists({ToCamelCase(pkColumns[0].Name)});");
                 codes.AppendLine(GetIndentStr(indent) + "}");
             }
 

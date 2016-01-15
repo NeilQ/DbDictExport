@@ -57,7 +57,7 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Count() < 2)
             {
                 codes.AppendLine(
-                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(out long total, int page, int size, string sort, bool asc);",
+                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc);",
                     EntityName));
             }
 

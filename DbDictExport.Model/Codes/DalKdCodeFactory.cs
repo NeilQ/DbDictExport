@@ -61,7 +61,7 @@ namespace DbDictExport.Core.Codes
                 codes.Append(GetIndentStr(indent) + "var sql = string.Format(\"SELECT TOP 1 * FROM {0} WHERE ");
                 //codes.Append("Marks = 1 and ID=@ID");
                 var whereStr = new List<string>();
-                if (Table.ColumnList.Exists(t => t.Name.ToLower() == "Marks"))
+                if (Table.ColumnList.Exists(t => t.Name.ToLower() == "marks"))
                 {
                     whereStr.Add("Marks=1");
                 }
@@ -82,7 +82,7 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Count < 2)
             {
                 codes.AppendLine(Environment.NewLine);
-                codes.AppendLine(GetIndentStr(indent) + string.Format("public List<{0}> Get{0}s(out long total, int page, int size, string sort, bool asc)", EntityName));
+                codes.AppendLine(GetIndentStr(indent) + string.Format("public List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc)", EntityName));
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 indent++;
                 codes.AppendLine(GetIndentStr(indent) +

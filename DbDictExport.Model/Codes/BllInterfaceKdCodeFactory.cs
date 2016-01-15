@@ -46,7 +46,7 @@ namespace DbDictExport.Core.Codes
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"List<{EntityName}> Get{EntityName}s(out long total, int page, int size, string sort, bool asc);");
+                                 $"List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc);");
             }
 
             var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
