@@ -27,6 +27,7 @@ namespace DbDictExport.Core.Codes
 
             // using 
             codes.AppendLine("using System.Collections.Generic;");
+            codes.AppendLine("using JS.Service.Common.Utility;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
             // namespace
@@ -46,9 +47,16 @@ namespace DbDictExport.Core.Codes
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc);");
+                                 $"List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc, PageFilter filter);");
             }
 
+            if (pkColumns.Count == 1)
+            {
+                codes.Append(Environment.NewLine);
+                // get by page
+                codes.AppendLine(GetIndentStr(indent) +
+                                 $"List<{EntityName}> Get{EntityName}s(PageFilter filter);");
+            }
             var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
             if (pkColumns.Any())
             {
