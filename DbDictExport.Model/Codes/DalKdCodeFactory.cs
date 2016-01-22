@@ -29,6 +29,7 @@ namespace DbDictExport.Core.Codes
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Data.SqlClient;");
             codes.AppendLine("using System.Text;");
+            codes.AppendLine("using JS.Service.Common.Utility;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
@@ -82,17 +83,30 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Count < 2)
             {
                 codes.AppendLine(Environment.NewLine);
-                codes.AppendLine(GetIndentStr(indent) + string.Format("public List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc)", EntityName));
+                codes.AppendLine(GetIndentStr(indent) + string.Format("public List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc, PageFilter filter)", EntityName));
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 indent++;
+                codes.AppendLine(GetIndentStr(indent) + "List<SqlParameter> paras = new List<SqlParameter>();");
                 codes.AppendLine(GetIndentStr(indent) +
                                  "var sql = new StringBuilder(string.Format(\"SELECT * FROM {0} WHERE Marks = 1\", TableName));");
                 codes.AppendLine(GetIndentStr(indent) + "if (string.IsNullOrEmpty(sort))");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) + "sort = \"AddTime\";");
                 codes.AppendLine(GetIndentStr(indent) + "}");
+                codes.AppendLine(GetIndentStr(indent) + "return GetEntities(page, size, out total, sql.ToString(), sort, asc, paras,filter);");
+                indent--;
+                codes.AppendLine(GetIndentStr(indent) + "}");
+            }
 
-                codes.AppendLine(GetIndentStr(indent) + "return GetEntities(page, size, out total, sql.ToString(), sort, asc);");
+            if (pkColumns.Count < 2)
+            {
+                codes.AppendLine(Environment.NewLine);
+                codes.AppendLine(GetIndentStr(indent) + string.Format("public List<{0}> Get{0}s(PageFilter filter)", EntityName));
+                codes.AppendLine(GetIndentStr(indent) + "{");
+                indent++;
+                codes.AppendLine(GetIndentStr(indent) + "List<SqlParameter> paras = new List<SqlParameter>();");
+                codes.AppendLine(GetIndentStr(indent) + "var sql = new StringBuilder(string.Format(\"SELECT * FROM {0} WHERE Marks = 1\", TableName));");
+                codes.AppendLine(GetIndentStr(indent) + "return GetEntities(sql.ToString(),filter, paras);");
                 indent--;
                 codes.AppendLine(GetIndentStr(indent) + "}");
             }

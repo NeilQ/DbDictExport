@@ -28,6 +28,7 @@ namespace DbDictExport.Core.Codes
             // using 
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Linq;");
+            codes.AppendLine("using JS.Service.Common.Utility;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IBLL;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
@@ -57,10 +58,22 @@ namespace DbDictExport.Core.Codes
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc)");
+                                 $"public List<{EntityName}> Get{EntityName}s(out int total, int page, int size, string sort, bool asc, PageFilter filter)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(out total, page, size, sort, asc);");
+                    $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(out total, page, size, sort, asc, filter);");
+                codes.AppendLine(GetIndentStr(indent) + "}");
+                codes.Append(Environment.NewLine);
+            }
+
+            if (pkColumns.Count == 1)
+            {
+                // get by page
+                codes.AppendLine(GetIndentStr(indent) +
+                                 $"public List<{EntityName}> Get{EntityName}s(PageFilter filter)");
+                codes.AppendLine(GetIndentStr(indent) + "{");
+                codes.AppendLine(GetIndentStr(indent + 1) +
+                    $"return _unitOfWork.{EntityName}Manager.Get{EntityName}s(filter);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }
@@ -134,7 +147,7 @@ namespace DbDictExport.Core.Codes
             // exists
             if (pkColumns.Count == 1)
             {
-                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {pkColumns[0].Name})");
+                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {ToCamelCase(pkColumns[0].Name)})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Exists({ToCamelCase(pkColumns[0].Name)});");

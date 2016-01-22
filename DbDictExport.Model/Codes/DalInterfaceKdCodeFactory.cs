@@ -26,6 +26,7 @@ namespace DbDictExport.Core.Codes
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
+            codes.AppendLine("using JS.Service.Common.Utility;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
             codes.AppendLine(Environment.NewLine);
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL");
@@ -57,10 +58,17 @@ namespace DbDictExport.Core.Codes
             if (pkColumns.Count() < 2)
             {
                 codes.AppendLine(
-                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc);",
+                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(PageFilter filter);",
                     EntityName));
             }
 
+            if (pkColumns.Count() < 2)
+            {
+                codes.Append(Environment.NewLine);
+                codes.AppendLine(
+                string.Format(GetIndentStr(indent) + "List<{0}> Get{0}s(out int total, int page, int size, string sort, bool asc, PageFilter filter);",
+                    EntityName));
+            }
 
             indent--;
             codes.AppendLine(GetIndentStr(indent) + "}"); // class 
