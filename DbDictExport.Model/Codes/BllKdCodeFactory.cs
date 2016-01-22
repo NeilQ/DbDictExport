@@ -134,7 +134,7 @@ namespace DbDictExport.Core.Codes
             // exists
             if (pkColumns.Count == 1)
             {
-                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {ToCamelCase(pkColumns[0].Name)}");
+                codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({MapCSharpType(pkColumns[0].DbType)} {ToCamelCase(pkColumns[0].Name)})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                     $"return _unitOfWork.{EntityName}Manager.Exists({ToCamelCase(pkColumns[0].Name)});");
