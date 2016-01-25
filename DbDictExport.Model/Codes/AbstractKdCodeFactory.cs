@@ -21,6 +21,7 @@ namespace DbDictExport.Core.Codes
             if (dbtype.ToLower().Contains("bigint")) return "long";
             if (dbtype.ToLower().Contains("int")) return "int";
             if (dbtype.ToLower().Contains("decimal")) return "decimal";
+            if (dbtype.ToLower().Contains("float")) return "float";
             return "string";
         }
 
