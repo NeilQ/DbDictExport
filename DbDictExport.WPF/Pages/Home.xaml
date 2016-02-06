@@ -9,9 +9,7 @@
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <StackPanel MinWidth="200">
-                <TextBlock Text="TODO: add content" />
-                <mui:BBCodeBlock BBCode="[url=/Pages/Connect.xaml]Connect[/url]"/>
-                <Button Content="Connect" Click="Button_Click" ></Button>
+                <Button Content="Connect" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Connect.xaml" ></Button>
             </StackPanel>
         </ScrollViewer>
     </Grid>

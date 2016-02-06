@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.ComponentModel;
 using FirstFloor.ModernUI.Presentation;
-using FirstFloor.ModernUI.Windows;
 using System.Windows;
 using System.Windows.Input;
 using System.Data.SqlClient;
@@ -13,67 +10,43 @@ using FirstFloor.ModernUI.Windows.Controls;
 
 namespace DbDictExport.WPF.Pages
 {
-    public sealed class ConnectViewModel : NotifyPropertyChanged, IDataErrorInfo
+    public sealed class ConnectViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         #region private variables and contants
-        private const string SqlServerAuthentication = "Sql Server Authentication";
-        private const string WindowsAuthentication = "Windows Authentication";
-        private readonly string[] _engines = { "Datebase Engine" };
+        private const string SQL_SERVER_AUTHENTICATION = "Sql Server Authentication";
+        private const string WINDOWS_AUTHENTICATION = "Windows Authentication";
         private string _selectedEngine;
-        private readonly string[] _servers = { ".", "(local)" };
+        private ObservableCollection<string> _servers = new ObservableCollection<string>()
+        {
+            ".", "(local)"
+        };
         private string _selectedServer;
-        private readonly string[] _authentications = { SqlServerAuthentication, WindowsAuthentication };
         private string _selectedAuthencation;
         private string _username = "sa";
         private string _isUsernameEnabled;
         private string _password;
         private string _isPasswordEnabled;
-        private readonly ICommand _connectCommand;
+
         #endregion
 
 
         #region Attributes
         public SqlConnectionStringBuilder ConnStringBuilder { get; set; }
 
-        /// <summary>
-        /// Gets the connect command.
-        /// </summary>
-        /// <value>
-        /// The connect command.
-        /// </value>
-        public ICommand ConnectCommand
-        {
-            get { return _connectCommand; }
-        }
+        public ICommand ConnectCommand { get; }
 
-        /// <summary>
-        /// Gets the engines.
-        /// </summary>
-        /// <value>
-        /// The engines.
-        /// </value>
-        public string[] Engines
-        {
-            get { return _engines; }
-        }
+        public string[] Engines { get; } = { "Datebase Engine" };
 
-        /// <summary>
-        /// Gets the servers.
-        /// </summary>
-        /// <value>
-        /// The servers.
-        /// </value>
-        public string[] Servers
+        public ObservableCollection<string> Servers
         {
             get { return _servers; }
+            set
+            {
+                _servers = value;
+                RaisePropertyChanged("Servers");
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the selected engine.
-        /// </summary>
-        /// <value>
-        /// The selected engine.
-        /// </value>
         public string SelectedEngine
         {
             get { return _selectedEngine; }
@@ -82,17 +55,11 @@ namespace DbDictExport.WPF.Pages
                 if (_selectedEngine != value)
                 {
                     _selectedEngine = value;
-                    OnPropertyChanged("SelectedEngine");
+                    RaisePropertyChanged("SelectedEngine");
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the selected server.
-        /// </summary>
-        /// <value>
-        /// The selected server.
-        /// </value>
         public string SelectedServer
         {
             get { return _selectedServer; }
@@ -101,28 +68,29 @@ namespace DbDictExport.WPF.Pages
                 if (SelectedServer != value)
                 {
                     _selectedServer = value;
-                    OnPropertyChanged("SelectedServer");
+                    RaisePropertyChanged("SelectedServer");
                 }
             }
         }
 
-        /// <summary>
-        /// Gets the authentications.
-        /// </summary>
-        /// <value>
-        /// The authentications.
-        /// </value>
-        public string[] Authentications
+        public string NewServer
         {
-            get { return _authentications; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    Servers.Add(value);
+                    SelectedServer = value;
+                }
+            }
+            get
+            {
+                return SelectedServer;
+            }
         }
 
-        /// <summary>
-        /// Gets or sets the selected authentication.
-        /// </summary>
-        /// <value>
-        /// The selected authentication.
-        /// </value>
+        public string[] Authentications { get; } = { SQL_SERVER_AUTHENTICATION, WINDOWS_AUTHENTICATION };
+
         public string SelectedAuthentication
         {
             get { return _selectedAuthencation; }
@@ -131,17 +99,11 @@ namespace DbDictExport.WPF.Pages
                 if (_selectedAuthencation != value)
                 {
                     _selectedAuthencation = value;
-                    OnPropertyChanged("SelectedAuthentication");
+                    RaisePropertyChanged("SelectedAuthentication");
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>
-        /// The username.
-        /// </value>
         public string Username
         {
             get { return _username; }
@@ -150,17 +112,11 @@ namespace DbDictExport.WPF.Pages
                 if (_username != value)
                 {
                     _username = value;
-                    OnPropertyChanged("Username");
+                    RaisePropertyChanged("Username");
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the is username enable.
-        /// </summary>
-        /// <value>
-        /// The is username enable.
-        /// </value>
         public string IsUsernameEnabled
         {
             get { return _isUsernameEnabled; }
@@ -169,17 +125,11 @@ namespace DbDictExport.WPF.Pages
                 if (_isUsernameEnabled != value)
                 {
                     _isUsernameEnabled = value;
-                    OnPropertyChanged("IsUsernameEnabled");
+                    RaisePropertyChanged("IsUsernameEnabled");
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        /// <value>
-        /// The password.
-        /// </value>
         public string Password
         {
             get { return _password; }
@@ -188,7 +138,7 @@ namespace DbDictExport.WPF.Pages
                 if (_password != value)
                 {
                     _password = value;
-                    OnPropertyChanged("Password");
+                    RaisePropertyChanged("Password");
                 }
             }
         }
@@ -207,7 +157,7 @@ namespace DbDictExport.WPF.Pages
                 if (_isPasswordEnabled != value)
                 {
                     _isPasswordEnabled = value;
-                    OnPropertyChanged("IsPasswordEnabled");
+                    RaisePropertyChanged("IsPasswordEnabled");
                 }
             }
         }
@@ -215,10 +165,7 @@ namespace DbDictExport.WPF.Pages
         /// <summary>
         /// Gets an error message indicating what is wrong with this object.
         /// </summary>
-        public string Error
-        {
-            get { return null; }
-        }
+        public string Error => null;
 
 
         /// <summary>
@@ -246,6 +193,8 @@ namespace DbDictExport.WPF.Pages
 
         public static ConnectViewModel Current = new ConnectViewModel();
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectViewModel"/> class.
         /// </summary>
@@ -257,30 +206,30 @@ namespace DbDictExport.WPF.Pages
 
             PropertyChanged += OnPropertyChanged;
 
-            _connectCommand = new RelayCommand(o =>
+            ConnectCommand = new RelayCommand(o =>
             {
-                StringBuilder message = new StringBuilder();
-                bool ok = true;
+                var message = new StringBuilder();
+                var ok = true;
 
                 // Validate inputs.
-                if (String.IsNullOrEmpty(SelectedServer))
+                if (string.IsNullOrEmpty(SelectedServer))
                 {
                     ok = false;
-                    message.AppendLine(" Server empty.");
+                    message.AppendLine("Server empty.");
                 }
-                if (String.IsNullOrEmpty(SelectedAuthentication))
+                if (string.IsNullOrEmpty(SelectedAuthentication))
                 {
                     ok = false;
                     message.AppendLine("Authentication empty.");
                 }
-                if (SelectedAuthentication == SqlServerAuthentication)
+                if (SelectedAuthentication == SQL_SERVER_AUTHENTICATION)
                 {
-                    if (String.IsNullOrEmpty(Username))
+                    if (string.IsNullOrEmpty(Username))
                     {
                         ok = false;
                         message.AppendLine("Username empty.");
                     }
-                    if (String.IsNullOrEmpty(Password))
+                    if (string.IsNullOrEmpty(Password))
                     {
                         ok = false;
                         message.AppendLine("Password empty.");
@@ -294,7 +243,7 @@ namespace DbDictExport.WPF.Pages
 
 
                 ConnStringBuilder = new SqlConnectionStringBuilder { DataSource = SelectedServer };
-                if (SelectedAuthentication == WindowsAuthentication)
+                if (SelectedAuthentication == WINDOWS_AUTHENTICATION)
                 {
                     ConnStringBuilder.IntegratedSecurity = true;
                 }
@@ -310,12 +259,12 @@ namespace DbDictExport.WPF.Pages
                     try
                     {
                         conn.Open();
-                        var routedCommand =NavigationCommands.GoToPage;
+                        var routedCommand = NavigationCommands.GoToPage;
                         routedCommand.Execute("Pages/Home.xaml", AppManagement.Current.AppMainWindow);
                     }
                     catch (Exception ex)
                     {
-                        ModernDialog.ShowMessage(ex.Message,"Error",MessageBoxButton.OK);
+                        ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
                     }
                 }
             });
@@ -330,15 +279,22 @@ namespace DbDictExport.WPF.Pages
         {
             if (e.PropertyName == "SelectedAuthentication")
             {
-                IsUsernameEnabled = SelectedAuthentication == SqlServerAuthentication
+                IsUsernameEnabled = SelectedAuthentication == SQL_SERVER_AUTHENTICATION
                     ? bool.TrueString
                     : bool.FalseString;
-                IsPasswordEnabled = SelectedAuthentication == SqlServerAuthentication
+                IsPasswordEnabled = SelectedAuthentication == SQL_SERVER_AUTHENTICATION
                     ? bool.TrueString
                     : bool.FalseString;
             }
         }
 
 
+        private void RaisePropertyChanged(string propertyName)
+        {
+            // take a copy to prevent thread issues
+            var handler = PropertyChanged;
+
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

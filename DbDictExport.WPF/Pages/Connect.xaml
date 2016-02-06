@@ -8,6 +8,9 @@
              xmlns:pages="clr-namespace:DbDictExport.WPF.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400" HorizontalAlignment="Center">
+    <UserControl.DataContext>
+        <pages:ConnectViewModel></pages:ConnectViewModel>
+    </UserControl.DataContext>
     <ScrollViewer>
         <StackPanel MinWidth="200">
 
@@ -45,7 +48,7 @@
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Server" Target="{Binding ElementName=Server}"></Label>
-                    <ComboBox x:Name="ComboServer" IsEditable="True" ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer,Mode=OneWay}" Width="200"></ComboBox>
+                    <ComboBox x:Name="ComboServer" IsEditable="True" ItemsSource="{Binding Servers}" SelectedItem="{Binding SelectedServer,Mode=OneWay}" Text="{Binding NewServer, UpdateSourceTrigger=LostFocus}" Width="200"></ComboBox>
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Authentication" Target="{Binding ElementName=Authentication}"></Label>
@@ -61,7 +64,7 @@
                 </StackPanel>
                 <StackPanel >
                     <Button x:Name="ButtonConnect" Content="Connect" Command="{Binding ConnectCommand}" Margin="100,0,0,0"></Button>
-                    <Button x:Name="ButtonCancle" Content="Cancle" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Home.xaml"  Margin="20,0,0,0"></Button>
+                    <Button x:Name="ButtonCancel" Content="Cancel" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Home.xaml"  Margin="20,0,0,0"></Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

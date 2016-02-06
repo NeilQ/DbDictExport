@@ -23,7 +23,6 @@ namespace DbDictExport.WPF.Pages
         public Connect()
         {
             InitializeComponent();
-            this.DataContext = new ConnectViewModel();
         }
 
     }
