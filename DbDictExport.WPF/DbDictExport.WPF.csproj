@@ -52,6 +52,10 @@
       <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net40\Microsoft.Windows.Shell.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -84,7 +88,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="AppManagement.cs" />
+    <Compile Include="Common\AuthHistoryService.cs" />
     <Compile Include="Common\PasswordBoxHelper.cs" />
+    <Compile Include="Common\SqlServerAuth.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
