@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.ComponentModel;
@@ -6,6 +7,9 @@ using FirstFloor.ModernUI.Presentation;
 using System.Windows;
 using System.Windows.Input;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using DbDictExport.WPF.Common;
 using FirstFloor.ModernUI.Windows.Controls;
 
 namespace DbDictExport.WPF.Pages
@@ -16,10 +20,7 @@ namespace DbDictExport.WPF.Pages
         private const string SQL_SERVER_AUTHENTICATION = "Sql Server Authentication";
         private const string WINDOWS_AUTHENTICATION = "Windows Authentication";
         private string _selectedEngine;
-        private ObservableCollection<string> _servers = new ObservableCollection<string>()
-        {
-            ".", "(local)"
-        };
+        private ObservableCollection<string> _servers;
         private string _selectedServer;
         private string _selectedAuthencation;
         private string _username = "sa";
@@ -27,6 +28,7 @@ namespace DbDictExport.WPF.Pages
         private string _password;
         private string _isPasswordEnabled;
 
+        private List<SqlServerAuth> _auths = AuthHistoryService.GetHistories() as List<SqlServerAuth>;
         #endregion
 
 
@@ -39,7 +41,7 @@ namespace DbDictExport.WPF.Pages
 
         public ObservableCollection<string> Servers
         {
-            get { return _servers; }
+            get { return _servers ?? (_servers = new ObservableCollection<string>()); }
             set
             {
                 _servers = value;
@@ -79,7 +81,10 @@ namespace DbDictExport.WPF.Pages
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    Servers.Add(value);
+                    if (!Servers.Contains(value))
+                    {
+                        Servers.Add(value);
+                    }
                     SelectedServer = value;
                 }
             }
@@ -201,8 +206,16 @@ namespace DbDictExport.WPF.Pages
         public ConnectViewModel()
         {
             SelectedAuthentication = Authentications[0];
+
+            foreach (var sqlServerAuth in _auths)
+            {
+                if (sqlServerAuth == null) continue;
+                Servers.Add(sqlServerAuth.Server);
+            }
+
             SelectedEngine = Engines[0];
             SelectedServer = Servers[0];
+
 
             PropertyChanged += OnPropertyChanged;
 
@@ -259,8 +272,8 @@ namespace DbDictExport.WPF.Pages
                     try
                     {
                         conn.Open();
-                        var routedCommand = NavigationCommands.GoToPage;
-                        routedCommand.Execute("Pages/Home.xaml", AppManagement.Current.AppMainWindow);
+                        OnConnectSucceed();
+
                     }
                     catch (Exception ex)
                     {
@@ -286,6 +299,20 @@ namespace DbDictExport.WPF.Pages
                     ? bool.TrueString
                     : bool.FalseString;
             }
+            if (e.PropertyName == "SelectedServer")
+            {
+                var auth = AuthHistoryService.GetHistory(SelectedServer);
+                if (auth != null)
+                {
+                    Username = auth.Username ?? "";
+                    Password = auth.Password ?? "";
+                }
+                else
+                {
+                    Username = "";
+                    Password = "";
+                }
+            }
         }
 
 
@@ -295,6 +322,23 @@ namespace DbDictExport.WPF.Pages
             var handler = PropertyChanged;
 
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnConnectSucceed()
+        {
+            AuthHistoryService.PersistHistory(new SqlServerAuth()
+            {
+                Server = SelectedServer,
+                AuthType =
+                    SelectedAuthentication == SQL_SERVER_AUTHENTICATION
+                        ? SqlServerAuthType.SqlServer
+                        : SqlServerAuthType.Windows,
+                Username = Username,
+                Password = Password
+            });
+
+            var routedCommand = NavigationCommands.GoToPage;
+            routedCommand.Execute("Pages/Home.xaml", AppManagement.Current.AppMainWindow);
         }
     }
 }

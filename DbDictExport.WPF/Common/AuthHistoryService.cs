@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 
 namespace DbDictExport.WPF.Common
@@ -63,12 +64,29 @@ namespace DbDictExport.WPF.Common
             };
         }
 
-        public IList<SqlServerAuth> GetHistory()
+        public static IList<SqlServerAuth> GetHistories()
         {
             return _history.Values.ToList();
         }
 
-        public void PersistHistory(SqlServerAuth auth)
+        public static SqlServerAuth GetHistory(string server)
+        {
+            if (string.IsNullOrEmpty(server)) return null;
+            SqlServerAuth auth;
+            return _history.TryGetValue(server, out auth) ? auth : null;
+        }
+
+        public static Dictionary<string, SqlServerAuth> GetHistoryDictionary()
+        {
+            return _history;
+        }
+
+        public static bool Exists(string server)
+        {
+            return _history != null && _history.ContainsKey(server);
+        }
+
+        public static void PersistHistory(SqlServerAuth auth)
         {
             if (string.IsNullOrEmpty(auth?.Server)) return;
             _history[auth.Server] = auth;
@@ -81,7 +99,7 @@ namespace DbDictExport.WPF.Common
             }
         }
 
-        public void ClearHistory()
+        public static void ClearHistory()
         {
             _history = new Dictionary<string, SqlServerAuth>();
             AppendDefaultAuth();
