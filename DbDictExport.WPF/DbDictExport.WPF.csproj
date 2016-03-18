@@ -87,7 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AppManagement.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Common\AuthHistoryService.cs" />
     <Compile Include="Common\PasswordBoxHelper.cs" />
     <Compile Include="Common\SqlServerAuth.cs" />

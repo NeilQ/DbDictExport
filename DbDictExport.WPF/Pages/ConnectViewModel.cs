@@ -7,10 +7,9 @@ using FirstFloor.ModernUI.Presentation;
 using System.Windows;
 using System.Windows.Input;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using DbDictExport.WPF.Common;
 using FirstFloor.ModernUI.Windows.Controls;
+using FirstFloor.ModernUI.Windows.Navigation;
 
 namespace DbDictExport.WPF.Pages
 {
@@ -28,7 +27,7 @@ namespace DbDictExport.WPF.Pages
         private string _password;
         private string _isPasswordEnabled;
 
-        private List<SqlServerAuth> _auths = AuthHistoryService.GetHistories() as List<SqlServerAuth>;
+        private readonly List<SqlServerAuth> _auths = AuthHistoryService.GetHistories() as List<SqlServerAuth>;
         #endregion
 
 
@@ -337,8 +336,11 @@ namespace DbDictExport.WPF.Pages
                 Password = Password
             });
 
+            Global.ConnectionBuilder = ConnStringBuilder;
+
             var routedCommand = NavigationCommands.GoToPage;
-            routedCommand.Execute("Pages/Home.xaml", AppManagement.Current.AppMainWindow);
+            IInputElement target = NavigationHelper.FindFrame("_top", Application.Current.MainWindow);
+            routedCommand.Execute("/pages/Home.xaml", target);
         }
     }
 }
