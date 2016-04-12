@@ -9,7 +9,9 @@
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <StackPanel MinWidth="200">
+                <!--
                 <Button Content="Connect" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Connect.xaml" ></Button>
+                -->
             </StackPanel>
         </ScrollViewer>
     </Grid>

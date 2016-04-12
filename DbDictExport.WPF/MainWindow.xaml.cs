@@ -1,4 +1,5 @@
-﻿using FirstFloor.ModernUI.Windows.Controls;
+﻿using System.Windows;
+using FirstFloor.ModernUI.Windows.Controls;
 
 
 namespace DbDictExport.WPF
@@ -11,6 +12,7 @@ namespace DbDictExport.WPF
         public MainWindow()
         {
             InitializeComponent();
+            Application.Current.MainWindow = this;
         }
     }
 }

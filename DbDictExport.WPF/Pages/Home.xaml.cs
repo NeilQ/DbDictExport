@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FirstFloor.ModernUI.Presentation;
 using FirstFloor.ModernUI.Windows.Controls;
+using FirstFloor.ModernUI.Windows.Navigation;
 
 namespace DbDictExport.WPF.Pages
 {
@@ -25,6 +26,19 @@ namespace DbDictExport.WPF.Pages
         public Home()
         {
             InitializeComponent();
+            Loaded += Home_Loaded;
+
         }
+
+        private void Home_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Global.ConnectionBuilder == null)
+            {
+                var routedCommand = NavigationCommands.GoToPage;
+                IInputElement target = NavigationHelper.FindFrame("_top", this);
+                routedCommand.Execute("/Pages/Connect.xaml", target);
+            }
+        }
+
     }
 }
