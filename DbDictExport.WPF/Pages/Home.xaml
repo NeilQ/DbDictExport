@@ -3,16 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pages="clr-namespace:DbDictExport.WPF.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <pages:HomeViewModel></pages:HomeViewModel>
+    </UserControl.DataContext>
     <Grid Style="{StaticResource ContentRoot}">
-        <ScrollViewer>
-            <StackPanel MinWidth="200">
-                <!--
-                <Button Content="Connect" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Connect.xaml" ></Button>
-                -->
-            </StackPanel>
-        </ScrollViewer>
+        <StackPanel MinWidth="200">
+
+            <!--<Button Content="Connect" Command="NavigationCommands.GoToPage" CommandParameter="/pages/Connect.xaml" ></Button>-->
+            <TreeView Name="DbTree" ItemsSource="{Binding DbCategories}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Columns}">
+                        <TextBlock Text="{Binding Name}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+        </StackPanel>
+        <!--<TreeView>
+                        <TreeViewItem Header="Level 1" IsExpanded="True">
+                                <TreeViewItem Header="Level 2.1" />
+                                <TreeViewItem Header="Level 2.2" IsExpanded="True">
+                                        <TreeViewItem Header="Level 3.1" />
+                                        <TreeViewItem Header="Level 3.2" />
+                                </TreeViewItem>
+                                <TreeViewItem Header="Level 2.3" />
+                        </TreeViewItem>
+                </TreeView>-->
     </Grid>
 </UserControl>

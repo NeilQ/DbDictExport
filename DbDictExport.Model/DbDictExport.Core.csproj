@@ -54,6 +54,7 @@
     <Compile Include="Common\Extentions.cs" />
     <Compile Include="Common\IExcelHelper.cs" />
     <Compile Include="Dal\DataAccess.cs" />
+    <Compile Include="DbCategory.cs" />
     <Compile Include="DbColumn.cs" />
     <Compile Include="DbTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
