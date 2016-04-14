@@ -53,6 +53,7 @@
             this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
             this.cmsDbTable = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.generateKdCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateMyCodeTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -98,18 +99,18 @@
             this.refreshToolStripMenuItem,
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem});
             this.cmsDatabase.Name = "cmsDatabase";
-            this.cmsDatabase.Size = new System.Drawing.Size(386, 56);
+            this.cmsDatabase.Size = new System.Drawing.Size(359, 56);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(385, 26);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(358, 26);
             this.refreshToolStripMenuItem.Text = "Refresh";
             // 
             // exportDataDictionaryDocumentToExcelToolStripMenuItem
             // 
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Name = "exportDataDictionaryDocumentToExcelToolStripMenuItem";
-            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(385, 26);
+            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(358, 26);
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Text = "Export data dictionary document to Excel";
             // 
             // menuStrip1
@@ -117,7 +118,8 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.Window;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newConnectToolStripMenuItem});
+            this.newConnectToolStripMenuItem,
+            this.generateMyCodeTemplateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(20, 60);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1433, 28);
@@ -127,7 +129,7 @@
             // newConnectToolStripMenuItem
             // 
             this.newConnectToolStripMenuItem.Name = "newConnectToolStripMenuItem";
-            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(119, 24);
+            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
             this.newConnectToolStripMenuItem.Text = "New Connect";
             this.newConnectToolStripMenuItem.Click += new System.EventHandler(this.newConnectToolStripMenuItem_Click);
             // 
@@ -325,13 +327,20 @@
             this.cmsDbTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generateKdCodesToolStripMenuItem});
             this.cmsDbTable.Name = "cmsDbTable";
-            this.cmsDbTable.Size = new System.Drawing.Size(224, 58);
+            this.cmsDbTable.Size = new System.Drawing.Size(210, 30);
             // 
             // generateKdCodesToolStripMenuItem
             // 
             this.generateKdCodesToolStripMenuItem.Name = "generateKdCodesToolStripMenuItem";
-            this.generateKdCodesToolStripMenuItem.Size = new System.Drawing.Size(223, 26);
+            this.generateKdCodesToolStripMenuItem.Size = new System.Drawing.Size(209, 26);
             this.generateKdCodesToolStripMenuItem.Text = "Generate kd Codes";
+            // 
+            // generateMyCodeTemplateToolStripMenuItem
+            // 
+            this.generateMyCodeTemplateToolStripMenuItem.Name = "generateMyCodeTemplateToolStripMenuItem";
+            this.generateMyCodeTemplateToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.generateMyCodeTemplateToolStripMenuItem.Text = "Generate My Code Template";
+            this.generateMyCodeTemplateToolStripMenuItem.Click += new System.EventHandler(this.generateMyCodeTemplateToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -387,5 +396,6 @@
         private MetroFramework.Controls.MetroScrollBar metroScrollBar1;
         private System.Windows.Forms.ContextMenuStrip cmsDbTable;
         private System.Windows.Forms.ToolStripMenuItem generateKdCodesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generateMyCodeTemplateToolStripMenuItem;
     }
 }

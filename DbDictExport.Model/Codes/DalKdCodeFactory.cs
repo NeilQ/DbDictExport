@@ -22,7 +22,7 @@ namespace DbDictExport.Core.Codes
 
         public override StringBuilder GenerateCodes()
         {
-            if (Table.ColumnList == null || Table.ColumnList.Count == 0) return null;
+            if (Table.ColumnList == null) return null;
             var codes = new StringBuilder();
             var indent = 0;
             // using

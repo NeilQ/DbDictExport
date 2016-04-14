@@ -301,6 +301,15 @@ namespace DbDictExport.WinForm
             MetroGridDesign.DataSource = null;
             MetroGridDesign.Columns.Clear();
         }
+
+        private void generateMyCodeTemplateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new KdCodeForm(new DbTable
+            {
+                Name = "Entity",
+                ColumnList = new List<DbColumn>()
+            }).Show();
+        }
     }
 
 }
