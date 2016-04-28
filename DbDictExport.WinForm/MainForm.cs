@@ -33,6 +33,8 @@ namespace DbDictExport.WinForm
         {
             InitializeComponent();
             MetroGridResultSet.DataError += dgvResultSet_DataError;
+            MetroGridDesign.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            MetroGridResultSet.SelectionMode = DataGridViewSelectionMode.CellSelect;
             tvDatabase.BeforeExpand += tvDatabase_BeforeExpand;
             tvDatabase.MouseDown += tvDatabase_MouseDown;
             foreach (ToolStripItem item in cmsDatabase.Items)
@@ -270,7 +272,6 @@ namespace DbDictExport.WinForm
         {
             var table = DataAccess.GetTableByName(_connBuilder, dbName, tableName);
             if (table == null) return;
-
             MetroGridDesign.DataSource = table.ColumnList.ToDataTable();
 
             if (dbName == Constants.DATABASE_TEMP_DB_NAME)

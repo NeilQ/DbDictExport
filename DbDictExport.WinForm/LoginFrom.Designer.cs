@@ -117,7 +117,7 @@
             this.lblPassword.AutoSize = true;
             this.lblPassword.Location = new System.Drawing.Point(58, 229);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(71, 20);
+            this.lblPassword.Size = new System.Drawing.Size(70, 20);
             this.lblPassword.TabIndex = 7;
             this.lblPassword.Text = "Password";
             // 
@@ -180,6 +180,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "LoginForm";
+            this.Style = MetroFramework.MetroColorStyle.White;
             this.Text = "Connect";
             this.ResumeLayout(false);
             this.PerformLayout();
