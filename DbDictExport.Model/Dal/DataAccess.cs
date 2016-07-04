@@ -205,7 +205,9 @@ namespace DbDictExport.Core.Dal
                                             [IsNullable]=case when a.isnullable=1 then '1'else '0' end,  
                                             [DefaultValue]=isnull(e.text,''),  
                                             [Description]=isnull(g.[value],'')  ,
-                                            [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu inner join information_schema.table_constraints tc ON (ccu.constraint_name = tc.constraint_name) 
+                                            [ForeignKey]= (SELECT count(ccu.column_name) as have from information_schema.constraint_column_usage ccu 
+                            inner join information_schema.table_constraints tc 
+                                ON (ccu.constraint_name = tc.constraint_name) 
                                                               WHERE tc.Constraint_Type = 'FOREIGN KEY' and ccu.table_name = d.name and ccu.column_name = a.name )  
                                                               FROM syscolumns a  
                                         left join systypes b on a.xusertype=b.xusertype  

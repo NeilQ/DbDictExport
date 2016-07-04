@@ -54,6 +54,7 @@ namespace DbDictExport.Core
         /// </summary>
         public string Description { get; set; }
 
+        
         /// <summary>
         /// Gets or sets a value indicates whether the column is a identity.
         /// </summary>

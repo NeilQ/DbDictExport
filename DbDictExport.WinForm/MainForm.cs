@@ -11,21 +11,18 @@ using DbDictExport.Core.Common;
 using DbDictExport.Core.Dal;
 using DbDictExport.WinForm.Service;
 using MetroFramework.Forms;
+using MySql.Data.MySqlClient;
 
 namespace DbDictExport.WinForm
 {
     public partial class MainForm : MetroForm
     {
 
-        private SqlConnectionStringBuilder _connBuilder;
-
 
         //private string columnTreeNodeNamePrefix = "col_";
-        public SqlConnectionStringBuilder ConnBuilder
-        {
-            get { return _connBuilder; }
-            set { _connBuilder = value; }
-        }
+        public SqlConnectionStringBuilder SqlServerConnectionStringBuilder { get; set; }
+
+        public MySqlConnectionStringBuilder MySqlConnectionStringBuilder { get; set; }
 
         private static TreeNode SelectedTableNode { get; set; }
 
@@ -101,8 +98,8 @@ namespace DbDictExport.WinForm
                                 SelectedTableNode = currentNode;
                                 SelectedTableNode.BackColor = SystemColors.Highlight;
 
-                                var table = currentNode.Tag as DbTable;
-                                SetGridData(currentNode.Parent.Text, table.Name);
+                                var table = currentNode.Tag as Table;
+                                SetGridData(table);
                             }
                         }
                     }
@@ -138,7 +135,7 @@ namespace DbDictExport.WinForm
                     {
                         LoadingFormService.CreateForm();
                         LoadingFormService.SetFormCaption(Constants.EXPORT_CAPTION);
-                        List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(_connBuilder, currentNode.Text);
+                        List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(SqlServerConnectionStringBuilder, currentNode.Text);
                         //Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
                         IExcelHelper helper = new AsposeExcelHelper();
 
@@ -180,7 +177,7 @@ namespace DbDictExport.WinForm
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES:
                     var table = currentNode.Tag as DbTable;
                     if (table == null) break;
-                    table.ColumnList = DataAccess.GetDbColumnList(ConnBuilder, table.Name);
+                    table.ColumnList = DataAccess.GetDbColumnList(SqlServerConnectionStringBuilder, table.Name);
                     var form = new KdCodeForm(table);
                     form.Show();
                     break;
@@ -204,19 +201,23 @@ namespace DbDictExport.WinForm
             //clear the empty node
             tvDatabase.Cursor = Cursors.AppStarting;
             rootNode.Nodes.Clear();
-            List<DbTable> tableList = DataAccess.GetDbTableNameListWithoutColumns(_connBuilder, rootNode.Text);
-            foreach (var tableNode in tableList.Select(table => new TreeNode
+
+            SqlServerConnectionStringBuilder.InitialCatalog = rootNode.Text;
+            var tables = Poco.LoadTables(SqlServerConnectionStringBuilder);
+            foreach (var table in tables)
             {
-                Name = Constants.TABLE_TREE_NODE_NAME_PREFIX + table.Name,
-                Text = String.Format("{0}.{1}", table.Schema, table.Name),
-                ToolTipText = String.Format("{0}.{1}", table.Schema, table.Name),
-                Tag = table,
-                ImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX,
-                SelectedImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX
-            }))
-            {
-                rootNode.Nodes.Add(tableNode);
+                var treeNode = new TreeNode
+                {
+                    Name = Constants.TABLE_TREE_NODE_NAME_PREFIX + table.Name,
+                    Text = $"{table.Schema}.{table.Name}",
+                    ToolTipText = $"{table.Schema}.{table.Name}",
+                    Tag = table,
+                    ImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX,
+                    SelectedImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX
+                };
+                rootNode.Nodes.Add(treeNode);
             }
+
             tvDatabase.Cursor = Cursors.Default;
 
         }
@@ -226,12 +227,12 @@ namespace DbDictExport.WinForm
             tvDatabase.Nodes.Clear();
             var rootNode = new TreeNode
             {
-                Text = _connBuilder.DataSource + string.Format("({0})", _connBuilder.UserID),
+                Text = SqlServerConnectionStringBuilder.DataSource + $"({SqlServerConnectionStringBuilder.UserID})",
                 ImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX,
                 SelectedImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX
             };
             tvDatabase.Nodes.Add(rootNode);
-            foreach (string dbName in DataAccess.GetDbNameList(ConnBuilder))
+            foreach (string dbName in Poco.LoadDatabases(SqlServerConnectionStringBuilder))
             {
                 var databaseNode = new TreeNode
                 {
@@ -261,7 +262,7 @@ namespace DbDictExport.WinForm
             var login = new LoginForm();
             if (login.ShowDialog() == DialogResult.OK)
             {
-                _connBuilder = login.ConnBuilder;
+                SqlServerConnectionStringBuilder = login.ConnBuilder;
                 ClearGridData();
                 login.Close();
                 LoadDatabaseTreeNode();
@@ -270,7 +271,7 @@ namespace DbDictExport.WinForm
 
         private void SetGridData(string dbName, string tableName)
         {
-            var table = DataAccess.GetTableByName(_connBuilder, dbName, tableName);
+            var table = DataAccess.GetTableByName(SqlServerConnectionStringBuilder, dbName, tableName);
             if (table == null) return;
             MetroGridDesign.DataSource = table.ColumnList.ToDataTable();
 
@@ -288,12 +289,37 @@ namespace DbDictExport.WinForm
                 MetroGridResultSet.Rows.Add(dgvr);
                 return;
             }
-            MetroGridResultSet.DataSource = DataAccess.GetResultSetByDbTable(_connBuilder, table);
+            MetroGridResultSet.DataSource = DataAccess.GetResultSetByDbTable(SqlServerConnectionStringBuilder, table);
 
             MetroGridDesign.ClearSelection();
             MetroGridResultSet.ClearSelection();
         }
 
+        private void SetGridData(Table table)
+        {
+            //var table = DataAccess.GetTableByName(_connBuilder, dbName, tableName);
+            if (table == null) return;
+            MetroGridDesign.DataSource = table.Columns.ToDataTable();
+
+            if (table.Name == Constants.DATABASE_TEMP_DB_NAME)
+            {
+                var dgvr = new DataGridViewRow();
+                var cell = new DataGridViewTextBoxCell
+                {
+                    Value = "The temp table do not support viewing records."
+                };
+                dgvr.Cells.Add(cell);
+
+                MetroGridResultSet.Columns.Add("Message", "Message");
+                MetroGridResultSet.Columns["Message"].Width = 600;
+                MetroGridResultSet.Rows.Add(dgvr);
+                return;
+            }
+            //MetroGridResultSet.DataSource = DataAccess.GetResultSetByDbTable(_connBuilder, table);
+
+            MetroGridDesign.ClearSelection();
+            MetroGridResultSet.ClearSelection();
+        }
         private void ClearGridData()
         {
             MetroGridResultSet.DataSource = null;
