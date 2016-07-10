@@ -27,7 +27,7 @@ namespace DbDictExport.Core.Dal
         };
 
         public abstract List<string> ReadDatabases(DbConnection connection, DbProviderFactory factory);
-      
+
         public abstract Tables ReadSchema(DbConnection connection, DbProviderFactory factory);
         //  public GeneratedTextTransformation outer;
 
@@ -65,13 +65,16 @@ namespace DbDictExport.Core.Dal
                 {
                     while (rdr.Read())
                     {
-                        Table tbl = new Table();
-                        tbl.Name = rdr["TABLE_NAME"].ToString();
-                        tbl.Schema = rdr["TABLE_SCHEMA"].ToString();
-                        tbl.IsView = string.Compare(rdr["TABLE_TYPE"].ToString(), "View", true) == 0;
+                        var tbl = new Table
+                        {
+                            Name = rdr["TABLE_NAME"].ToString(),
+                            Schema = rdr["TABLE_SCHEMA"].ToString(),
+                            IsView =
+                                string.Compare(rdr["TABLE_TYPE"].ToString(), "View", StringComparison.OrdinalIgnoreCase) ==
+                                0
+                        };
                         tbl.CleanName = CleanUp(tbl.Name);
                         tbl.ClassName = Inflector.MakeSingular(tbl.CleanName);
-
                         result.Add(tbl);
                     }
                 }
@@ -82,15 +85,17 @@ namespace DbDictExport.Core.Dal
                 tbl.Columns = LoadColumns(tbl);
 
                 // Mark the primary key
-                string PrimaryKey = GetPK(tbl.Name);
-                var pkColumn =
-                    tbl.Columns.SingleOrDefault(x => x.Name.ToLower().Trim() == PrimaryKey.ToLower().Trim());
-                if (pkColumn != null)
+                var pks = GetPK(tbl.Name);
+                foreach (var pk in pks)
                 {
-                    pkColumn.IsPK = true;
+                    var pkColumn =
+                   tbl.Columns.SingleOrDefault(x => x.Name.ToLower().Trim() == pk.ToLower().Trim());
+                    if (pkColumn != null)
+                    {
+                        pkColumn.IsPK = true;
+                    }
                 }
             }
-
 
             return result;
         }
@@ -132,6 +137,7 @@ namespace DbDictExport.Core.Dal
                         col.Length = string.IsNullOrEmpty(lengthStr) ? 0 : int.Parse(lengthStr);
                         col.DefaultValue = rdr["DefaultSetting"].ToString();
                         col.DbType = rdr["DataType"].ToString();
+                        col.Description = rdr["Description"].ToString();
                         result.Add(col);
                     }
                 }
@@ -140,8 +146,8 @@ namespace DbDictExport.Core.Dal
             }
         }
 
-       
-        string GetPK(string table)
+
+        List<string> GetPK(string table)
         {
 
             string sql = @"SELECT c.name AS ColumnName
@@ -151,6 +157,7 @@ namespace DbDictExport.Core.Dal
                 LEFT OUTER JOIN sys.columns AS c ON ic.object_id = c.object_id AND c.column_id = ic.column_id
                 WHERE (i.is_primary_key = 1) AND (o.name = @tableName)";
 
+            var pks = new List<string>();
             using (var cmd = _factory.CreateCommand())
             {
                 cmd.Connection = _connection;
@@ -161,13 +168,19 @@ namespace DbDictExport.Core.Dal
                 p.Value = table;
                 cmd.Parameters.Add(p);
 
-                var result = cmd.ExecuteScalar();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            pks.Add(reader["ColumnName"].ToString());
+                        }
+                    }
+                }
 
-                if (result != null)
-                    return result.ToString();
             }
-
-            return "";
+            return pks;
         }
 
         string GetPropertyType(string sqlType)
@@ -233,7 +246,7 @@ namespace DbDictExport.Core.Dal
 
         public override List<string> ReadDatabases(DbConnection connection, DbProviderFactory factory)
         {
-             var result = new List<string>();
+            var result = new List<string>();
 
             result.AddRange(from DataRow row in connection.GetSchema(SqlClientMetaDataCollectionNames.Databases).Rows select row[0].ToString());
 
@@ -256,8 +269,14 @@ namespace DbDictExport.Core.Dal
             CHARACTER_MAXIMUM_LENGTH AS MaxLength, 
             DATETIME_PRECISION AS DatePrecision,
             COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsIdentity') AS IsIdentity,
-            COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsComputed') as IsComputed
+            COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsComputed') as IsComputed,
+            s.value as Description
         FROM  INFORMATION_SCHEMA.COLUMNS
+        LEFT OUTER JOIN sys.extended_properties s 
+        ON 
+            s.major_id = OBJECT_ID(INFORMATION_SCHEMA.COLUMNS.TABLE_SCHEMA+'.'+INFORMATION_SCHEMA.COLUMNS.TABLE_NAME) 
+            AND s.minor_id = INFORMATION_SCHEMA.COLUMNS.ORDINAL_POSITION 
+            AND s.name = 'MS_Description' 
         WHERE TABLE_NAME=@tableName AND TABLE_SCHEMA=@schemaName
         ORDER BY OrdinalPosition ASC";
 
@@ -392,6 +411,5 @@ namespace DbDictExport.Core.Dal
             ";
 
     }
-
 
 }

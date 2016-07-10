@@ -167,7 +167,7 @@ namespace DbDictExport.Core.Dal
             {
                 _factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 return new List<string>();
