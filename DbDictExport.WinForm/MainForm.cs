@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
@@ -42,12 +43,9 @@ namespace DbDictExport.WinForm
             {
                 item.Click += cmsDbTableItem_Click;
             }
-            LoadLoginForm();
+            //LoadLoginForm();
             tvDatabase.ImageList = imgListCommon;
         }
-
-
-
 
         void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -56,6 +54,43 @@ namespace DbDictExport.WinForm
                 e.ThrowException = false;
             }
 
+        }
+
+        private string GetServerHost()
+        {
+            if (Global.DataBaseType == DataBaseType.SqlServer)
+            {
+                return SqlServerConnectionStringBuilder.DataSource + $"({SqlServerConnectionStringBuilder.UserID})";
+            }
+            else
+            {
+                return MySqlConnectionStringBuilder.Server +
+                       $"({MySqlConnectionStringBuilder.UserID})";
+            }
+        }
+
+        private string GetConnectionString()
+        {
+            if (Global.DataBaseType == DataBaseType.SqlServer)
+            {
+                return SqlServerConnectionStringBuilder.ConnectionString;
+            }
+            else
+            {
+                return MySqlConnectionStringBuilder.ConnectionString;
+            }
+        }
+
+        private void SetDataBaseName(string database)
+        {
+            if (Global.DataBaseType == DataBaseType.SqlServer)
+            {
+                SqlServerConnectionStringBuilder.InitialCatalog = database;
+            }
+            else
+            {
+                MySqlConnectionStringBuilder.Database = database;
+            }
         }
 
         #region database TreeView's events
@@ -187,9 +222,15 @@ namespace DbDictExport.WinForm
         #endregion
 
         #region MenuItems click events
-        private void newConnectToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void sqlServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadLoginForm();
+            LoadSqlServerLoginForm();
+        }
+
+        private void mySqlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadMysqlLoginForm();
         }
 
         #endregion
@@ -202,8 +243,8 @@ namespace DbDictExport.WinForm
             tvDatabase.Cursor = Cursors.AppStarting;
             rootNode.Nodes.Clear();
 
-            SqlServerConnectionStringBuilder.InitialCatalog = rootNode.Text;
-            var tables = Poco.LoadTables(SqlServerConnectionStringBuilder);
+            SetDataBaseName(rootNode.Text);
+            var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName);
             foreach (var table in tables)
             {
                 var treeNode = new TreeNode
@@ -219,7 +260,6 @@ namespace DbDictExport.WinForm
             }
 
             tvDatabase.Cursor = Cursors.Default;
-
         }
 
         private void LoadDatabaseTreeNode()
@@ -227,12 +267,12 @@ namespace DbDictExport.WinForm
             tvDatabase.Nodes.Clear();
             var rootNode = new TreeNode
             {
-                Text = SqlServerConnectionStringBuilder.DataSource + $"({SqlServerConnectionStringBuilder.UserID})",
+                Text = GetServerHost(),
                 ImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX,
                 SelectedImageIndex = Constants.TREENODE_ROOT_IMAGE_INDEX
             };
             tvDatabase.Nodes.Add(rootNode);
-            foreach (string dbName in Poco.LoadDatabases(SqlServerConnectionStringBuilder))
+            foreach (string dbName in Poco.LoadDatabases(GetConnectionString(), Global.ProviderName))
             {
                 var databaseNode = new TreeNode
                 {
@@ -257,12 +297,24 @@ namespace DbDictExport.WinForm
         }
         #endregion
 
-        private void LoadLoginForm()
+        private void LoadSqlServerLoginForm()
         {
             var login = new LoginForm();
             if (login.ShowDialog() == DialogResult.OK)
             {
                 SqlServerConnectionStringBuilder = login.ConnBuilder;
+                ClearGridData();
+                login.Close();
+                LoadDatabaseTreeNode();
+            }
+        }
+
+        private void LoadMysqlLoginForm()
+        {
+            var login = new MysqlLoginForm();
+            if (login.ShowDialog() == DialogResult.OK)
+            {
+                MySqlConnectionStringBuilder = login.ConnBuilder;
                 ClearGridData();
                 login.Close();
                 LoadDatabaseTreeNode();
@@ -337,6 +389,8 @@ namespace DbDictExport.WinForm
                 ColumnList = new List<DbColumn>()
             }).Show();
         }
+
+
     }
 
 }

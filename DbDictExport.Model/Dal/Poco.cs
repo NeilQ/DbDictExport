@@ -37,7 +37,6 @@ namespace DbDictExport.Core.Dal
 
 
         static string _connectionString = "";
-        string _providerName = "";
 
 
         public static string ConnectionString
@@ -49,15 +48,6 @@ namespace DbDictExport.Core.Dal
             }
         }
 
-        public string ProviderName
-        {
-            get
-            {
-                //InitConnectionString();
-                return _providerName;
-            }
-        }
-
 
         static string zap_password(string connectionString)
         {
@@ -66,22 +56,22 @@ namespace DbDictExport.Core.Dal
             return rx.Replace(connectionString, "password=**zapped**;");
         }
 
-        public static void InitConnectionString(DbConnectionStringBuilder connBuilder)
+        public static void InitConnectionString(string connectionString)
         {
-            _connectionString = connBuilder.ConnectionString;
+            _connectionString = connectionString;
 
         }
 
 
-        public static Tables LoadTables(DbConnectionStringBuilder connBuilder)
+        public static Tables LoadTables(string connectionString, string providerName)
         {
             //connBuilder.
             // ConnectionString = connBuilder.ConnectionString;
-            InitConnectionString(connBuilder);
+            InitConnectionString(connectionString);
             DbProviderFactory _factory;
             try
             {
-                _factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
+                _factory = DbProviderFactories.GetFactory(providerName);
             }
             catch (Exception e)
             {
@@ -152,20 +142,19 @@ namespace DbDictExport.Core.Dal
             }
             catch (Exception x)
             {
-
                 return new Tables();
             }
 
 
         }
 
-        public static List<string> LoadDatabases(DbConnectionStringBuilder connBuilder)
+        public static List<string> LoadDatabases(string connectionString, string providerName)
         {
-            InitConnectionString(connBuilder);
+            InitConnectionString(connectionString);
             DbProviderFactory _factory;
             try
             {
-                _factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
+                _factory = DbProviderFactories.GetFactory(providerName);
             }
             catch (Exception e)
             {

@@ -7,5 +7,14 @@ namespace DbDictExport.WinForm
 {
     public static class Global
     {
+        public static string ProviderName { get; set; }
+
+        public static DataBaseType DataBaseType { get; set; }
+    }
+
+    public enum DataBaseType
+    {
+        SqlServer,
+        Mysql
     }
 }

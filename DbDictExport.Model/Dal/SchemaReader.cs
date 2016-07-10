@@ -134,7 +134,10 @@ namespace DbDictExport.Core.Dal
                         col.PropertyType = GetPropertyType(rdr["DataType"].ToString());
                         col.IsNullable = rdr["IsNullable"].ToString() == "YES";
                         col.IsAutoIncrement = ((int)rdr["IsIdentity"]) == 1;
-                        col.Length = string.IsNullOrEmpty(lengthStr) ? 0 : int.Parse(lengthStr);
+                        if (!string.IsNullOrEmpty(lengthStr))
+                        {
+                            col.Length = int.Parse(lengthStr);
+                        }
                         col.DefaultValue = rdr["DefaultSetting"].ToString();
                         col.DbType = rdr["DataType"].ToString();
                         col.Description = rdr["Description"].ToString();
@@ -288,7 +291,21 @@ namespace DbDictExport.Core.Dal
         // SchemaReader.ReadSchema
         public override List<string> ReadDatabases(DbConnection connection, DbProviderFactory factory)
         {
-            throw new NotImplementedException();
+            var cmd = factory.CreateCommand();
+            cmd.Connection = connection;
+            cmd.CommandText = "SHOW DATABASES;";
+            var dbs = new List<string>();
+            using (cmd)
+            {
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        dbs.Add(rdr["DataBase"].ToString());
+                    }
+                }
+            }
+            return dbs;
         }
 
         public override Tables ReadSchema(DbConnection connection, DbProviderFactory factory)
@@ -331,14 +348,25 @@ namespace DbDictExport.Core.Dal
                 var columns = schema.Select("TABLE_NAME='" + item.Name + "'");
                 foreach (var row in columns)
                 {
+                    var lengthStr = row["CHARACTER_MAXIMUM_LENGTH"].ToString();
                     Column col = new Column();
                     col.Name = row["COLUMN_NAME"].ToString();
                     col.PropertyName = CleanUp(col.Name);
                     col.PropertyType = GetPropertyType(row);
                     col.IsNullable = row["IS_NULLABLE"].ToString() == "YES";
                     col.IsPK = row["COLUMN_KEY"].ToString() == "PRI";
-                    col.IsAutoIncrement = row["extra"].ToString().ToLower().IndexOf("auto_increment") >= 0;
-
+                    col.IsAutoIncrement = row["extra"].ToString().ToLower().IndexOf("auto_increment", StringComparison.Ordinal) >= 0;
+                    if (!string.IsNullOrEmpty(lengthStr))
+                    {
+                        int length;
+                        if (int.TryParse(lengthStr, out length))
+                        {
+                            col.Length = int.Parse(lengthStr);
+                        }
+                    }
+                    col.DefaultValue = row["COLUMN_DEFAULT"].ToString();
+                    col.DbType = row["DATA_TYPE"].ToString();
+                    col.Description = row["COLUMN_COMMENT"].ToString();
                     item.Columns.Add(col);
                 }
             }

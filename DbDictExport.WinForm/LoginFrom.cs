@@ -93,9 +93,16 @@ namespace DbDictExport.WinForm
             // Access database
             if (Connect())
             {
+                InitGlobal();
                 RefreshConnectHistory();
                 DialogResult = DialogResult.OK;
             }
+        }
+
+        private static void InitGlobal()
+        {
+            Global.DataBaseType = DataBaseType.SqlServer;
+            Global.ProviderName = "System.Data.SqlClient";
         }
 
         private bool Connect()
