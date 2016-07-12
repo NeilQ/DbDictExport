@@ -1,0 +1,108 @@
+﻿using System;
+using System.Linq;
+using System.Text;
+using DbDictExport.Core.Common;
+using DbDictExport.Core.Dal;
+
+namespace DbDictExport.Core.Codes.js
+{
+    public class BllInterfaceCodeFactory : AbstractCodeFactory
+    {
+        public BllInterfaceCodeFactory(string entityName, string moduleName, Table dbTable)
+        {
+            EntityName = entityName;
+            ModuleName = moduleName;
+            Table = dbTable;
+
+            if (string.IsNullOrEmpty(EntityName))
+                EntityName = Constants.KDCODE_DEFAULT_ENTITY_NAME;
+            if (string.IsNullOrEmpty(ModuleName))
+                ModuleName = Constants.KDCODE_DEFAULT_MODULE_NAME;
+        }
+
+        public override StringBuilder GenerateCodes()
+        {
+            if (Table.Columns == null) return null;
+            var codes = new StringBuilder();
+            var indent = 0;
+
+            // using 
+            codes.AppendLine("using System.Collections.Generic;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
+
+            // namespace
+            codes.Append(Environment.NewLine);
+            codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IBLL");
+            codes.AppendLine("{"); // namespace
+
+            // class
+            indent++;
+            codes.AppendLine(GetIndentStr(indent) + $"public interface I{EntityName}Service");
+            codes.AppendLine(GetIndentStr(indent) + "{"); // class
+
+            var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
+            // methods
+            indent++;
+            if (pkColumns.Count == 1)
+            {
+                // get by page
+                codes.AppendLine(GetIndentStr(indent) +
+                                 $"List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc);");
+            }
+
+            var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
+            if (pkColumns.Any())
+            {
+                // get by primary key
+                codes.Append(Environment.NewLine);
+                codes.Append(GetIndentStr(indent) + $"{EntityName} Get{EntityName}(");
+
+                codes.Append(string.Join(", ", tmpList));
+                codes.Append(");");
+                codes.Append(Environment.NewLine);
+                codes.Append(Environment.NewLine);
+            }
+
+
+            // add
+            codes.AppendLine(GetIndentStr(indent) + $"int Add({EntityName} entity);");
+            codes.Append(Environment.NewLine);
+
+            // update
+            codes.AppendLine(GetIndentStr(indent) + $"bool Update({EntityName} entity);");
+            codes.Append(Environment.NewLine);
+
+            // delete
+            if (pkColumns.Any())
+            {
+                //codes.Append(Environment.NewLine);
+                codes.Append(GetIndentStr(indent) + "bool Delete(");
+                codes.Append(string.Join(", ", tmpList));
+                codes.Append(");");
+                codes.Append(Environment.NewLine);
+                codes.Append(Environment.NewLine);
+            }
+
+
+            // bulk delete
+            if (pkColumns.Count == 1)
+            {
+                codes.AppendLine(GetIndentStr(indent) + "bool Delete(IEnumerable<int> idList);");
+                codes.Append(Environment.NewLine);
+            }
+
+            // exists
+            if (pkColumns.Count == 1)
+            {
+                codes.AppendLine(GetIndentStr(indent) + "bool Exists(int id);");
+            }
+
+            indent--;
+            codes.AppendLine(GetIndentStr(indent) + "}"); // class
+
+            codes.AppendLine("}"); // namespace
+
+            return codes;
+        }
+    }
+}

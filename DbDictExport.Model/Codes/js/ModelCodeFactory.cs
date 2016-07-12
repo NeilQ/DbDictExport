@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Text;
 using DbDictExport.Core.Common;
+using DbDictExport.Core.Dal;
 
-namespace DbDictExport.Core.Codes
+namespace DbDictExport.Core.Codes.js
 {
-    public class ModelKdCodeFactory : AbstractKdCodeFactory
+    public class ModelCodeFactory : AbstractCodeFactory
     {
-        public ModelKdCodeFactory(string entityName, string moduleName, DbTable dbTable)
+        public ModelCodeFactory(string entityName, string moduleName, Table dbTable)
         {
             EntityName = entityName;
             ModuleName = moduleName;
@@ -21,20 +22,18 @@ namespace DbDictExport.Core.Codes
 
         public override StringBuilder GenerateCodes()
         {
-            if (Table.ColumnList == null) return null;
+            if (Table.Columns == null) return null;
             var codes = new StringBuilder();
             var indent = 0;
 
             // using 
-            codes.AppendLine("using System;");
-            codes.Append(Environment.NewLine);
 
             // namespace
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
             codes.AppendLine("{"); // namespace
 
             indent++;
-            var pkColumns = Table.ColumnList.Where(t => t.PrimaryKey).ToList();
+            var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
             //attributes
             codes.AppendLine(GetIndentStr(indent) + $"[TableName(\"{Table.Name}\")]");
             if (pkColumns.Count == 1)
@@ -43,11 +42,10 @@ namespace DbDictExport.Core.Codes
             }
 
             // class
-            bool hasBaseFields = Table.ColumnList.Exists(t => t.Name == "AddUser")
-                && Table.ColumnList.Exists(t => t.Name == "AddTime")
-                && Table.ColumnList.Exists(t => t.Name == "UpdateUser")
-                && Table.ColumnList.Exists(t => t.Name == "UpdateTime")
-                && Table.ColumnList.Exists(t => t.Name == "Marks");
+            bool hasBaseFields = Table.Columns.Exists(t => t.Name == "AddUser")
+                && Table.Columns.Exists(t => t.Name == "AddTime")
+                && Table.Columns.Exists(t => t.Name == "UpdateUser")
+                && Table.Columns.Exists(t => t.Name == "UpdateTime");
             if (hasBaseFields)
             {
                 codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : BaseField");
@@ -60,14 +58,13 @@ namespace DbDictExport.Core.Codes
 
             // fields
             indent++;
-            foreach (var column in Table.ColumnList)
+            foreach (var column in Table.Columns)
             {
                 if (hasBaseFields &&
                     (column.Name == "AddTime"
                     || column.Name == "UpdateUser"
                     || column.Name == "UpdateTime"
-                    || column.Name == "AddUser"
-                    || column.Name == "Marks"))
+                    || column.Name == "AddUser"))
                 {
                     continue;
                 }
@@ -78,7 +75,7 @@ namespace DbDictExport.Core.Codes
 
                 // field
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public {MapCSharpType(column.DbType)} {column.Name} {{ get; set; }}");
+                                 $"public {column.PropertyType} {column.PropertyName} {{ get; set; }}");
                 codes.Append(Environment.NewLine);
             }
 

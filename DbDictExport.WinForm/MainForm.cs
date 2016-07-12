@@ -216,7 +216,12 @@ namespace DbDictExport.WinForm
                     var form = new KdCodeForm(table);
                     form.Show();
                     break;
-
+                case Constants.CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES:
+                    var currTable = currentNode.Tag as Table;
+                    if (currTable == null) break;
+                    var jsForm = new JSCodeForm(currTable);
+                    jsForm.Show();
+                    break;
             }
         }
         #endregion
@@ -380,16 +385,6 @@ namespace DbDictExport.WinForm
             MetroGridDesign.DataSource = null;
             MetroGridDesign.Columns.Clear();
         }
-
-        private void generateMyCodeTemplateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new KdCodeForm(new DbTable
-            {
-                Name = "Entity",
-                ColumnList = new List<DbColumn>()
-            }).Show();
-        }
-
 
     }
 

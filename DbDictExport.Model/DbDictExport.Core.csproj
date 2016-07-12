@@ -54,6 +54,12 @@
     <Compile Include="Codes\BllKdCodeFactory.cs" />
     <Compile Include="Codes\DalInterfaceKdCodeFactory.cs" />
     <Compile Include="Codes\DalKdCodeFactory.cs" />
+    <Compile Include="Codes\js\AbstractCodeFactory.cs" />
+    <Compile Include="Codes\js\BllInterfaceCodeFactory.cs" />
+    <Compile Include="Codes\js\BllCodeFactory.cs" />
+    <Compile Include="Codes\js\DalInterfaceCodeFactory.cs" />
+    <Compile Include="Codes\js\DalCodeFactory.cs" />
+    <Compile Include="Codes\js\ModelCodeFactory.cs" />
     <Compile Include="Codes\ModelKdCodeFactory.cs" />
     <Compile Include="Common\AsposeExcelHelper.cs" />
     <Compile Include="Common\Constants.cs" />

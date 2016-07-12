@@ -25,6 +25,7 @@
         public const string CONTEXT_MENU_DATABASE_EXPORT_DICTIONARY = "Export data dictionary document to Excel";
         public const string CONTEXT_MENU_DATABASE_REFRESH = "Refresh";
         public const string CONTEXT_MENU_TABLE_GENERATE_KD_CODES = "Generate kd Codes";
+        public const string CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES = "Generate JingShang Codes";
 
 
         public const string KDCODE_NAMESPACE_PREFIX = "JS.Service.";
