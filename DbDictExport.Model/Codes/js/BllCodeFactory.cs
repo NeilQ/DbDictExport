@@ -26,6 +26,8 @@ namespace DbDictExport.Core.Codes.js
             var codes = new StringBuilder();
             var indent = 0;
 
+            var existMarks = Table.Columns.Exists(t => t.Name.ToLower() == "marks");
+
             // using 
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Linq;");
@@ -111,12 +113,26 @@ namespace DbDictExport.Core.Codes.js
                 codes.Append(")");
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "{");
-                //                codes.Append(GetIndentStr(indent + 1) +
-                //                             $"return _unitOfWork.{EntityName}Manager.MarkDeletion(");
-                codes.Append(GetIndentStr(indent + 1) +
-                           $"throw new NotImplementedException();");
-                //codes.Append(string.Join(", ", paramList));
-                //codes.Append(");");
+
+                if (existMarks)
+                {
+                    codes.Append(GetIndentStr(indent + 1) +
+                                 $"return _unitOfWork.{EntityName}Manager.SoftDelete(");
+                    codes.Append(string.Join(", ", paramList));
+                    codes.Append(");");
+                }
+                else
+                {
+                    codes.Append(GetIndentStr(indent + 1) +
+                                 $"return _unitOfWork.{EntityName}Manager.Delete(");
+                    codes.Append(string.Join(", ", paramList));
+                    codes.Append(");");
+                }
+
+
+                //codes.Append(GetIndentStr(indent + 1) +
+                //           $"throw new NotImplementedException();");
+
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
@@ -128,10 +144,21 @@ namespace DbDictExport.Core.Codes.js
             {
                 codes.AppendLine(GetIndentStr(indent) + "public bool Delete(IEnumerable<int> idList)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
+
+                if (existMarks)
+                {
+                    codes.AppendLine(GetIndentStr(indent + 1) +
+                              $"return _unitOfWork.{EntityName}Manager.SoftDelete(idList.SoftSelect<int, object>(t => t));");
+                }
+                else
+                {
+                    codes.AppendLine(GetIndentStr(indent + 1) +
+                                $"return _unitOfWork.{EntityName}Manager.Delete(idList.Select<int, object>(t => t));");
+                }
+
+
                 //codes.AppendLine(GetIndentStr(indent + 1) +
-                //                $"return _unitOfWork.{EntityName}Manager.MarkDeletions(idList.Select<int, object>(t => t));");
-                codes.AppendLine(GetIndentStr(indent + 1) +
-                                 $"throw new NotImplementedException();");
+                //                 $"throw new NotImplementedException();");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }
