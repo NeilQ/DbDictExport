@@ -55,7 +55,7 @@ namespace DbDictExport.Core.Codes.js
             {
                 // get by primary key
                 codes.Append(Environment.NewLine);
-                codes.Append(GetIndentStr(indent) + $"{EntityName} Get{EntityName}(");
+                codes.Append(GetIndentStr(indent) + $"{EntityName} GetByPK(");
 
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
