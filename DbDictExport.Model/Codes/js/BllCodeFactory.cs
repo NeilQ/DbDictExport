@@ -60,10 +60,10 @@ namespace DbDictExport.Core.Codes.js
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc)");
+                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _unitOfWork.{EntityName}Manager.GetByPage(out total, page, size, sort, asc);");
+                    $"return _unitOfWork.{EntityName}Manager.GetByPage(out total, page, size, sort, asc, condition);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }

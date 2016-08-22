@@ -29,20 +29,19 @@ namespace DbDictExport.Core.Codes.js
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine("using System.Data.SqlClient;");
-            codes.AppendLine("using System.Text;");
+            codes.AppendLine("using PetaPoco;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
 
             // namespace
             codes.Append(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.SQLServer");
+            codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.MySql");
             codes.AppendLine("{");
 
             // class
             indent++;
             codes.AppendLine(GetIndentStr(indent) +
-                             string.Format("public class {0}Manager : BaseManager<{0}>, I{0}Manager", EntityName));
+                             string.Format("public class {0}Manager : ManagerBase<{0}>, I{0}Manager", EntityName));
             codes.AppendLine(GetIndentStr(indent) + "{");
 
             // methods
@@ -60,7 +59,7 @@ namespace DbDictExport.Core.Codes.js
 
                 // method body
                 indent++;
-                codes.Append(GetIndentStr(indent) + $"return Db.SingleOrDefault<{EntityName}>(\"WHERE");
+                codes.Append(GetIndentStr(indent) + $"return Db.SingleOrDefault<{EntityName}>(\"WHERE ");
                 //codes.Append("Marks = 1 and ID=@ID");
                 var whereStr = new List<string>();
                 if (existMarks)
@@ -73,7 +72,8 @@ namespace DbDictExport.Core.Codes.js
                     whereStr.Add($"{pk.Name} = @{index++}");
                 }
                 codes.Append(string.Join(" AND ", whereStr));
-                codes.Append($"\", {string.Join(", ", tmpList)})");
+                var list = pkColumns.Select(pk => $"{ToCamelCase(pk.Name)}");
+                codes.Append($"\", {string.Join(", ", list)});");
                 codes.Append(Environment.NewLine);
 
                 indent--;
@@ -84,7 +84,7 @@ namespace DbDictExport.Core.Codes.js
             {
                 codes.AppendLine(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc)");
+                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 indent++;
                 codes.AppendLine(GetIndentStr(indent) +
@@ -110,7 +110,7 @@ namespace DbDictExport.Core.Codes.js
                 codes.AppendLine(GetIndentStr(indent) + "}");
 
                 codes.AppendLine(GetIndentStr(indent) + "sql.OrderBy(sort + (asc ? \" ASC\" : \" DESC\"));");
-                codes.AppendLine(GetIndentStr(indent) + "var data = Db.Page<ExamQuestion>(page, size, sql);");
+                codes.AppendLine(GetIndentStr(indent) + $"var data = Db.Page<{EntityName}>(page, size, sql);");
                 codes.AppendLine(GetIndentStr(indent) + "total = (int)data.TotalItems;");
                 codes.AppendLine(GetIndentStr(indent) + "return data.Items;");
 

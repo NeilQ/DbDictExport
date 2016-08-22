@@ -34,7 +34,7 @@ namespace DbDictExport.Core.Codes.js
 
             indent++;
             // class
-            codes.AppendLine(string.Format("{1}public interface I{0}Manager : IBaseManager<{0}>", EntityName,
+            codes.AppendLine(string.Format("{1}public interface I{0}Manager : IManagerBase<{0}>", EntityName,
                 GetIndentStr(indent)));
             codes.AppendLine(GetIndentStr(indent) + "{"); //class
 
