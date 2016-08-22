@@ -27,6 +27,8 @@ namespace DbDictExport.Core.Codes.js
             var indent = 0;
 
             // using 
+            codes.AppendLine($"using PetaPoco;");
+            codes.Append(Environment.NewLine);
 
             // namespace
             codes.AppendLine($"namespace {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model");
