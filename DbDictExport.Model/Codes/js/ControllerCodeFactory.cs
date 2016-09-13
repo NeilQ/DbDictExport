@@ -25,7 +25,7 @@ namespace DbDictExport.Core.Codes.js
         public override StringBuilder GenerateCodes()
         {
             if (Table.Columns == null) return null;
-            var pkColumns = Table.Columns.Select(p => p.IsPK == true).ToList();
+            var pkColumns = Table.Columns.Where(p => p.IsPK == true).ToList();
 
             var existMarks = Table.Columns.Exists(t => t.Name.ToLower() == "marks");
             var codes = new StringBuilder();
@@ -50,7 +50,7 @@ namespace DbDictExport.Core.Codes.js
             codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// ");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-            codes.AppendLine(GetIndentStr(indent) + $"[RoutePrefix(\"{camelEntityName}\")]");
+            codes.AppendLine(GetIndentStr(indent) + $"[RoutePrefix(\"{camelEntityName}s\")]");
             codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName}Controller : ApiController");
             codes.AppendLine(GetIndentStr(indent) + "{");
 
@@ -81,7 +81,7 @@ namespace DbDictExport.Core.Codes.js
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"asc\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "[Route(\"{page}/{num}\")]");
                 codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof(ResponseModel<{EntityName}>))]");
-                codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Get(int page, int num, string sort = \"Sort\", bool? asc = true)");
+                codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Get(int page, int num, string sort = \"AddTime\", bool? asc = true)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) + "// validate");
                 codes.AppendLine(GetIndentStr(indent + 1) + "if (page <= 0 || num <= 0)");
@@ -90,7 +90,7 @@ namespace DbDictExport.Core.Codes.js
                 codes.AppendLine(GetIndentStr(indent + 1) + "}");
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent + 1) + "int total;");
-                codes.AppendLine(GetIndentStr(indent + 1) + $"var data = _{camelEntityName}Service.Get{EntityName}s(type, out total, page, num, keyword, sort, asc ?? true);");
+                codes.AppendLine(GetIndentStr(indent + 1) + $"var data = _{camelEntityName}Service.GetByPage(out total, page, num, sort, asc ?? true);");
                 codes.AppendLine(GetIndentStr(indent + 1) + $"return Ok(new ResponseModel<{EntityName}>");
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Total = total,");
