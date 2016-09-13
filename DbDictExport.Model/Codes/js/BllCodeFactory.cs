@@ -55,15 +55,35 @@ namespace DbDictExport.Core.Codes.js
             codes.Append(Environment.NewLine);
 
             var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
+
+
+            if (pkColumns.Count >= 2)
+            {
+                string tempStr = string.Empty;
+                for (int i = 0; i < pkColumns.Count; i++)
+                {
+                    // get by every primary key
+                    codes.Append(GetIndentStr(indent) + $"public List<{EntityName}> GetBy{pkColumns[i].Name}(");
+                    codes.Append(pkColumns[i].DbType + " ");
+                    codes.Append(Extentions.ToRequiredFormatString(pkColumns[i].Name, Models.NamingRule.Camel));
+                    codes.AppendLine(")");
+                    codes.AppendLine(GetIndentStr(indent) + "{");
+                    codes.AppendLine(GetIndentStr(indent + 1) +
+                        $"return _unitOfWork.{EntityName}Manager.GetBy{pkColumns[i].Name}({Extentions.ToRequiredFormatString(pkColumns[i].Name, Models.NamingRule.Camel)});");
+                    codes.AppendLine(GetIndentStr(indent) + "}");
+                    codes.Append(Environment.NewLine);
+                }
+            }
+
             // methods
             if (pkColumns.Count == 1)
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition)");
+                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _unitOfWork.{EntityName}Manager.GetByPage(out total, page, size, sort, asc, condition);");
+                    $"return _unitOfWork.{EntityName}Manager.GetByPage(out total, page, size, sort, asc);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }
@@ -148,12 +168,12 @@ namespace DbDictExport.Core.Codes.js
                 if (existMarks)
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                              $"return _unitOfWork.{EntityName}Manager.SoftDelete(idList.SoftSelect<int, object>(t => t));");
+                              $"return _unitOfWork.{EntityName}Manager.SoftDelete(idList.SoftSelect<int, object>(t => t)).ToList();");
                 }
                 else
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                                $"return _unitOfWork.{EntityName}Manager.Delete(idList.Select<int, object>(t => t));");
+                                $"return _unitOfWork.{EntityName}Manager.Delete(idList.Select<int, object>(t => t)).ToList();");
                 }
 
 

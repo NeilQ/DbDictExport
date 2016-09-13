@@ -41,25 +41,39 @@ namespace DbDictExport.Core.Codes.js
             indent++;
             // methods
             // get by primary
-            var pkColumns = Table.Columns.Where(t => t.IsPK);
+            var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
             if (pkColumns.Any())
             {
-                codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + $"{EntityName} GetByPK(");
                 //codes.Append("int ticketId, int costId");
                 var tmpList = pkColumns.Select(pk => $"{pk.PropertyType} {ToCamelCase(pk.Name)}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
-                codes.Append(Environment.NewLine);
-                codes.Append(Environment.NewLine);
+                codes.AppendLine(Environment.NewLine);
+            }
+
+
+            if (pkColumns.Count >= 2)
+            {
+                string tempStr = string.Empty;
+                for (int i = 0; i < pkColumns.Count; i++)
+                {
+                    // get by every primary key
+                    codes.Append(GetIndentStr(indent) + $"List<{EntityName}> GetBy{pkColumns[i].Name}(");
+                    codes.Append(pkColumns[i].DbType + " ");
+                    codes.Append(Extentions.ToRequiredFormatString(pkColumns[i].Name, Models.NamingRule.Camel));
+                    codes.AppendLine(");");
+                    codes.Append(Environment.NewLine);
+                }
             }
 
             // get by page
             if (pkColumns.Count() < 2)
             {
                 codes.AppendLine(
-                string.Format(GetIndentStr(indent) + "List<{0}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition);",
+                string.Format(GetIndentStr(indent) + "List<{0}> GetByPage(out int total, int page, int size, string sort, bool asc);",
                     EntityName));
+                codes.Append(Environment.NewLine);
             }
 
 

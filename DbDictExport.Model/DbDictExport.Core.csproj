@@ -57,6 +57,7 @@
     <Compile Include="Codes\js\AbstractCodeFactory.cs" />
     <Compile Include="Codes\js\BllInterfaceCodeFactory.cs" />
     <Compile Include="Codes\js\BllCodeFactory.cs" />
+    <Compile Include="Codes\js\ControllerCodeFactory.cs" />
     <Compile Include="Codes\js\DalInterfaceCodeFactory.cs" />
     <Compile Include="Codes\js\DalCodeFactory.cs" />
     <Compile Include="Codes\js\ModelCodeFactory.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Dal\Table.cs" />
     <Compile Include="DbColumn.cs" />
     <Compile Include="DbTable.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Generated\Database.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

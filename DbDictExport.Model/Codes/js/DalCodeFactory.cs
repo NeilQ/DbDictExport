@@ -29,9 +29,12 @@ namespace DbDictExport.Core.Codes.js
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
+            codes.AppendLine("using System.Linq;");
             codes.AppendLine("using PetaPoco;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.DAL.MySql;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.IDAL;");
             codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Model;");
+            codes.AppendLine($"using {Constants.KDCODE_NAMESPACE_PREFIX}{ModuleName}.Utility;");
 
             // namespace
             codes.Append(Environment.NewLine);
@@ -80,11 +83,49 @@ namespace DbDictExport.Core.Codes.js
                 codes.AppendLine(GetIndentStr(indent) + "}");
             }
 
+            codes.Append(Environment.NewLine);
+
+            // methods
+            // get based on the composition of each primary keys
+            if (pkColumns.Count >= 2)
+            {
+                string tempStr = string.Empty;
+                List<string> function = new List<string>();
+                List<string> condition = new List<string>();
+                List<string> variate = new List<string>();
+                for (int i = 0; i < pkColumns.Count; i++)
+                {
+
+                    codes.Append(GetIndentStr(indent) + $"public IEnumerable<{EntityName}> GetBy{pkColumns[i].Name}(");
+                    codes.Append( $"{MapCSharpType(pkColumns[i].DbType)} {ToCamelCase(pkColumns[i].Name)}");
+                    codes.Append(")\r\n");
+                    codes.AppendLine(GetIndentStr(indent) + "{");
+
+                    // method body
+                    indent++;
+                    codes.Append(GetIndentStr(indent) + $"return Db.Query<{EntityName}>(\"WHERE ");
+                    //codes.Append("Marks = 1 and ID=@ID");
+                    var whereStr = new List<string>();
+                    if (existMarks)
+                    {
+                        whereStr.Add("Marks=1");
+                    }
+                    whereStr.Add($"{pkColumns[i].Name} = @0 ");
+                    codes.Append(string.Join(" AND ", whereStr)+"\",");
+                    codes.AppendLine(Extentions.ToRequiredFormatString(pkColumns[i].Name+")",Models.NamingRule.Camel));
+                    codes.Append(";");
+                    indent--;
+                    codes.AppendLine(GetIndentStr(indent) + "}");
+                    codes.Append(Environment.NewLine);
+                }
+                
+            }
+
+
             if (pkColumns.Count < 2)
             {
-                codes.AppendLine(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition)");
+                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 indent++;
                 codes.AppendLine(GetIndentStr(indent) +
@@ -116,6 +157,7 @@ namespace DbDictExport.Core.Codes.js
 
                 indent--;
                 codes.AppendLine(GetIndentStr(indent) + "}");
+                codes.AppendLine(Environment.NewLine);
             }
 
             indent--;
@@ -124,5 +166,6 @@ namespace DbDictExport.Core.Codes.js
 
             return codes;
         }
+        
     }
 }
