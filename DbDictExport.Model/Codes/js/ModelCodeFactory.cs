@@ -28,6 +28,7 @@ namespace DbDictExport.Core.Codes.js
 
             // using 
             codes.AppendLine($"using PetaPoco;");
+            codes.AppendLine($"using System;");
             codes.Append(Environment.NewLine);
 
             // namespace

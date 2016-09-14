@@ -31,5 +31,8 @@
         public const string KDCODE_NAMESPACE_PREFIX = "JS.Service.";
         public const string KDCODE_DEFAULT_ENTITY_NAME = "Entity";
         public const string KDCODE_DEFAULT_MODULE_NAME = "Default";
+
+
+        public const string NULLABLE_PROPERTY_TYPE_NAME = "int|long|short|double|float|decimal|datetimeoffset|datetime|guid|byte|bool";
     }
 }

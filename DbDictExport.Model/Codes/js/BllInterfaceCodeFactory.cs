@@ -43,24 +43,37 @@ namespace DbDictExport.Core.Codes.js
             var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
             // methods
             indent++;
+            if (pkColumns.Count >= 2)
+            {
+                string tempStr = string.Empty;
+                for (int i = 0; i < pkColumns.Count; i++)
+                {
+                    // get by every primary key
+                    codes.Append(GetIndentStr(indent) + $"List<{EntityName}> GetBy{pkColumns[i].Name}(");
+                    codes.Append(pkColumns[i].DbType+" ");
+                    codes.Append(Extentions.ToRequiredFormatString(pkColumns[i].Name,Models.NamingRule.Camel));
+                    codes.Append(");");
+                    codes.AppendLine(Environment.NewLine);
+                }
+            }
+
             if (pkColumns.Count == 1)
             {
                 // get by page
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc, object condition);");
+                                 $"List<{EntityName}> GetByPage(out int total, int page, int size, string sort, bool asc);");
+                codes.Append(Environment.NewLine);
             }
 
             var tmpList = pkColumns.Select(pk => $"{MapCSharpType(pk.DbType)} {ToCamelCase(pk.Name)}").ToList();
             if (pkColumns.Any())
             {
                 // get by primary key
-                codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + $"{EntityName} GetByPK(");
 
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
-                codes.Append(Environment.NewLine);
-                codes.Append(Environment.NewLine);
+                codes.AppendLine(Environment.NewLine);
             }
 
 
@@ -79,7 +92,6 @@ namespace DbDictExport.Core.Codes.js
                 codes.Append(GetIndentStr(indent) + "bool Delete(");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");
-                codes.Append(Environment.NewLine);
                 codes.Append(Environment.NewLine);
             }
 

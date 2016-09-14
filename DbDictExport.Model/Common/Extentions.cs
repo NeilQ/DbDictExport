@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using DbDictExport.Core.Dal;
+using DbDictExport.Core.Models;
 
 namespace DbDictExport.Core.Common
 {
@@ -82,6 +83,22 @@ namespace DbDictExport.Core.Common
                 dataTable.Rows.Add(row);
             }
             return dataTable;
+        }
+
+        public static string ToRequiredFormatString(string value, NamingRule rule)
+        {
+            string result = value;
+            switch (rule)
+            {
+                case NamingRule.Camel: //Camel  驼峰
+                    result=value[0].ToString().ToLower() + value.Substring(1, value.Length - 1);
+                    break;
+                case NamingRule.Pascal: //Pascal  帕斯卡
+                    result = value[0].ToString().ToUpper() + value.Substring(1, value.Length - 1);
+                    break;
+                   
+            }
+            return result;
         }
     }
 }
