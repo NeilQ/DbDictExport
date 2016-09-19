@@ -168,7 +168,7 @@ namespace DbDictExport.Core.Codes.js
                 if (existMarks)
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                              $"return _unitOfWork.{EntityName}Manager.SoftDelete(idList.SoftSelect<int, object>(t => t)).ToList();");
+                              $"return _unitOfWork.{EntityName}Manager.SoftDelete(idList.Select<int, object>(t => t)).ToList();");
                 }
                 else
                 {
