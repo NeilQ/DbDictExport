@@ -95,7 +95,8 @@ namespace DbDictExport.Core.Codes.js
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Total = total,");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Data = data");
-                codes.AppendLine(GetIndentStr(indent + 1) + "}");
+                codes.AppendLine(GetIndentStr(indent + 1) + "});");
+                codes.AppendLine(GetIndentStr(indent) + "}");
             }
 
             

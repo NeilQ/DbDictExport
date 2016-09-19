@@ -173,7 +173,7 @@ namespace DbDictExport.Core.Codes.js
                 else
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                                $"return _unitOfWork.{EntityName}Manager.Delete(idList.Select<int, object>(t => t)).ToList();");
+                                $"return _unitOfWork.{EntityName}Manager.Delete(idList.Select<int, object>(t => t).ToList());");
                 }
 
 
