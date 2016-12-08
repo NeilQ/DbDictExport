@@ -110,7 +110,7 @@ namespace DbDictExport.Core.Codes.js
             codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"id\">主键</param>");
             codes.AppendLine(GetIndentStr(indent) + "/// <returns></returns>");
             codes.AppendLine(GetIndentStr(indent) + "[Route(\"{id}\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof(ResponseModel<{EntityName}>))]");
+            codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof({EntityName}))]");
             codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Get(int id)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + $"var data = _{camelEntityName}Service.GetByPK(id);");
