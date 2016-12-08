@@ -170,7 +170,9 @@ namespace DbDictExport.WinForm
                     {
                         LoadingFormService.CreateForm();
                         LoadingFormService.SetFormCaption(Constants.EXPORT_CAPTION);
-                        List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(SqlServerConnectionStringBuilder, currentNode.Text);
+                        // List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(SqlServerConnectionStringBuilder, currentNode.Text);
+                        SetDataBaseName(currentNode.Text);
+                        var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName);
                         //Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
                         IExcelHelper helper = new AsposeExcelHelper();
 
@@ -183,7 +185,7 @@ namespace DbDictExport.WinForm
                         };
                         if (dia.ShowDialog() == DialogResult.OK)
                         {
-                            helper.GenerateWorkbook(tableList, dia.FileName);
+                            helper.GenerateWorkbook(tables, dia.FileName);
                             //workbook.Save(dia.FileName);
                         }
                     }
