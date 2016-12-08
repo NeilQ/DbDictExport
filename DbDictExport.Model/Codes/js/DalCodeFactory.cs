@@ -96,7 +96,7 @@ namespace DbDictExport.Core.Codes.js
                 for (int i = 0; i < pkColumns.Count; i++)
                 {
 
-                    codes.Append(GetIndentStr(indent) + $"public IEnumerable<{EntityName}> GetBy{pkColumns[i].Name}(");
+                    codes.Append(GetIndentStr(indent) + $"public List<{EntityName}> GetBy{pkColumns[i].Name}(");
                     codes.Append( $"{MapCSharpType(pkColumns[i].DbType)} {ToCamelCase(pkColumns[i].Name)}");
                     codes.Append(")\r\n");
                     codes.AppendLine(GetIndentStr(indent) + "{");
@@ -112,8 +112,7 @@ namespace DbDictExport.Core.Codes.js
                     }
                     whereStr.Add($"{pkColumns[i].Name} = @0 ");
                     codes.Append(string.Join(" AND ", whereStr)+"\",");
-                    codes.AppendLine(Extentions.ToRequiredFormatString(pkColumns[i].Name+")",Models.NamingRule.Camel));
-                    codes.Append(";");
+                    codes.AppendLine(Extentions.ToRequiredFormatString(pkColumns[i].Name+");",Models.NamingRule.Camel));
                     indent--;
                     codes.AppendLine(GetIndentStr(indent) + "}");
                     codes.Append(Environment.NewLine);
