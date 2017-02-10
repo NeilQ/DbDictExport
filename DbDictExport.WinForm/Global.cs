@@ -15,6 +15,7 @@ namespace DbDictExport.WinForm
     public enum DataBaseType
     {
         SqlServer,
-        Mysql
+        Mysql,
+        Postgresql
     }
 }

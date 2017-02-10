@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using DbDictExport.Core;
-using DbDictExport.Core.Codes;
 using DbDictExport.Core.Common;
 using DbDictExport.Core.Dal;
+using DbDictExport.WinForm.CodeForms;
+using DbDictExport.WinForm.LoginForms;
 using DbDictExport.WinForm.Service;
 using MetroFramework.Forms;
 using MySql.Data.MySqlClient;
+using Npgsql;
 
 namespace DbDictExport.WinForm
 {
@@ -24,6 +22,8 @@ namespace DbDictExport.WinForm
         public SqlConnectionStringBuilder SqlServerConnectionStringBuilder { get; set; }
 
         public MySqlConnectionStringBuilder MySqlConnectionStringBuilder { get; set; }
+
+        public NpgsqlConnectionStringBuilder PostgresConnectionStringBuilder { get; set; }
 
         private static TreeNode SelectedTableNode { get; set; }
 
@@ -43,8 +43,11 @@ namespace DbDictExport.WinForm
             {
                 item.Click += cmsDbTableItem_Click;
             }
-            //LoadLoginForm();
             tvDatabase.ImageList = imgListCommon;
+
+            generateKdCodesToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES;
+            generateJingShangCodesToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES;
+            generateAcartonsCodesPgToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES;
         }
 
         void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -58,38 +61,49 @@ namespace DbDictExport.WinForm
 
         private string GetServerHost()
         {
-            if (Global.DataBaseType == DataBaseType.SqlServer)
+            switch (Global.DataBaseType)
             {
-                return SqlServerConnectionStringBuilder.DataSource + $"({SqlServerConnectionStringBuilder.UserID})";
-            }
-            else
-            {
-                return MySqlConnectionStringBuilder.Server +
-                       $"({MySqlConnectionStringBuilder.UserID})";
+                case DataBaseType.SqlServer:
+                    return SqlServerConnectionStringBuilder.DataSource + $"({SqlServerConnectionStringBuilder.UserID})";
+                case DataBaseType.Mysql:
+                    return MySqlConnectionStringBuilder.Server +
+                           $"({MySqlConnectionStringBuilder.UserID})";
+                case DataBaseType.Postgresql:
+                    return PostgresConnectionStringBuilder.Host +
+                           $":{PostgresConnectionStringBuilder.Port} - {PostgresConnectionStringBuilder.Username}";
+                default:
+                    return string.Empty;
             }
         }
 
         private string GetConnectionString()
         {
-            if (Global.DataBaseType == DataBaseType.SqlServer)
+            switch (Global.DataBaseType)
             {
-                return SqlServerConnectionStringBuilder.ConnectionString;
-            }
-            else
-            {
-                return MySqlConnectionStringBuilder.ConnectionString;
+                case DataBaseType.SqlServer:
+                    return SqlServerConnectionStringBuilder.ConnectionString;
+                case DataBaseType.Mysql:
+                    return MySqlConnectionStringBuilder.ConnectionString;
+                case DataBaseType.Postgresql:
+                    return PostgresConnectionStringBuilder.ConnectionString;
+                default:
+                    return string.Empty;
             }
         }
 
         private void SetDataBaseName(string database)
         {
-            if (Global.DataBaseType == DataBaseType.SqlServer)
+            switch (Global.DataBaseType)
             {
-                SqlServerConnectionStringBuilder.InitialCatalog = database;
-            }
-            else
-            {
-                MySqlConnectionStringBuilder.Database = database;
+                case DataBaseType.SqlServer:
+                    SqlServerConnectionStringBuilder.InitialCatalog = database;
+                    break;
+                case DataBaseType.Mysql:
+                    MySqlConnectionStringBuilder.Database = database;
+                    break;
+                case DataBaseType.Postgresql:
+                    PostgresConnectionStringBuilder.Database = database;
+                    break;
             }
         }
 
@@ -209,6 +223,7 @@ namespace DbDictExport.WinForm
             var tripItem = sender as ToolStripItem;
             var currentNode = tvDatabase.SelectedNode;
             if (tripItem == null) return;
+            Table currTable;
             switch (tripItem.Text)
             {
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES:
@@ -219,10 +234,16 @@ namespace DbDictExport.WinForm
                     form.Show();
                     break;
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES:
-                    var currTable = currentNode.Tag as Table;
+                     currTable = currentNode.Tag as Table;
                     if (currTable == null) break;
                     var jsForm = new JSCodeForm(currTable);
                     jsForm.Show();
+                    break;
+                case Constants.CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES:
+                     currTable = currentNode.Tag as Table;
+                    if (currTable == null) break;
+                    var acartonsForm = new AcartonsCodeForm(currTable);
+                    acartonsForm.Show();
                     break;
             }
         }
@@ -240,6 +261,10 @@ namespace DbDictExport.WinForm
             LoadMysqlLoginForm();
         }
 
+        private void postgresqlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadPostgresLoginForm();
+        }
         #endregion
 
         #region Load TreeView nodes
@@ -328,6 +353,18 @@ namespace DbDictExport.WinForm
             }
         }
 
+        private void LoadPostgresLoginForm()
+        {
+            var login = new PostgresLoginForm();
+            if (login.ShowDialog() == DialogResult.OK)
+            {
+                PostgresConnectionStringBuilder = login.ConnBuilder;
+                ClearGridData();
+                login.Close();
+                LoadDatabaseTreeNode();
+            }
+        }
+
         private void SetGridData(string dbName, string tableName)
         {
             var table = DataAccess.GetTableByName(SqlServerConnectionStringBuilder, dbName, tableName);
@@ -379,6 +416,7 @@ namespace DbDictExport.WinForm
             MetroGridDesign.ClearSelection();
             MetroGridResultSet.ClearSelection();
         }
+
         private void ClearGridData()
         {
             MetroGridResultSet.DataSource = null;
@@ -387,6 +425,7 @@ namespace DbDictExport.WinForm
             MetroGridDesign.DataSource = null;
             MetroGridDesign.Columns.Clear();
         }
+
 
     }
 

@@ -45,6 +45,7 @@
             this.newConnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sqlServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mySqlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.postgresqlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imgListCommon = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -60,6 +61,7 @@
             this.cmsDbTable = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.generateKdCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateJingShangCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateAcartonsCodesPgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -139,7 +141,8 @@
             // 
             this.newConnectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sqlServerToolStripMenuItem,
-            this.mySqlToolStripMenuItem});
+            this.mySqlToolStripMenuItem,
+            this.postgresqlToolStripMenuItem});
             this.newConnectToolStripMenuItem.Name = "newConnectToolStripMenuItem";
             this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
             this.newConnectToolStripMenuItem.Text = "New Connect";
@@ -147,16 +150,23 @@
             // sqlServerToolStripMenuItem
             // 
             this.sqlServerToolStripMenuItem.Name = "sqlServerToolStripMenuItem";
-            this.sqlServerToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.sqlServerToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.sqlServerToolStripMenuItem.Text = "Sql Server";
             this.sqlServerToolStripMenuItem.Click += new System.EventHandler(this.sqlServerToolStripMenuItem_Click);
             // 
             // mySqlToolStripMenuItem
             // 
             this.mySqlToolStripMenuItem.Name = "mySqlToolStripMenuItem";
-            this.mySqlToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.mySqlToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.mySqlToolStripMenuItem.Text = "MySql";
             this.mySqlToolStripMenuItem.Click += new System.EventHandler(this.mySqlToolStripMenuItem_Click);
+            // 
+            // postgresqlToolStripMenuItem
+            // 
+            this.postgresqlToolStripMenuItem.Name = "postgresqlToolStripMenuItem";
+            this.postgresqlToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.postgresqlToolStripMenuItem.Text = "Postgresql";
+            this.postgresqlToolStripMenuItem.Click += new System.EventHandler(this.postgresqlToolStripMenuItem_Click);
             // 
             // imgListCommon
             // 
@@ -415,9 +425,10 @@
             this.cmsDbTable.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsDbTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generateKdCodesToolStripMenuItem,
-            this.generateJingShangCodesToolStripMenuItem});
+            this.generateJingShangCodesToolStripMenuItem,
+            this.generateAcartonsCodesPgToolStripMenuItem});
             this.cmsDbTable.Name = "cmsDbTable";
-            this.cmsDbTable.Size = new System.Drawing.Size(303, 84);
+            this.cmsDbTable.Size = new System.Drawing.Size(303, 82);
             // 
             // generateKdCodesToolStripMenuItem
             // 
@@ -430,6 +441,12 @@
             this.generateJingShangCodesToolStripMenuItem.Name = "generateJingShangCodesToolStripMenuItem";
             this.generateJingShangCodesToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
             this.generateJingShangCodesToolStripMenuItem.Text = "Generate JingShang Codes(干！)";
+            // 
+            // generateAcartonsCodesPgToolStripMenuItem
+            // 
+            this.generateAcartonsCodesPgToolStripMenuItem.Name = "generateAcartonsCodesPgToolStripMenuItem";
+            this.generateAcartonsCodesPgToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.generateAcartonsCodesPgToolStripMenuItem.Text = "Generate Acartons Codes - Pg";
             // 
             // MainForm
             // 
@@ -499,5 +516,7 @@
         private System.Windows.Forms.ToolStripMenuItem sqlServerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mySqlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateJingShangCodesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem postgresqlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generateAcartonsCodesPgToolStripMenuItem;
     }
 }

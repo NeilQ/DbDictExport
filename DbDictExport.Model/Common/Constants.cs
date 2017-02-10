@@ -1,4 +1,6 @@
-﻿namespace DbDictExport.Core.Common
+﻿using System.Security.Permissions;
+
+namespace DbDictExport.Core.Common
 {
     public static class Constants
     {
@@ -26,12 +28,14 @@
         public const string CONTEXT_MENU_DATABASE_REFRESH = "Refresh";
         public const string CONTEXT_MENU_TABLE_GENERATE_KD_CODES = "Generate kd Codes";
         public const string CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES = "Generate JingShang Codes(干！)";
+        public const string CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES = "Generate Acartons Codes - Pg";
 
 
         public const string KDCODE_NAMESPACE_PREFIX = "JS.Service.";
         public const string KDCODE_DEFAULT_ENTITY_NAME = "Entity";
         public const string KDCODE_DEFAULT_MODULE_NAME = "Default";
 
+        public const string ACARTONS_NAMESAPCE_PREFIX = "Acartons.Parking";
 
         public const string NULLABLE_PROPERTY_TYPE_NAME = "int|long|short|double|float|decimal|datetimeoffset|datetime|guid|byte|bool";
     }

@@ -96,7 +96,6 @@ namespace DbDictExport.Core.Common
                 case NamingRule.Pascal: //Pascal  帕斯卡
                     result = value[0].ToString().ToUpper() + value.Substring(1, value.Length - 1);
                     break;
-                   
             }
             return result;
         }

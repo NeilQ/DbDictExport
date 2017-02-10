@@ -9,9 +9,11 @@ namespace DbDictExport.Core.Models
     public enum NamingRule
     {
         [Description("Named by Camel")]
-        Camel=0,
+        Camel = 0,
 
         [Description("Named by Pascal")]
-        Pascal=1
+        Pascal = 1,
+
+        LowerUnderline = 2
     }
 }

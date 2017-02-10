@@ -87,12 +87,17 @@ namespace DbDictExport.Core.Dal
                     conn.ConnectionString = _connectionString;
                     conn.Open();
 
-                    SchemaReader reader = null;
+                    SchemaReader reader;
 
                     if (_factory.GetType().Name == "MySqlClientFactory")
                     {
                         // MySql
                         reader = new MySqlSchemaReader();
+                    }
+                    else if (_factory.GetType().Name == "NpgsqlFactory")
+                    {
+                        // PostgreSql
+                        reader = new PostgresqlSchemaReader();
                     }
                     else
                     {
@@ -175,6 +180,11 @@ namespace DbDictExport.Core.Dal
                     {
                         // MySql
                         reader = new MySqlSchemaReader();
+                    }
+                    else if (_factory.GetType().Name == "NpgsqlFactory")
+                    {
+                        // PostgreSql
+                        reader = new PostgresqlSchemaReader();
                     }
                     else
                     {
