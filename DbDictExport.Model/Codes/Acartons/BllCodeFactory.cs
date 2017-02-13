@@ -199,7 +199,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 if (existMarks)
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                              $"return _repoFactory.{EntityName}Repo.SoftDelete(idList.Select<int, object>(t => t)).ToList();");
+                              $"return _repoFactory.{EntityName}Repo.SoftDelete(idList.Select<int, object>(t => t).ToList());");
                 }
                 else
                 {
