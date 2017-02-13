@@ -37,7 +37,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
             // namespace
             codes.Append(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.BLL");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Bll");
             codes.AppendLine("{"); // namespace
 
             // class
