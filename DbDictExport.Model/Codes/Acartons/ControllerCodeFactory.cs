@@ -127,7 +127,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// 添加实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
             codes.AppendLine(GetIndentStr(indent) + "[Route(\"\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Post({EntityName} model)");
+            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Post([FromBody]{EntityName} model)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + "if (model == null)");
             codes.AppendLine(GetIndentStr(indent + 1) + "{");
@@ -151,7 +151,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// 更新实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
             codes.AppendLine(GetIndentStr(indent) + "[Route(\"{id}\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Put(int id, {EntityName} model)");
+            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Put(int id, [FromBody]{EntityName} model)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + "if (model == null)");
             codes.AppendLine(GetIndentStr(indent + 1) + "{");
