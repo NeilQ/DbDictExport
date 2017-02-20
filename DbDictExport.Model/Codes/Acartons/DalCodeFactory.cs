@@ -31,7 +31,6 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Linq;");
             codes.AppendLine("using PetaPoco;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Dal;");
             codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Dal.Interface;");
             codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model;");
             codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Utils;");
@@ -155,12 +154,16 @@ namespace DbDictExport.Core.Codes.Acartons
                              "var sql = new Sql()");
             indent++;
             codes.AppendLine(GetIndentStr(indent) + ".Select(\"*\")");
-            codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
             if (existMarks)
             {
-                codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\")");
+                codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
+                codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\");");
             }
-            codes.Append(";");
+            else
+            {
+                codes.Append(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName);");
+
+            }
             indent--;
 
             codes.AppendLine(GetIndentStr(indent) + "if (!string.IsNullOrEmpty(sort))");

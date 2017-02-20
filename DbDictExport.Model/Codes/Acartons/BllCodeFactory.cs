@@ -135,7 +135,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.Append(GetIndentStr(indent + 1) +
-                             $"return _repoFactory{EntityName}Repo.GetByPK(");
+                             $"return _repoFactory.{EntityName}Repo.GetByPK(");
                 codes.Append(string.Join(", ", paramList));
                 codes.Append(");");
                 codes.Append(Environment.NewLine);
