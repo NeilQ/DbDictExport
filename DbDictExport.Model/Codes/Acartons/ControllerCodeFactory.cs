@@ -92,7 +92,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent + 1) + "int total;");
                 codes.AppendLine(GetIndentStr(indent + 1) +
                                  $"var data = _{_camelEntityName}Service.GetByPage(out total, page, num, sort);");
-                codes.AppendLine(GetIndentStr(indent + 1) + $"return Ok(new ResponseModel<{EntityName}>");
+                codes.AppendLine(GetIndentStr(indent + 1) + $"return Ok(new PageModel<{EntityName}>");
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Total = total,");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Data = data");
