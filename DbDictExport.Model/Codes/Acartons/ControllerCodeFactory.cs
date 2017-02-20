@@ -13,7 +13,7 @@ namespace DbDictExport.Core.Codes.Acartons
         public ControllerCodeFactory(string entityName, string moduleName, Table dbTable)
         {
             _camelEntityName = Extentions.ToRequiredFormatString(entityName, Models.NamingRule.Camel);
-            _apiRouteName = Inflector.MakePlural(Inflector.ToHumanCase(entityName.ToLower()));
+            _apiRouteName = Inflector.MakePlural(Inflector.ToHumanCase(entityName)).ToLower();
             EntityName = entityName;
             ModuleName = moduleName;
             Table = dbTable;
@@ -98,6 +98,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent + 2) + "Data = data");
                 codes.AppendLine(GetIndentStr(indent + 1) + "});");
                 codes.AppendLine(GetIndentStr(indent) + "}");
+
             }
 
 
