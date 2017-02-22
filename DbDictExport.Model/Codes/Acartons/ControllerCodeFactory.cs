@@ -75,23 +75,23 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
                 codes.AppendLine(GetIndentStr(indent) + "/// 分页获取实体列表");
                 codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-                codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"num\"></param>");
+                codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"size\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"page\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"sort\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "[Route(\"\")]");
                 codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof(PageModel<{EntityName}>))]");
                 codes.AppendLine(GetIndentStr(indent) +
-                                 "public IHttpActionResult Get(int page, int num, string sort = \"add_time desc\")");
+                                 "public IHttpActionResult Get(int page, int size, string sort = \"add_time desc\")");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) + "// validate");
-                codes.AppendLine(GetIndentStr(indent + 1) + "if (page <= 0 || num <= 0)");
+                codes.AppendLine(GetIndentStr(indent + 1) + "if (page <= 0 || size <= 0)");
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(MessageFactory.CreatePageParamsInvalidMessage());");
                 codes.AppendLine(GetIndentStr(indent + 1) + "}");
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent + 1) + "int total;");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                                 $"var data = _{_camelEntityName}Service.GetByPage(out total, page, num, sort);");
+                                 $"var data = _{_camelEntityName}Service.GetByPage(out total, page, size, sort);");
                 codes.AppendLine(GetIndentStr(indent + 1) + $"return Ok(new PageModel<{EntityName}>");
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Total = total,");
