@@ -61,7 +61,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
             //constructor
             codes.Append(Environment.NewLine);
-            codes.AppendLine(GetIndentStr(indent) + $"public {EntityName}Controller(I{EntityName}Service {_camelEntityName}Service)");
+            codes.AppendLine(GetIndentStr(indent) + $"public {Inflector.MakePlural(EntityName)}Controller(I{EntityName}Service {_camelEntityName}Service)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + $"_{_camelEntityName}Service = {_camelEntityName}Service;");
             codes.AppendLine(GetIndentStr(indent) + "}");
