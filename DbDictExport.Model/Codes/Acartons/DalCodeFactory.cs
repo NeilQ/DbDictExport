@@ -95,15 +95,17 @@ namespace DbDictExport.Core.Codes.Acartons
 
                     // method body
                     indent++;
-                    codes.Append(GetIndentStr(indent) + $"return Db.Query<{EntityName}>(\"WHERE ");
+                    codes.Append(GetIndentStr(indent) + $"return Db.Fetch<{EntityName}>(\"WHERE ");
+
                     var whereStr = new List<string>();
                     if (existMarks)
                     {
                         whereStr.Add("marked_for_delete=false");
                     }
                     whereStr.Add($"{pkColumns[i].Name} = @0 ");
+
                     codes.Append(string.Join(" AND ", whereStr) + "\",");
-                    codes.AppendLine(Extentions.ToRequiredFormatString(pkColumns[i].Name + ");", Models.NamingRule.Camel));
+                    codes.AppendLine(ToCamelCase(pkColumns[i].PropertyName));
                     indent--;
                     codes.AppendLine(GetIndentStr(indent) + "}");
                     codes.Append(Environment.NewLine);
@@ -147,7 +149,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
             // get all
             codes.AppendLine(GetIndentStr(indent) +
-                                 $"public List<{EntityName}> GetAll(string sort, object condition)");
+                                             $"public List<{EntityName}> GetAll(string sort, object condition)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             indent++;
             codes.AppendLine(GetIndentStr(indent) +
