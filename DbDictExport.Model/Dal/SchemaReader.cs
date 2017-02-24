@@ -515,11 +515,16 @@ namespace DbDictExport.Core.Dal
             {
                 tbl.Columns = LoadColumns(tbl);
 
-                // Mark the primary key
-                var primaryKey = GetPK(tbl.Name);
-                var pkColumn = tbl.Columns.SingleOrDefault(x => x.Name.ToLower().Trim() == primaryKey.ToLower().Trim());
-                if (pkColumn != null)
-                    pkColumn.IsPK = true;
+                var pks = GetPK(tbl.Name);
+                foreach (var pk in pks)
+                {
+                    var pkColumn =
+                   tbl.Columns.SingleOrDefault(x => x.Name.ToLower().Trim() == pk.ToLower().Trim());
+                    if (pkColumn != null)
+                    {
+                        pkColumn.IsPK = true;
+                    }
+                }
             }
 
 
@@ -562,9 +567,10 @@ namespace DbDictExport.Core.Dal
             }
         }
 
-        string GetPK(string table)
+        List<string> GetPK(string table)
         {
 
+            var pks = new List<string>();
             string sql = @"SELECT kcu.column_name 
 			FROM information_schema.key_column_usage kcu
 			JOIN information_schema.table_constraints tc
@@ -582,13 +588,18 @@ namespace DbDictExport.Core.Dal
                 p.Value = table;
                 cmd.Parameters.Add(p);
 
-                var result = cmd.ExecuteScalar();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.HasRows) return pks;
+                    while (reader.Read())
+                    {
+                        pks.Add(reader["column_name"].ToString());
+                    }
+                }
 
-                if (result != null)
-                    return result.ToString();
             }
 
-            return "";
+            return pks;
         }
 
         string GetPropertyType(string sqlType)
