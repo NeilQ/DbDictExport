@@ -86,7 +86,7 @@ namespace DbDictExport.Core.Codes.Acartons
             // get based on the composition of each primary keys
             if (pkColumns.Count >= 2)
             {
-                for (int i = 0; i < pkColumns.Count; i++)
+                for (var i = 0; i < pkColumns.Count; i++)
                 {
                     codes.Append(GetIndentStr(indent) + $"public List<{EntityName}> GetBy{pkColumns[i].PropertyName}(");
                     codes.Append($"{pkColumns[i].PropertyType} {ToCamelCase(pkColumns[i].PropertyName)}");
@@ -124,12 +124,17 @@ namespace DbDictExport.Core.Codes.Acartons
                                  "var sql = new Sql()");
                 indent++;
                 codes.AppendLine(GetIndentStr(indent) + ".Select(\"*\")");
-                codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
+
                 if (existMarks)
                 {
-                    codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\")");
+                    codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
+                    codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\");");
                 }
-                codes.Append(";");
+                else
+                {
+                    codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName);");
+                }
+
                 indent--;
 
                 codes.AppendLine(GetIndentStr(indent) + "if (string.IsNullOrEmpty(sort))");
@@ -164,6 +169,7 @@ namespace DbDictExport.Core.Codes.Acartons
             else
             {
                 codes.Append(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName);");
+                codes.Append(Environment.NewLine);
 
             }
             indent--;
