@@ -164,11 +164,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(ModelState);");
             codes.AppendLine(GetIndentStr(indent + 1) + "}");
             codes.Append(Environment.NewLine);
-            codes.AppendLine(GetIndentStr(indent + 1) + $"var entity = _{_camelEntityName}Service.GetByPK(id);");
-            codes.AppendLine(GetIndentStr(indent + 1) + "if (entity == null)");
-            codes.AppendLine(GetIndentStr(indent + 1) + "{");
-            codes.AppendLine(GetIndentStr(indent + 2) + "return NotFound();");
-            codes.AppendLine(GetIndentStr(indent + 1) + "}");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"if (!_{_camelEntityName}Service.Exists(id)) return NotFound();");
             codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent + 1) + $"_{_camelEntityName}Service.Update(model);");
             codes.Append(Environment.NewLine);
