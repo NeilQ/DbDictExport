@@ -78,7 +78,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
                 // field
                 codes.AppendLine(GetIndentStr(indent) +
-                                 $"[Column(Name = \"{column.Name}\")]");
+                                 $"[Column(\"{column.Name}\")]");
                 codes.AppendLine(GetIndentStr(indent) +
                                  $"public {column.PropertyType} {column.PropertyName} {{ get; set; }}");
                 codes.Append(Environment.NewLine);
