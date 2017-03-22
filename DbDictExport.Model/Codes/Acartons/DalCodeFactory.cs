@@ -105,7 +105,7 @@ namespace DbDictExport.Core.Codes.Acartons
                     whereStr.Add($"{pkColumns[i].Name} = @0 ");
 
                     codes.Append(string.Join(" AND ", whereStr) + "\",");
-                    codes.AppendLine(ToCamelCase(pkColumns[i].PropertyName));
+                    codes.AppendLine(ToCamelCase(pkColumns[i].PropertyName) + ");");
                     indent--;
                     codes.AppendLine(GetIndentStr(indent) + "}");
                     codes.Append(Environment.NewLine);
