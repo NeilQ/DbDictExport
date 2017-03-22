@@ -572,11 +572,11 @@ namespace DbDictExport.Core.Dal
 
             var pks = new List<string>();
             string sql = @"SELECT kcu.column_name 
-			FROM information_schema.key_column_usage kcu
-			JOIN information_schema.table_constraints tc
-			ON kcu.constraint_name=tc.constraint_name
-			WHERE lower(tc.constraint_type)='primary key'
-			AND kcu.table_name=@tablename";
+            FROM information_schema.key_column_usage kcu
+            JOIN information_schema.table_constraints tc
+            ON kcu.constraint_name=tc.constraint_name
+            WHERE lower(tc.constraint_type)='primary key'
+            AND kcu.table_name=@tablename";
 
             using (var cmd = _factory.CreateCommand())
             {
@@ -607,6 +607,7 @@ namespace DbDictExport.Core.Dal
             switch (sqlType)
             {
                 case "int8":
+                    return "int";
                 case "serial8":
                     return "int";
 
@@ -650,20 +651,20 @@ namespace DbDictExport.Core.Dal
 
 
         const string TABLE_SQL = @"
-			SELECT table_name, table_schema, table_type
-			FROM information_schema.tables 
-			WHERE (table_type='BASE TABLE' OR table_type='VIEW')
-				AND table_schema NOT IN ('pg_catalog', 'information_schema');
-			";
+            SELECT table_name, table_schema, table_type
+            FROM information_schema.tables 
+            WHERE (table_type='BASE TABLE' OR table_type='VIEW')
+                AND table_schema NOT IN ('pg_catalog', 'information_schema');
+            ";
 
         const string COLUMN_SQL = @"
-			SELECT cols.column_name, cols.is_nullable, cols.udt_name, cols.column_default,
+            SELECT cols.column_name, cols.is_nullable, cols.udt_name, cols.column_default,
                 (SELECT pg_catalog.col_description(c.oid, cols.ordinal_position::int)
                  FROM pg_catalog.pg_class c
                  WHERE c.oid = (SELECT ('" + "\"" + @"' || cols.table_name || '" + "\"" + @"')::regclass::oid)
                  AND c.relname = cols.table_name
                 ) AS column_comment 
-			FROM information_schema.columns cols
-			WHERE cols.table_name=@tableName;";
+            FROM information_schema.columns cols
+            WHERE cols.table_name=@tableName;";
     }
 }
