@@ -103,7 +103,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.Append(Environment.NewLine);
 
             // delete
-            if (pkColumns.Any())
+            if (pkColumns.Count == 1)
             {
                 //codes.Append(Environment.NewLine);
                 codes.Append(GetIndentStr(indent) + "bool Delete(");

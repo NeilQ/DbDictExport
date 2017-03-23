@@ -161,7 +161,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.Append(Environment.NewLine);
 
             // delete
-            if (pkColumns.Any())
+            if (pkColumns.Count == 1)
             {
                 codes.Append(GetIndentStr(indent) + "public bool Delete(");
                 codes.Append(string.Join(", ", tmpList));
