@@ -220,3 +220,4 @@ packages/ModernUI.WPF.1.0.5/lib/net45/FirstFloor.ModernUI.dll
 packages/ModernUI.WPF.1.0.5/ModernUI.WPF.1.0.5.nupkg
 packages/ModernUI.WPF.1.0.5/lib/net45/FirstFloor.ModernUI.XML
 packages/repositories.config
+/.vs/DbDictExport/v15/sqlite3/storage.ide

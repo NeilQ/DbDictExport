@@ -28,6 +28,8 @@ namespace DbDictExport.Core.Codes.Acartons
 
             var existMarks = Table.Columns.Exists(t => t.Name.ToLower() == "marked_for_delete");
 
+            var repoName = "{ToCamelCase(EntityName)}Repo";
+
             // using 
             codes.AppendLine("using System.Collections.Generic;");
             codes.AppendLine("using System.Linq;");
@@ -46,11 +48,11 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "{"); // class
 
             indent++;
-            codes.AppendLine(GetIndentStr(indent) + "private readonly IRepoFactory _repoFactory;");
+            codes.AppendLine(GetIndentStr(indent) + $"private readonly I{EntityName}Repo _{repoName};");
             codes.Append(Environment.NewLine);
-            codes.AppendLine(GetIndentStr(indent) + $"public {EntityName}Service(IRepoFactory repoFactory)");
+            codes.AppendLine(GetIndentStr(indent) + $"public {EntityName}Service(I{EntityName}Repo {repoName})");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + "_repoFactory = repoFactory;");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"_{repoName} = {repoName};");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
@@ -68,7 +70,7 @@ namespace DbDictExport.Core.Codes.Acartons
                     codes.AppendLine(")");
                     codes.AppendLine(GetIndentStr(indent) + "{");
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                                     $"return _repoFactory.{EntityName}Repo.GetBy{pkColumns[i].PropertyName}({ToCamelCase(pkColumns[i].PropertyName)});");
+                                     $"return _{repoName}.GetBy{pkColumns[i].PropertyName}({ToCamelCase(pkColumns[i].PropertyName)});");
                     codes.AppendLine(GetIndentStr(indent) + "}");
                     codes.Append(Environment.NewLine);
                 }
@@ -82,7 +84,7 @@ namespace DbDictExport.Core.Codes.Acartons
                                  $"public List<{EntityName}> GetByPage(out int total, int page, int size)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _repoFactory.{EntityName}Repo.GetByPage(out total, page, size, null, null);");
+                    $"return _{repoName}.GetByPage(out total, page, size, null, null);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
 
@@ -90,7 +92,7 @@ namespace DbDictExport.Core.Codes.Acartons
                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _repoFactory.{EntityName}Repo.GetByPage(out total, page, size, sort, null);");
+                    $"return _{repoName}.GetByPage(out total, page, size, sort, null);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
 
@@ -98,7 +100,7 @@ namespace DbDictExport.Core.Codes.Acartons
                                 $"public List<{EntityName}> GetByPage(out int total, int page, int size, string sort, object condition)");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _repoFactory.{EntityName}Repo.GetByPage(out total, page, size, sort, condition);");
+                    $"return _{repoName}.GetByPage(out total, page, size, sort, condition);");
                 codes.AppendLine(GetIndentStr(indent) + "}");
                 codes.Append(Environment.NewLine);
             }
@@ -106,19 +108,19 @@ namespace DbDictExport.Core.Codes.Acartons
             // get all
             codes.AppendLine(GetIndentStr(indent) + $"public List<{EntityName}> GetAll()");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + $"return _repoFactory.{EntityName}Repo.GetAll(null, null);");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"return _{repoName}.GetAll(null, null);");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
             codes.AppendLine(GetIndentStr(indent) + $"public List<{EntityName}> GetAll(object condition)");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + $"return _repoFactory.{EntityName}Repo.GetAll(null, condition);");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"return _{repoName}.GetAll(null, condition);");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
             codes.AppendLine(GetIndentStr(indent) + $"public List<{EntityName}> GetAll(string sort, object condition)");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + $"return _repoFactory.{EntityName}Repo.GetAll(sort, condition);");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"return _{repoName}.GetAll(sort, condition);");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
@@ -135,7 +137,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.Append(GetIndentStr(indent + 1) +
-                             $"return _repoFactory.{EntityName}Repo.GetByPK(");
+                             $"return _{repoName}.GetByPK(");
                 codes.Append(string.Join(", ", paramList));
                 codes.Append(");");
                 codes.Append(Environment.NewLine);
@@ -148,7 +150,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + $"public int Add({EntityName} entity)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) +
-                             $"return _repoFactory.{EntityName}Repo.Insert(entity);");
+                             $"return _{repoName}.Insert(entity);");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
@@ -156,7 +158,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + $"public bool Update({EntityName} entity)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) +
-                             $"return _repoFactory.{EntityName}Repo.Update(entity);");
+                             $"return _{repoName}.Update(entity);");
             codes.AppendLine(GetIndentStr(indent) + "}");
             codes.Append(Environment.NewLine);
 
@@ -172,14 +174,14 @@ namespace DbDictExport.Core.Codes.Acartons
                 if (existMarks)
                 {
                     codes.Append(GetIndentStr(indent + 1) +
-                                 $"return _repoFactory.{EntityName}Repo.SoftDelete(");
+                                 $"return _{repoName}.SoftDelete(");
                     codes.Append(string.Join(", ", paramList));
                     codes.Append(");");
                 }
                 else
                 {
                     codes.Append(GetIndentStr(indent + 1) +
-                                 $"return _repoFactory.{EntityName}Repo.Delete(");
+                                 $"return _{repoName}.Delete(");
                     codes.Append(string.Join(", ", paramList));
                     codes.Append(");");
                 }
@@ -199,12 +201,12 @@ namespace DbDictExport.Core.Codes.Acartons
                 if (existMarks)
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                              $"return _repoFactory.{EntityName}Repo.SoftDelete(idList.Select<int, object>(t => t).ToList());");
+                              $"return _{repoName}.SoftDelete(idList.Select<int, object>(t => t).ToList());");
                 }
                 else
                 {
                     codes.AppendLine(GetIndentStr(indent + 1) +
-                                $"return _repoFactory.{EntityName}Repo.Delete(idList.Select<int, object>(t => t).ToList());");
+                                $"return _{repoName}.Delete(idList.Select<int, object>(t => t).ToList());");
                 }
 
 
@@ -220,7 +222,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent) + $"public bool Exists({pkColumns[0].PropertyType} {ToCamelCase(pkColumns[0].PropertyName)})");
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                    $"return _repoFactory.{EntityName}Repo.Exists({ToCamelCase(pkColumns[0].PropertyName)});");
+                    $"return _{repoName}.Exists({ToCamelCase(pkColumns[0].PropertyName)});");
                 codes.AppendLine(GetIndentStr(indent) + "}");
             }
 
