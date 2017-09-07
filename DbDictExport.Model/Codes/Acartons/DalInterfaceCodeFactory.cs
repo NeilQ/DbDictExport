@@ -42,9 +42,9 @@ namespace DbDictExport.Core.Codes.Acartons
             // methods
             // get by primary
             var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
-            if (pkColumns.Any())
+            if (pkColumns.Count > 1)
             {
-                codes.Append(GetIndentStr(indent) + $"{EntityName} GetByPK(");
+                codes.Append(GetIndentStr(indent) + $"{EntityName} GetByPk(");
                 var tmpList = pkColumns.Select(pk => $"{pk.PropertyType} {ToCamelCase(pk.Name)}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(");");

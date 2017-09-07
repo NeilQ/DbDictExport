@@ -50,10 +50,10 @@ namespace DbDictExport.Core.Codes.Acartons
             // get by primary
             indent++;
             var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
-            if (pkColumns.Any())
+            if (pkColumns.Count > 1)
             {
                 codes.Append(Environment.NewLine);
-                codes.Append(GetIndentStr(indent) + $"public {EntityName} GetByPK(");
+                codes.Append(GetIndentStr(indent) + $"public {EntityName} GetByPk(");
                 var tmpList = pkColumns.Select(pk => $"{pk.PropertyType} {ToCamelCase(pk.PropertyName)}");
                 codes.Append(string.Join(", ", tmpList));
                 codes.Append(")\r\n");
