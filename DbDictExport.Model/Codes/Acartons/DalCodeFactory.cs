@@ -46,9 +46,15 @@ namespace DbDictExport.Core.Codes.Acartons
                              string.Format("public class {0}Repo : RepoBase<{0}>, I{0}Repo", EntityName));
             codes.AppendLine(GetIndentStr(indent) + "{");
 
+            indent++;
+            // constructor
+            codes.Append(Environment.NewLine);
+            codes.AppendLine(GetIndentStr(indent) +
+                             "public {0}Repo(IUserContext userContext) : base(userContext) { }");
+
+
             // methods
             // get by primary
-            indent++;
             var pkColumns = Table.Columns.Where(t => t.IsPK).ToList();
             if (pkColumns.Count > 1)
             {
