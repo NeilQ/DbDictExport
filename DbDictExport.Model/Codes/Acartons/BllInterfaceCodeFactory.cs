@@ -28,11 +28,11 @@ namespace DbDictExport.Core.Codes.Acartons
 
             // using 
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models;");
 
             // namespace
             codes.Append(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Bll.Interface");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Bll.Interface");
             codes.AppendLine("{"); // namespace
 
             // class

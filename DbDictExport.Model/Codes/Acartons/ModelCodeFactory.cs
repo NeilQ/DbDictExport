@@ -27,12 +27,13 @@ namespace DbDictExport.Core.Codes.Acartons
             var indent = 0;
 
             // using 
-            codes.AppendLine("using PetaPoco;");
+            codes.AppendLine("using NPoco;");
             codes.AppendLine("using System;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Entities");
             codes.Append(Environment.NewLine);
 
             // namespace
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models");
             codes.AppendLine("{"); // namespace
 
             indent++;

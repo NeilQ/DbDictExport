@@ -32,17 +32,17 @@ namespace DbDictExport.Core.Codes.Acartons
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine("using System.Web.Http;");
-            codes.AppendLine("using System.Web.Http.Description;");
             // codes.AppendLine("using PetaPoco;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Bll.Interface;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model.Dtos;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Utils;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Bll.Interface;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Dtos;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Api.Filters;");
+            codes.AppendLine("using Microsoft.AspNetCore.Http.Extensions;");
+            codes.AppendLine("using Microsoft.AspNetCore.Mvc;");
 
             // namespace
             codes.Append(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Api.Controllers");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Api.Controllers");
             codes.AppendLine("{");
 
             // class
@@ -50,7 +50,8 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// ");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-            codes.AppendLine(GetIndentStr(indent) + $"[RoutePrefix(\"api/{_apiRouteName}\")]");
+            codes.AppendLine(GetIndentStr(indent) + "[Produces(\"application/json\")]");
+            codes.AppendLine(GetIndentStr(indent) + $"[Route(\"api/{_apiRouteName}\")]");
             codes.AppendLine(GetIndentStr(indent) + $"public class {Inflector.MakePlural(EntityName)}Controller : ApiController");
             codes.AppendLine(GetIndentStr(indent) + "{");
 
@@ -78,20 +79,13 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"size\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"page\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"sort\"></param>");
-                codes.AppendLine(GetIndentStr(indent) + "[Route(\"\")]");
-                codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof(PageModel<{EntityName}>))]");
+                codes.AppendLine(GetIndentStr(indent) + "[HttpGet]");
+                codes.AppendLine(GetIndentStr(indent) + $"[ProducesResponseType(typeof(PageModel<{EntityName}>), 200)]");
                 codes.AppendLine(GetIndentStr(indent) +
-                                 "public IHttpActionResult Get(int page, int size, string sort = \"add_time desc\")");
+                                 "public IActionResult Get(int page, int size, string sort = \"add_time desc\")");
                 codes.AppendLine(GetIndentStr(indent) + "{");
-                codes.AppendLine(GetIndentStr(indent + 1) + "// validate");
-                codes.AppendLine(GetIndentStr(indent + 1) + "if (page <= 0 || size <= 0)");
-                codes.AppendLine(GetIndentStr(indent + 1) + "{");
-                codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(MessageFactory.CreatePageParamsInvalidMessage());");
-                codes.AppendLine(GetIndentStr(indent + 1) + "}");
-                codes.Append(Environment.NewLine);
-                codes.AppendLine(GetIndentStr(indent + 1) + "int total;");
                 codes.AppendLine(GetIndentStr(indent + 1) +
-                                 $"var data = _{_camelEntityName}Service.GetByPage(out total, page, size, sort);");
+                                 $"var data = _{_camelEntityName}Service.GetByPage(out int total, page, size, sort);");
                 codes.AppendLine(GetIndentStr(indent + 1) + $"return Ok(new PageModel<{EntityName}>");
                 codes.AppendLine(GetIndentStr(indent + 1) + "{");
                 codes.AppendLine(GetIndentStr(indent + 2) + "Total = total,");
@@ -111,9 +105,9 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"id\">主键</param>");
             codes.AppendLine(GetIndentStr(indent) + "/// <returns></returns>");
-            codes.AppendLine(GetIndentStr(indent) + "[Route(\"{id}\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"[ResponseType(typeof({EntityName}))]");
-            codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Get(int id)");
+            codes.AppendLine(GetIndentStr(indent) + "[HttpGet(\"{id}\")]");
+            codes.AppendLine(GetIndentStr(indent) + $"[ProducesResponseType(typeof({EntityName}), 200)]");
+            codes.AppendLine(GetIndentStr(indent) + "public IActionResult Get(int id)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + $"var data = _{_camelEntityName}Service.GetByPK(id);");
             codes.AppendLine(GetIndentStr(indent + 1) + "if (data == null) return NotFound();");
@@ -127,19 +121,10 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// 添加实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-            codes.AppendLine(GetIndentStr(indent) + "[Route(\"\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Post([FromBody]{EntityName} model)");
+            codes.AppendLine(GetIndentStr(indent) + "[Validate]");
+            codes.AppendLine(GetIndentStr(indent) + "[HttpPost]");
+            codes.AppendLine(GetIndentStr(indent) + $"public IActionResult Post([FromBody]{EntityName} model)");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + "if (model == null)");
-            codes.AppendLine(GetIndentStr(indent + 1) + "{");
-            codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(MessageFactory.CreateParamsIsNullMessage());");
-            codes.AppendLine(GetIndentStr(indent + 1) + "}");
-            codes.AppendLine(GetIndentStr(indent + 1) + "// Validate");
-            codes.AppendLine(GetIndentStr(indent + 1) + "if (!ModelState.IsValid)");
-            codes.AppendLine(GetIndentStr(indent + 1) + "{");
-            codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(ModelState);");
-            codes.AppendLine(GetIndentStr(indent + 1) + "}");
-            codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent + 1) + $"var key = _{_camelEntityName}Service.Add(model);");
             codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent + 1) + "return Created(Request.RequestUri + key.ToString(), key);");
@@ -151,19 +136,10 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// 更新实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-            codes.AppendLine(GetIndentStr(indent) + "[Route(\"{id}\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"public IHttpActionResult Put(int id, [FromBody]{EntityName} model)");
+            codes.AppendLine(GetIndentStr(indent) + "[Validate]");
+            codes.AppendLine(GetIndentStr(indent) + "[HttpPut(\"{id}\")]");
+            codes.AppendLine(GetIndentStr(indent) + $"public IActionResult Put(int id, [FromBody]{EntityName} model)");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + "if (model == null)");
-            codes.AppendLine(GetIndentStr(indent + 1) + "{");
-            codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(MessageFactory.CreateParamsIsNullMessage());");
-            codes.AppendLine(GetIndentStr(indent + 1) + "}");
-            codes.AppendLine(GetIndentStr(indent + 1) + "// Validate");
-            codes.AppendLine(GetIndentStr(indent + 1) + "if (!ModelState.IsValid)");
-            codes.AppendLine(GetIndentStr(indent + 1) + "{");
-            codes.AppendLine(GetIndentStr(indent + 2) + "return BadRequest(ModelState);");
-            codes.AppendLine(GetIndentStr(indent + 1) + "}");
-            codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent + 1) + $"if (!_{_camelEntityName}Service.Exists(id)) return NotFound();");
             codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent + 1) + $"_{_camelEntityName}Service.Update(model);");
@@ -177,8 +153,8 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// 删除实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
-            codes.AppendLine(GetIndentStr(indent) + "[Route(\"{id}\")]");
-            codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Delete(int id)");
+            codes.AppendLine(GetIndentStr(indent) + "[HttpDelete(\"{id}\")]");
+            codes.AppendLine(GetIndentStr(indent) + "public IActionResult Delete(int id)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + $"var result = _{_camelEntityName}Service.Delete(id);");
             codes.AppendLine(GetIndentStr(indent + 1) + "if (result)");
@@ -195,9 +171,8 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// 批量删除实体");
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
             codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"idList\">主键ID的list集合</param>");
-            codes.AppendLine(GetIndentStr(indent) + "[Route(\"bulk_delete\")]");
-            codes.AppendLine(GetIndentStr(indent) + "[HttpPost]");
-            codes.AppendLine(GetIndentStr(indent) + "public IHttpActionResult Delete([FromBody] List<int> idList)");
+            codes.AppendLine(GetIndentStr(indent) + "[HttpPost(\"bulk_delete\")]");
+            codes.AppendLine(GetIndentStr(indent) + "public IActionResult Delete([FromBody] List<int> idList)");
             codes.AppendLine(GetIndentStr(indent) + "{");
             codes.AppendLine(GetIndentStr(indent + 1) + "if (idList == null || idList.Count == 0)");
             codes.AppendLine(GetIndentStr(indent + 1) + "{");

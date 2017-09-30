@@ -28,16 +28,15 @@ namespace DbDictExport.Core.Codes.Acartons
             var codes = new StringBuilder();
             var indent = 0;
             // using
+            codes.AppendLine("using NPoco;");
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine("using System.Linq;");
-            codes.AppendLine("using PetaPoco;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Dal.Interface;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Utils;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Dal.Interface;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Entities;");
 
             // namespace
             codes.Append(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Dal");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Dal");
             codes.AppendLine("{");
 
             // class
@@ -67,11 +66,11 @@ namespace DbDictExport.Core.Codes.Acartons
 
                 // method body
                 indent++;
-                codes.Append(GetIndentStr(indent) + $"return Db.SingleOrDefault<{EntityName}>(\"WHERE ");
+                codes.Append(GetIndentStr(indent) + $"return Db.SingleOrDefault<{EntityName}>({(existMarks ? "$" : "")}\"WHERE ");
                 var whereStr = new List<string>();
                 if (existMarks)
                 {
-                    whereStr.Add("marked_for_delete=false");
+                    whereStr.Add("{DbFieldNames.AddTime}=false");
                 }
                 int index = 0;
                 foreach (var pk in pkColumns)
@@ -101,12 +100,12 @@ namespace DbDictExport.Core.Codes.Acartons
 
                     // method body
                     indent++;
-                    codes.Append(GetIndentStr(indent) + $"return Db.Fetch<{EntityName}>(\"WHERE ");
+                    codes.Append(GetIndentStr(indent) + $"return Db.Fetch<{EntityName}>({(existMarks ? "$" : "")}\"WHERE ");
 
                     var whereStr = new List<string>();
                     if (existMarks)
                     {
-                        whereStr.Add("marked_for_delete=false");
+                        whereStr.Add("{DbFieldNames.AddTime}=false");
                     }
                     whereStr.Add($"{pkColumns[i].Name} = @0 ");
 
@@ -134,7 +133,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 if (existMarks)
                 {
                     codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
-                    codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\");");
+                    codes.AppendLine(GetIndentStr(indent) + ".Where($\"{DbFieldNames.MarkedForDelete}=false\");");
                 }
                 else
                 {
@@ -145,7 +144,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
                 codes.AppendLine(GetIndentStr(indent) + "if (string.IsNullOrEmpty(sort))");
                 codes.AppendLine(GetIndentStr(indent) + "{");
-                codes.AppendLine(GetIndentStr(indent + 1) + "sort = \"add_time desc\";");
+                codes.AppendLine(GetIndentStr(indent + 1) + "sort = $\"{DbFieldNames.AddTime} desc\";");
                 codes.AppendLine(GetIndentStr(indent) + "}");
 
                 codes.AppendLine(GetIndentStr(indent) + "sql.OrderBy(sort);");
@@ -170,7 +169,7 @@ namespace DbDictExport.Core.Codes.Acartons
             if (existMarks)
             {
                 codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
-                codes.AppendLine(GetIndentStr(indent) + ".Where(\"marked_for_delete=false\");");
+                codes.AppendLine(GetIndentStr(indent) + ".Where($\"{DbFieldNames.MarkedForDelete}=false\");");
             }
             else
             {

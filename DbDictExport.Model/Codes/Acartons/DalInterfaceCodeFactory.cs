@@ -27,9 +27,9 @@ namespace DbDictExport.Core.Codes.Acartons
             var indent = 0;
             // using
             codes.AppendLine("using System.Collections.Generic;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Model;");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models;");
             codes.AppendLine(Environment.NewLine);
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Dal.Interface");
+            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Dal.Interface");
             codes.AppendLine("{"); // namesapce
 
             indent++;
