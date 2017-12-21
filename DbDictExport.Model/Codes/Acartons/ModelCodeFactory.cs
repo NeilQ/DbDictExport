@@ -29,7 +29,7 @@ namespace DbDictExport.Core.Codes.Acartons
             // using 
             codes.AppendLine("using NPoco;");
             codes.AppendLine("using System;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Entities");
+            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Entities;");
             codes.Append(Environment.NewLine);
 
             // namespace
@@ -50,9 +50,16 @@ namespace DbDictExport.Core.Codes.Acartons
                 && Table.Columns.Exists(t => t.Name == "add_time")
                 && Table.Columns.Exists(t => t.Name == "update_user")
                 && Table.Columns.Exists(t => t.Name == "update_time");
-            if (hasBaseFields)
+            bool hasDeleteFields = Table.Columns.Exists(t => t.Name == "marked_for_delete")
+                                   && Table.Columns.Exists(t => t.Name == "delete_user")
+                                   && Table.Columns.Exists(t => t.Name == "delete_time");
+            if (hasBaseFields && hasDeleteFields)
             {
-                codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : BaseField");
+                codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : FullAuditedEntityBase");
+            }
+            else if (hasBaseFields)
+            {
+                codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : AuditedEntityBase");
             }
             else
             {

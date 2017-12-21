@@ -74,7 +74,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 // get page data
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
-                codes.AppendLine(GetIndentStr(indent) + "/// 分页获取实体列表");
+                codes.AppendLine(GetIndentStr(indent) + "/// 获取实体列表");
                 codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"size\"></param>");
                 codes.AppendLine(GetIndentStr(indent) + "/// <param name=\"page\"></param>");
@@ -92,10 +92,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.AppendLine(GetIndentStr(indent + 2) + "Data = data");
                 codes.AppendLine(GetIndentStr(indent + 1) + "});");
                 codes.AppendLine(GetIndentStr(indent) + "}");
-
             }
-
-
 
             // methods
             // get single data
@@ -114,7 +111,6 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent + 1) + "return Ok(data);");
             codes.AppendLine(GetIndentStr(indent) + "}");
 
-
             // methods
             // post data
             codes.Append(Environment.NewLine);
@@ -125,9 +121,9 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "[HttpPost]");
             codes.AppendLine(GetIndentStr(indent) + $"public IActionResult Post([FromBody]{EntityName} model)");
             codes.AppendLine(GetIndentStr(indent) + "{");
-            codes.AppendLine(GetIndentStr(indent + 1) + $"var key = _{_camelEntityName}Service.Add(model);");
+            codes.AppendLine(GetIndentStr(indent + 1) + $"var id = _{_camelEntityName}Service.Add(model);");
             codes.Append(Environment.NewLine);
-            codes.AppendLine(GetIndentStr(indent + 1) + "return Created(Request.RequestUri + key.ToString(), key);");
+            codes.AppendLine(GetIndentStr(indent + 1) + "return Created(Request.GetEncodedUrl() + $\"/{id}\", id);");
             codes.AppendLine(GetIndentStr(indent) + "}");
 
             // methods
@@ -181,7 +177,6 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent + 1) + $"_{_camelEntityName}Service.Delete(idList);");
             codes.AppendLine(GetIndentStr(indent + 1) + "return Ok();");
             codes.AppendLine(GetIndentStr(indent) + "}");
-
 
             codes.Append(Environment.NewLine);
             indent--;
