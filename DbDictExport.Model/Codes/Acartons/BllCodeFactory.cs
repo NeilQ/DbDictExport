@@ -28,7 +28,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
             var existMarks = Table.Columns.Exists(t => t.Name.ToLower() == "marked_for_delete");
 
-            var repoName = "{ToCamelCase(EntityName)}Repo";
+            var repoName = $"{ToCamelCase(EntityName)}Repo";
 
             // using 
             codes.AppendLine("using System.Collections.Generic;");
@@ -137,7 +137,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 codes.Append(Environment.NewLine);
                 codes.AppendLine(GetIndentStr(indent) + "{");
                 codes.Append(GetIndentStr(indent + 1) +
-                             $"return _{repoName}.GetByPK(");
+                             $"return _{repoName}.GetByPk(");
                 codes.Append(string.Join(", ", paramList));
                 codes.Append(");");
                 codes.Append(Environment.NewLine);

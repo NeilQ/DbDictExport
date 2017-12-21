@@ -49,7 +49,7 @@ namespace DbDictExport.Core.Codes.Acartons
             // constructor
             codes.Append(Environment.NewLine);
             codes.AppendLine(GetIndentStr(indent) +
-                             "public {0}Repo(IUserContext userContext) : base(userContext) { }");
+                             $"public {EntityName}Repo(IUserContext userContext) : base(userContext) {{ }}");
 
 
             // methods
@@ -70,7 +70,7 @@ namespace DbDictExport.Core.Codes.Acartons
                 var whereStr = new List<string>();
                 if (existMarks)
                 {
-                    whereStr.Add("{DbFieldNames.AddTime}=false");
+                    whereStr.Add("{DbFieldNames.MarkedForDelete}=false");
                 }
                 int index = 0;
                 foreach (var pk in pkColumns)
@@ -105,7 +105,7 @@ namespace DbDictExport.Core.Codes.Acartons
                     var whereStr = new List<string>();
                     if (existMarks)
                     {
-                        whereStr.Add("{DbFieldNames.AddTime}=false");
+                        whereStr.Add("{DbFieldNames.MarkedForDelete}=false");
                     }
                     whereStr.Add($"{pkColumns[i].Name} = @0 ");
 
@@ -132,7 +132,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
                 if (existMarks)
                 {
-                    codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
+                    codes.AppendLine(GetIndentStr(indent) + ".From(GetTableName())");
                     codes.AppendLine(GetIndentStr(indent) + ".Where($\"{DbFieldNames.MarkedForDelete}=false\");");
                 }
                 else
@@ -168,12 +168,12 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + ".Select(\"*\")");
             if (existMarks)
             {
-                codes.AppendLine(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName)");
+                codes.AppendLine(GetIndentStr(indent) + ".From(GetTableName())");
                 codes.AppendLine(GetIndentStr(indent) + ".Where($\"{DbFieldNames.MarkedForDelete}=false\");");
             }
             else
             {
-                codes.Append(GetIndentStr(indent) + ".From(PocoData.TableInfo.TableName);");
+                codes.Append(GetIndentStr(indent) + ".From(GetTableName());");
                 codes.Append(Environment.NewLine);
 
             }
