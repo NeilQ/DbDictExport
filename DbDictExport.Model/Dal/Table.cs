@@ -5,6 +5,7 @@ namespace DbDictExport.Core.Dal
 {
     public class Table
     {
+        private const string V = "default";
         public List<Column> Columns;
         public string Name;
         public string Schema;
@@ -29,6 +30,10 @@ namespace DbDictExport.Core.Dal
             get { return GetColumn(columnName); }
         }
 
+        public override string ToString()
+        {
+            return (Schema ?? "default") + "." + Name;
+        }
     }
 
     public class Column
