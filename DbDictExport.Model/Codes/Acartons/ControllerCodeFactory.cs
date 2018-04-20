@@ -52,7 +52,7 @@ namespace DbDictExport.Core.Codes.Acartons
             codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
             codes.AppendLine(GetIndentStr(indent) + "[Produces(\"application/json\")]");
             codes.AppendLine(GetIndentStr(indent) + $"[Route(\"api/{_apiRouteName}\")]");
-            codes.AppendLine(GetIndentStr(indent) + $"public class {Inflector.MakePlural(EntityName)}Controller : ApiController");
+            codes.AppendLine(GetIndentStr(indent) + $"public class {Inflector.MakePlural(EntityName)}Controller : Controller");
             codes.AppendLine(GetIndentStr(indent) + "{");
 
             //files
