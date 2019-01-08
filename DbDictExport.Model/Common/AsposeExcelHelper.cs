@@ -8,7 +8,7 @@ namespace DbDictExport.Core.Common
 {
     public sealed class AsposeExcelHelper : IExcelHelper
     {
-        public void GenerateWorkbook(Tables tableList, string fileName)
+        public void GenerateWorkbook(IList<Table> tableList, string fileName)
         {
             #region
 

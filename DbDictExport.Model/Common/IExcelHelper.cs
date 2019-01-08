@@ -5,6 +5,6 @@ namespace DbDictExport.Core.Common
 {
     public interface IExcelHelper
     {
-        void GenerateWorkbook(Tables tableList, string fileName);
+        void GenerateWorkbook(IList<Table> tableList, string fileName);
     }
 }

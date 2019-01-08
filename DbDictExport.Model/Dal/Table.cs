@@ -15,6 +15,8 @@ namespace DbDictExport.Core.Dal
         public string SequenceName;
         public bool Ignore;
 
+        public string DisplayName => $"{Schema}.{Name}";
+
         public Column PK
         {
             get { return this.Columns.SingleOrDefault(x => x.IsPK); }

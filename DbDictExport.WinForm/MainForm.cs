@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using DbDictExport.Core;
 using DbDictExport.Core.Common;
@@ -186,7 +187,7 @@ namespace DbDictExport.WinForm
                         LoadingFormService.SetFormCaption(Constants.EXPORT_CAPTION);
                         // List<DbTable> tableList = DataAccess.GetDbTableListWithColumns(SqlServerConnectionStringBuilder, currentNode.Text);
                         SetDataBaseName(currentNode.Text);
-                        var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName);
+                        var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName).OrderBy(t => t.DisplayName).ToList();
                         //Workbook workbook = ExcelHelper.GenerateWorkbook(tableList);
                         IExcelHelper helper = new AsposeExcelHelper();
 
@@ -234,13 +235,13 @@ namespace DbDictExport.WinForm
                     form.Show();
                     break;
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES:
-                     currTable = currentNode.Tag as Table;
+                    currTable = currentNode.Tag as Table;
                     if (currTable == null) break;
                     var jsForm = new JSCodeForm(currTable);
                     jsForm.Show();
                     break;
                 case Constants.CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES:
-                     currTable = currentNode.Tag as Table;
+                    currTable = currentNode.Tag as Table;
                     if (currTable == null) break;
                     var acartonsForm = new AcartonsCodeForm(currTable);
                     acartonsForm.Show();
@@ -276,14 +277,14 @@ namespace DbDictExport.WinForm
             rootNode.Nodes.Clear();
 
             SetDataBaseName(rootNode.Text);
-            var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName);
+            var tables = Poco.LoadTables(GetConnectionString(), Global.ProviderName).OrderBy(t => t.DisplayName);
             foreach (var table in tables)
             {
                 var treeNode = new TreeNode
                 {
                     Name = Constants.TABLE_TREE_NODE_NAME_PREFIX + table.Name,
-                    Text = $"{table.Schema}.{table.Name}",
-                    ToolTipText = $"{table.Schema}.{table.Name}",
+                    Text = table.DisplayName,
+                    ToolTipText = table.DisplayName,
                     Tag = table,
                     ImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX,
                     SelectedImageIndex = Constants.TREENODE_DATATABLE_IMAGE_INDEX
