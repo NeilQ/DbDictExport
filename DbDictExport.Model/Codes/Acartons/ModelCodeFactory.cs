@@ -27,13 +27,13 @@ namespace DbDictExport.Core.Codes.Acartons
             var indent = 0;
 
             // using 
-            codes.AppendLine("using NPoco;");
             codes.AppendLine("using System;");
-            codes.AppendLine($"using {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Entities;");
+            codes.AppendLine("using NPoco;");
+            codes.AppendLine("using Acartons.Core.Entities;");
             codes.Append(Environment.NewLine);
 
             // namespace
-            codes.AppendLine($"namespace {Constants.ACARTONS_NAMESAPCE_PREFIX}.Core.Models");
+            codes.AppendLine($"namespace {ModuleName}");
             codes.AppendLine("{"); // namespace
 
             indent++;
@@ -79,14 +79,54 @@ namespace DbDictExport.Core.Codes.Acartons
                 {
                     continue;
                 }
-                // annatation
+
+                if (hasDeleteFields &&
+                    (column.Name == "marked_for_delete"
+                     || column.Name == "delete_user"
+                     || column.Name == "delete_time"))
+                {
+                    continue;
+                }
+                // annotation
                 codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
                 codes.AppendLine(GetIndentStr(indent) + $"/// {column.Description}");
                 codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
 
                 // field
-                // codes.AppendLine(GetIndentStr(indent) +
-                //                 $"[Column(\"{column.Name}\")]");
+                codes.AppendLine(GetIndentStr(indent) +
+                                 $"public {column.PropertyType} {column.PropertyName} {{ get; set; }}");
+                codes.Append(Environment.NewLine);
+            }
+
+            indent--;
+            codes.AppendLine(GetIndentStr(indent) + "}");  // entity class end
+
+
+            // dto
+            codes.Append(Environment.NewLine);
+            codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName}Save");
+            codes.AppendLine(GetIndentStr(indent) + "{");
+            // fields
+            indent++;
+            foreach (var column in Table.Columns)
+            {
+                if (column.Name == "update_time"
+                     || column.Name == "update_user"
+                     || column.Name == "add_time"
+                     || column.Name == "add_user"
+                     || column.Name == "marked_for_delete"
+                    || column.Name == "delete_user"
+                    || column.Name == "delete_time")
+                {
+                    continue;
+                }
+
+                // annotation
+                codes.AppendLine(GetIndentStr(indent) + "/// <summary>");
+                codes.AppendLine(GetIndentStr(indent) + $"/// {column.Description}");
+                codes.AppendLine(GetIndentStr(indent) + "/// </summary>");
+
+                // field
                 codes.AppendLine(GetIndentStr(indent) +
                                  $"public {column.PropertyType} {column.PropertyName} {{ get; set; }}");
                 codes.Append(Environment.NewLine);
@@ -95,7 +135,14 @@ namespace DbDictExport.Core.Codes.Acartons
             indent--;
             codes.AppendLine(GetIndentStr(indent) + "}");
 
+            codes.Append(Environment.NewLine);
+            codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName}Dto: {EntityName}Save");
+            codes.AppendLine(GetIndentStr(indent) + "{");
+            codes.AppendLine(GetIndentStr(indent) + "}");
+
+
             codes.AppendLine("}"); // namespace
+
 
             return codes;
         }

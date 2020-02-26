@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using DbDictExport.Core.Codes.Acartons;
+using DbDictExport.Core.Common;
 using DbDictExport.Core.Dal;
 using MetroFramework.Forms;
 
@@ -22,6 +23,8 @@ namespace DbDictExport.WinForm.CodeForms
             InitializeComponent();
             Table = table;
             lblTableName.Text = table.Name;
+            txtEntityName.Text = Inflector.MakeSingular(Inflector.ToTitleCase(Table.Name)).Replace(" ", "");
+            txtModuleName.Text = Constants.ACARTONS_NAMESAPCE_PREFIX + "." + Inflector.MakePlural(txtEntityName.Text);
         }
 
         private void btnRun_Click(object sender, EventArgs e)

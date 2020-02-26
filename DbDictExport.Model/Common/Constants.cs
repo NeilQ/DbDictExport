@@ -35,7 +35,7 @@ namespace DbDictExport.Core.Common
         public const string KDCODE_DEFAULT_ENTITY_NAME = "Entity";
         public const string KDCODE_DEFAULT_MODULE_NAME = "Default";
 
-        public const string ACARTONS_NAMESAPCE_PREFIX = "Acartons.Parking";
+        public const string ACARTONS_NAMESAPCE_PREFIX = "Acartons.Domain";
 
         public const string NULLABLE_PROPERTY_TYPE_NAME = "int|long|short|double|float|decimal|datetimeoffset|datetime|guid|byte|bool";
     }
