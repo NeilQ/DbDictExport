@@ -33,7 +33,7 @@ namespace DbDictExport.Core.Codes.Acartons
 
             indent++;
             // class
-            codes.AppendLine(string.Format("{1}public interface I{0}Repo : IRepository<{0}>", EntityName,
+            codes.AppendLine(string.Format("{1}public interface I{0}Repo : INPocoRepository<{0}>", EntityName,
                 GetIndentStr(indent)));
             codes.AppendLine(GetIndentStr(indent) + "{"); //class
             codes.AppendLine(GetIndentStr(indent) + "}"); // class 
