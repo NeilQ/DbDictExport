@@ -53,6 +53,8 @@ namespace DbDictExport.Core.Codes.Acartons
             bool hasDeleteFields = Table.Columns.Exists(t => t.Name == "marked_for_delete")
                                    && Table.Columns.Exists(t => t.Name == "delete_user")
                                    && Table.Columns.Exists(t => t.Name == "delete_time");
+            bool hasCreateFields = Table.Columns.Exists(t => t.Name == "add_user")
+                                   && Table.Columns.Exists(t => t.Name == "add_time");
             if (hasBaseFields && hasDeleteFields)
             {
                 codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : FullAuditedEntityBase");
@@ -60,6 +62,10 @@ namespace DbDictExport.Core.Codes.Acartons
             else if (hasBaseFields)
             {
                 codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : AuditedEntityBase");
+            }
+            else if (hasCreateFields)
+            {
+                codes.AppendLine(GetIndentStr(indent) + $"public class {EntityName} : CreateAuditedEntityBase");
             }
             else
             {
@@ -71,6 +77,11 @@ namespace DbDictExport.Core.Codes.Acartons
             indent++;
             foreach (var column in Table.Columns)
             {
+                if (hasCreateFields && (column.Name == "add_time" || column.Name == "add_user"))
+                {
+                    continue;
+                }
+
                 if (hasBaseFields &&
                     (column.Name == "update_time"
                     || column.Name == "update_user"
