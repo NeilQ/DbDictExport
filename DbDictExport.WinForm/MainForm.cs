@@ -49,6 +49,7 @@ namespace DbDictExport.WinForm
             generateKdCodesToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_KD_CODES;
             generateJingShangCodesToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES;
             generateAcartonsCodesPgToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES;
+            generateFMEACodesToolStripMenuItem.Text = Constants.CONTEXT_MENU_TABLE_GENERATE_FMEA_CODES;
         }
 
         void dgvResultSet_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -245,6 +246,12 @@ namespace DbDictExport.WinForm
                     if (currTable == null) break;
                     var acartonsForm = new AcartonsCodeForm(currTable);
                     acartonsForm.Show();
+                    break;
+                case Constants.CONTEXT_MENU_TABLE_GENERATE_FMEA_CODES:
+                    currTable = currentNode.Tag as Table;
+                    if (currTable == null) break;
+                    var feamForm = new FmeaCodeForm(currTable);
+                    feamForm.Show();
                     break;
             }
         }

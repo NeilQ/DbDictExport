@@ -29,6 +29,7 @@ namespace DbDictExport.Core.Common
         public const string CONTEXT_MENU_TABLE_GENERATE_KD_CODES = "Generate kd Codes";
         public const string CONTEXT_MENU_TABLE_GENERATE_JINGSHANG_CODES = "Generate JingShang Codes(干！)";
         public const string CONTEXT_MENU_TABLE_GENERATE_ACARTONS_CODES = "Generate Acartons Codes - Pg";
+        public const string CONTEXT_MENU_TABLE_GENERATE_FMEA_CODES = "Generate FMEA Codes";
 
 
         public const string KDCODE_NAMESPACE_PREFIX = "JS.Service.";
@@ -36,6 +37,8 @@ namespace DbDictExport.Core.Common
         public const string KDCODE_DEFAULT_MODULE_NAME = "Default";
 
         public const string ACARTONS_NAMESAPCE_PREFIX = "Acartons.Domain";
+
+        public const string FMEA_NAMESAPCE_PREFIX = "FMEA.Api";
 
         public const string NULLABLE_PROPERTY_TYPE_NAME = "int|long|short|double|float|decimal|datetimeoffset|datetime|guid|byte|bool";
     }

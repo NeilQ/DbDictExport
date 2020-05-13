@@ -136,6 +136,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeForms\FmeaCodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeForms\FmeaCodeForm.Designer.cs">
+      <DependentUpon>FmeaCodeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="CodeForms\AcartonsCodeForm.cs">
       <SubType>Form</SubType>
@@ -190,6 +196,9 @@
     <Compile Include="Service\LoadingFormService.cs" />
     <EmbeddedResource Include="CodeForms\AcartonsCodeForm.resx">
       <DependentUpon>AcartonsCodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeForms\FmeaCodeForm.resx">
+      <DependentUpon>FmeaCodeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CodeForms\JSCodeForm.resx">
       <DependentUpon>JSCodeForm.cs</DependentUpon>

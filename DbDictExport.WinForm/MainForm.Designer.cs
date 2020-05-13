@@ -62,6 +62,7 @@
             this.generateKdCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateJingShangCodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateAcartonsCodesPgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateFMEACodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.cmsDatabase.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -90,8 +91,10 @@
             this.groupBox1.Controls.Add(this.tvDatabase);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(370, 747);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(295, 595);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DataBase";
@@ -99,9 +102,10 @@
             // tvDatabase
             // 
             this.tvDatabase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvDatabase.Location = new System.Drawing.Point(3, 23);
+            this.tvDatabase.Location = new System.Drawing.Point(2, 18);
+            this.tvDatabase.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tvDatabase.Name = "tvDatabase";
-            this.tvDatabase.Size = new System.Drawing.Size(364, 721);
+            this.tvDatabase.Size = new System.Drawing.Size(291, 575);
             this.tvDatabase.TabIndex = 0;
             // 
             // cmsDatabase
@@ -111,18 +115,18 @@
             this.refreshToolStripMenuItem,
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem});
             this.cmsDatabase.Name = "cmsDatabase";
-            this.cmsDatabase.Size = new System.Drawing.Size(359, 56);
+            this.cmsDatabase.Size = new System.Drawing.Size(317, 48);
             // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(358, 26);
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(316, 22);
             this.refreshToolStripMenuItem.Text = "Refresh";
             // 
             // exportDataDictionaryDocumentToExcelToolStripMenuItem
             // 
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Name = "exportDataDictionaryDocumentToExcelToolStripMenuItem";
-            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(358, 26);
+            this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Size = new System.Drawing.Size(316, 22);
             this.exportDataDictionaryDocumentToExcelToolStripMenuItem.Text = "Export data dictionary document to Excel";
             // 
             // menuStrip1
@@ -131,9 +135,10 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newConnectToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(20, 60);
+            this.menuStrip1.Location = new System.Drawing.Point(16, 48);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1433, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1146, 25);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -144,27 +149,27 @@
             this.mySqlToolStripMenuItem,
             this.postgresqlToolStripMenuItem});
             this.newConnectToolStripMenuItem.Name = "newConnectToolStripMenuItem";
-            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
+            this.newConnectToolStripMenuItem.Size = new System.Drawing.Size(97, 21);
             this.newConnectToolStripMenuItem.Text = "New Connect";
             // 
             // sqlServerToolStripMenuItem
             // 
             this.sqlServerToolStripMenuItem.Name = "sqlServerToolStripMenuItem";
-            this.sqlServerToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.sqlServerToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.sqlServerToolStripMenuItem.Text = "Sql Server";
             this.sqlServerToolStripMenuItem.Click += new System.EventHandler(this.sqlServerToolStripMenuItem_Click);
             // 
             // mySqlToolStripMenuItem
             // 
             this.mySqlToolStripMenuItem.Name = "mySqlToolStripMenuItem";
-            this.mySqlToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.mySqlToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.mySqlToolStripMenuItem.Text = "MySql";
             this.mySqlToolStripMenuItem.Click += new System.EventHandler(this.mySqlToolStripMenuItem_Click);
             // 
             // postgresqlToolStripMenuItem
             // 
             this.postgresqlToolStripMenuItem.Name = "postgresqlToolStripMenuItem";
-            this.postgresqlToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.postgresqlToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.postgresqlToolStripMenuItem.Text = "Postgresql";
             this.postgresqlToolStripMenuItem.Click += new System.EventHandler(this.postgresqlToolStripMenuItem_Click);
             // 
@@ -180,8 +185,8 @@
             // 
             this.splitContainer1.BackColor = System.Drawing.Color.Silver;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(20, 88);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 30, 3, 3);
+            this.splitContainer1.Location = new System.Drawing.Point(16, 73);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 24, 2, 2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -193,8 +198,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(1433, 747);
-            this.splitContainer1.SplitterDistance = 370;
+            this.splitContainer1.Size = new System.Drawing.Size(1146, 595);
+            this.splitContainer1.SplitterDistance = 295;
+            this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 4;
             // 
             // panel1
@@ -203,8 +209,9 @@
             this.panel1.Controls.Add(this.tableTabControl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1059, 747);
+            this.panel1.Size = new System.Drawing.Size(848, 595);
             this.panel1.TabIndex = 2;
             // 
             // tableTabControl
@@ -213,9 +220,10 @@
             this.tableTabControl.Controls.Add(this.createScriptTabPage);
             this.tableTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableTabControl.Location = new System.Drawing.Point(0, 0);
+            this.tableTabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableTabControl.Name = "tableTabControl";
             this.tableTabControl.SelectedIndex = 0;
-            this.tableTabControl.Size = new System.Drawing.Size(1059, 747);
+            this.tableTabControl.Size = new System.Drawing.Size(848, 595);
             this.tableTabControl.Style = MetroFramework.MetroColorStyle.Orange;
             this.tableTabControl.TabIndex = 1;
             this.tableTabControl.UseSelectable = true;
@@ -225,22 +233,24 @@
             this.viewTabPage.Controls.Add(this.splitContainer2);
             this.viewTabPage.HorizontalScrollbarBarColor = true;
             this.viewTabPage.HorizontalScrollbarHighlightOnWheel = false;
-            this.viewTabPage.HorizontalScrollbarSize = 4;
+            this.viewTabPage.HorizontalScrollbarSize = 3;
             this.viewTabPage.Location = new System.Drawing.Point(4, 38);
+            this.viewTabPage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.viewTabPage.Name = "viewTabPage";
             this.viewTabPage.Padding = new System.Windows.Forms.Padding(1);
-            this.viewTabPage.Size = new System.Drawing.Size(1051, 705);
+            this.viewTabPage.Size = new System.Drawing.Size(840, 553);
             this.viewTabPage.TabIndex = 0;
             this.viewTabPage.Text = "View";
             this.viewTabPage.VerticalScrollbarBarColor = true;
             this.viewTabPage.VerticalScrollbarHighlightOnWheel = false;
-            this.viewTabPage.VerticalScrollbarSize = 7;
+            this.viewTabPage.VerticalScrollbarSize = 6;
             // 
             // splitContainer2
             // 
             this.splitContainer2.BackColor = System.Drawing.Color.Silver;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(1, 1);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -251,8 +261,9 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.groupBox3);
-            this.splitContainer2.Size = new System.Drawing.Size(1049, 703);
-            this.splitContainer2.SplitterDistance = 422;
+            this.splitContainer2.Size = new System.Drawing.Size(838, 551);
+            this.splitContainer2.SplitterDistance = 330;
+            this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
             // groupBox2
@@ -262,10 +273,10 @@
             this.groupBox2.Controls.Add(this.MetroGridDesign);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(1049, 422);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Size = new System.Drawing.Size(838, 330);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Design";
@@ -302,8 +313,8 @@
             this.MetroGridDesign.EnableHeadersVisualStyles = false;
             this.MetroGridDesign.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.MetroGridDesign.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.MetroGridDesign.Location = new System.Drawing.Point(3, 22);
-            this.MetroGridDesign.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MetroGridDesign.Location = new System.Drawing.Point(2, 18);
+            this.MetroGridDesign.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MetroGridDesign.Name = "MetroGridDesign";
             this.MetroGridDesign.ReadOnly = true;
             this.MetroGridDesign.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -320,7 +331,7 @@
             this.MetroGridDesign.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.MetroGridDesign.RowTemplate.Height = 27;
             this.MetroGridDesign.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MetroGridDesign.Size = new System.Drawing.Size(1043, 398);
+            this.MetroGridDesign.Size = new System.Drawing.Size(834, 310);
             this.MetroGridDesign.Style = MetroFramework.MetroColorStyle.Silver;
             this.MetroGridDesign.TabIndex = 1;
             this.MetroGridDesign.UseStyleColors = true;
@@ -331,10 +342,10 @@
             this.groupBox3.Controls.Add(this.MetroGridResultSet);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(1049, 277);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Size = new System.Drawing.Size(838, 218);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Result Set";
@@ -370,8 +381,8 @@
             this.MetroGridResultSet.EnableHeadersVisualStyles = false;
             this.MetroGridResultSet.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.MetroGridResultSet.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.MetroGridResultSet.Location = new System.Drawing.Point(3, 22);
-            this.MetroGridResultSet.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MetroGridResultSet.Location = new System.Drawing.Point(2, 18);
+            this.MetroGridResultSet.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MetroGridResultSet.Name = "MetroGridResultSet";
             this.MetroGridResultSet.ReadOnly = true;
             this.MetroGridResultSet.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -388,7 +399,7 @@
             this.MetroGridResultSet.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.MetroGridResultSet.RowTemplate.Height = 27;
             this.MetroGridResultSet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MetroGridResultSet.Size = new System.Drawing.Size(1043, 253);
+            this.MetroGridResultSet.Size = new System.Drawing.Size(834, 198);
             this.MetroGridResultSet.Style = MetroFramework.MetroColorStyle.Silver;
             this.MetroGridResultSet.TabIndex = 0;
             // 
@@ -396,15 +407,16 @@
             // 
             this.createScriptTabPage.HorizontalScrollbarBarColor = true;
             this.createScriptTabPage.HorizontalScrollbarHighlightOnWheel = false;
-            this.createScriptTabPage.HorizontalScrollbarSize = 4;
+            this.createScriptTabPage.HorizontalScrollbarSize = 3;
             this.createScriptTabPage.Location = new System.Drawing.Point(4, 38);
+            this.createScriptTabPage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.createScriptTabPage.Name = "createScriptTabPage";
-            this.createScriptTabPage.Size = new System.Drawing.Size(1051, 705);
+            this.createScriptTabPage.Size = new System.Drawing.Size(839, 556);
             this.createScriptTabPage.TabIndex = 1;
             this.createScriptTabPage.Text = "Create Scripts";
             this.createScriptTabPage.VerticalScrollbarBarColor = true;
             this.createScriptTabPage.VerticalScrollbarHighlightOnWheel = false;
-            this.createScriptTabPage.VerticalScrollbarSize = 7;
+            this.createScriptTabPage.VerticalScrollbarSize = 6;
             // 
             // metroScrollBar1
             // 
@@ -426,40 +438,48 @@
             this.cmsDbTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generateKdCodesToolStripMenuItem,
             this.generateJingShangCodesToolStripMenuItem,
-            this.generateAcartonsCodesPgToolStripMenuItem});
+            this.generateAcartonsCodesPgToolStripMenuItem,
+            this.generateFMEACodesToolStripMenuItem});
             this.cmsDbTable.Name = "cmsDbTable";
-            this.cmsDbTable.Size = new System.Drawing.Size(303, 82);
+            this.cmsDbTable.Size = new System.Drawing.Size(254, 114);
             // 
             // generateKdCodesToolStripMenuItem
             // 
             this.generateKdCodesToolStripMenuItem.Name = "generateKdCodesToolStripMenuItem";
-            this.generateKdCodesToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.generateKdCodesToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
             this.generateKdCodesToolStripMenuItem.Text = "Generate kd Codes";
             // 
             // generateJingShangCodesToolStripMenuItem
             // 
             this.generateJingShangCodesToolStripMenuItem.Name = "generateJingShangCodesToolStripMenuItem";
-            this.generateJingShangCodesToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
-            this.generateJingShangCodesToolStripMenuItem.Text = "Generate JingShang Codes(干！)";
+            this.generateJingShangCodesToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.generateJingShangCodesToolStripMenuItem.Text = "Generate JingShang Codes";
             // 
             // generateAcartonsCodesPgToolStripMenuItem
             // 
             this.generateAcartonsCodesPgToolStripMenuItem.Name = "generateAcartonsCodesPgToolStripMenuItem";
-            this.generateAcartonsCodesPgToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.generateAcartonsCodesPgToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
             this.generateAcartonsCodesPgToolStripMenuItem.Text = "Generate Acartons Codes - Pg";
+            // 
+            // generateFMEACodesToolStripMenuItem
+            // 
+            this.generateFMEACodesToolStripMenuItem.Name = "generateFMEACodesToolStripMenuItem";
+            this.generateFMEACodesToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.generateFMEACodesToolStripMenuItem.Text = "Generate FMEA Codes";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1473, 855);
+            this.ClientSize = new System.Drawing.Size(1178, 684);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "MainForm";
+            this.Padding = new System.Windows.Forms.Padding(16, 48, 16, 16);
             this.Style = MetroFramework.MetroColorStyle.White;
             this.Text = "DbViewer";
             this.groupBox1.ResumeLayout(false);
@@ -518,5 +538,6 @@
         private System.Windows.Forms.ToolStripMenuItem generateJingShangCodesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem postgresqlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateAcartonsCodesPgToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem generateFMEACodesToolStripMenuItem;
     }
 }
