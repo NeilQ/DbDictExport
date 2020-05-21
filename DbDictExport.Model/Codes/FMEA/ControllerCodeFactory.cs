@@ -44,7 +44,7 @@ namespace DbDictExport.Core.Codes.FMEA
             // class
             indent++;
             codes.AppendLine(GetIndentStr(indent) + $"[Route(\"api/{_apiRouteName}\")]");
-            codes.AppendLine(GetIndentStr(indent) + "[ApiExplorerSettings(GroupName = \"\")]");
+           // codes.AppendLine(GetIndentStr(indent) + "[ApiExplorerSettings(GroupName = \"\")]");
             //codes.AppendLine(GetIndentStr(indent) + "[Authorize]");
             codes.AppendLine(GetIndentStr(indent) + $"public class {Inflector.MakePlural(EntityName)}Controller");
             indent++;
