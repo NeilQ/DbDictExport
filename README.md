@@ -1,3 +1,5 @@
+# This project has archived and please see the new winui project [neilq/DbToys](https://github.com/NeilQ/DbToys/edit/master/README.md)
+
 DbDictExport
 ============
 
